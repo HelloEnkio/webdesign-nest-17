@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -57,10 +56,6 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
               initial={{ y: "80%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "-80%", opacity: 0 }}
-              showSpeedControl={true}
-              minSpeed={2000}
-              maxSpeed={8000}
-              speedControlClassName="max-w-xs mt-4"
             />
           </motion.span>
         </h1>
@@ -72,7 +67,6 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
         <span className="font-medium text-white"> performance technique</span> pour donner vie à votre vision.
       </p>
       
-      {/* Boutons */}
       <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
         <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-br from-teal-400 via-teal-500 to-cyan-600 hover:shadow-xl hover:shadow-teal-500/30 transition-all duration-300 border-0 text-lg font-medium py-7 px-8">
           <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-cyan-400 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:translate-y-0"></span>
@@ -91,12 +85,10 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
         </Button>
       </div>
       
-      {/* Stats section */}
       <div ref={statsRef}>
         <HeroStats />
       </div>
       
-      {/* Client logos */}
       <HeroClientLogos />
     </div>
   );

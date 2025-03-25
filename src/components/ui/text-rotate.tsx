@@ -1,4 +1,3 @@
-
 "use client"
 
 import {
@@ -189,23 +188,6 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
           </AnimatePresence>
         </motion.span>
         
-        {showSpeedControl && (
-          <div className={cn("mt-2 px-2", speedControlClassName)}>
-            <Slider
-              value={[currentSpeed]}
-              min={minSpeed}
-              max={maxSpeed}
-              step={100}
-              onValueChange={handleSpeedChange}
-              aria-label="Rotation Speed"
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>Fast</span>
-              <span>Slow</span>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
