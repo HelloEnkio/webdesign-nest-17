@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { TypingCursor } from "./typing-cursor";
 
 interface TypingAnimationProps {
   texts: string[];
@@ -68,14 +69,7 @@ export function TypingAnimation({
   return (
     <span className={cn("inline-flex items-center", className)}>
       {currentText}
-      {showCursor && (
-        <span 
-          className={cn(
-            "inline-block w-0.5 h-10 bg-teal-300 ml-0.5",
-            isDeleting ? "opacity-50" : "animate-pulse"
-          )}
-        />
-      )}
+      {showCursor && <TypingCursor isDeleting={isDeleting} />}
     </span>
   );
 }

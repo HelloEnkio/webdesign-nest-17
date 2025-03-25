@@ -6,17 +6,13 @@ import {
   useImperativeHandle,
   useMemo
 } from "react"
-import {
-  AnimatePresence,
-  AnimatePresenceProps,
-  motion,
-} from "framer-motion"
+import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 import { useTextRotate } from "@/hooks/use-text-rotate"
-import { getStaggerDelay } from "@/utils/text-utils"
-import { TextRotateCharacter } from "./text-rotate-character"
 import { useTypingEffect } from "@/hooks/use-typing-effect"
+import { StandardTextAnimation } from "./standard-text-animation"
+import { TypingTextAnimation } from "./typing-text-animation"
 
 interface TextRotateProps {
   texts: string[]
@@ -24,7 +20,7 @@ interface TextRotateProps {
   initial?: any
   animate?: any
   exit?: any
-  animatePresenceMode?: AnimatePresenceProps["mode"]
+  animatePresenceMode?: "sync" | "popLayout" | "wait" | undefined
   animatePresenceInitial?: boolean
   staggerDuration?: number
   staggerFrom?: "first" | "last" | "center" | number | "random"
@@ -144,64 +140,27 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
           <span className="sr-only">{typingMode ? displayText : texts[currentTextIndex]}</span>
 
           {!typingMode ? (
-            <AnimatePresence
-              mode={animatePresenceMode}
-              initial={animatePresenceInitial}
-            >
-              <motion.div
-                key={currentTextIndex}
-                className={cn(
-                  "flex flex-wrap",
-                  splitBy === "lines" && "flex-col w-full"
-                )}
-                layout
-                aria-hidden="true"
-              >
-                {elements.map((char, index, array) => (
-                  <TextRotateCharacter
-                    key={index}
-                    char={char}
-                    initial={initial}
-                    animate={animate}
-                    exit={exit}
-                    transition={{
-                      ...transition,
-                      delay: getStaggerDelay(
-                        index,
-                        array.length,
-                        staggerFrom,
-                        staggerDuration
-                      ),
-                    }}
-                    className={elementLevelClassName}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+            <StandardTextAnimation 
+              elements={elements}
+              currentTextIndex={currentTextIndex}
+              initial={initial}
+              animate={animate}
+              exit={exit}
+              transition={transition}
+              animatePresenceMode={animatePresenceMode}
+              animatePresenceInitial={animatePresenceInitial}
+              staggerFrom={staggerFrom}
+              staggerDuration={staggerDuration}
+              splitBy={splitBy}
+              elementLevelClassName={elementLevelClassName}
+            />
           ) : (
-            <div className="flex items-center">
-              {elements.map((char, index) => (
-                <TextRotateCharacter
-                  key={index}
-                  char={char}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.1 }}
-                  className={elementLevelClassName}
-                />
-              ))}
-              {showCursor && (
-                <motion.span
-                  className={cn("inline-block w-0.5 h-10 bg-teal-300 ml-0.5", {
-                    "animate-pulse": !isDeleting
-                  })}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                />
-              )}
-            </div>
+            <TypingTextAnimation
+              elements={elements}
+              showCursor={showCursor}
+              isDeleting={isDeleting}
+              elementLevelClassName={elementLevelClassName}
+            />
           )}
         </motion.span>
       </div>
