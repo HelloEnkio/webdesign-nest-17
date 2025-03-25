@@ -1,0 +1,59 @@
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import HeroStats from './HeroStats';
+import HeroClientLogos from './HeroClientLogos';
+
+interface HeroContentProps {
+  titleRef: React.RefObject<HTMLHeadingElement>;
+  subtitleRef: React.RefObject<HTMLParagraphElement>;
+  buttonsRef: React.RefObject<HTMLDivElement>;
+  statsRef: React.RefObject<HTMLDivElement>;
+}
+
+const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, buttonsRef, statsRef }) => {
+  return (
+    <div className="lg:col-span-7 space-y-8 md:space-y-10 relative">
+      <div className="space-y-4">
+        <h1 ref={titleRef} className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight text-white drop-shadow-md">
+          <span className="block mb-2">Créez votre</span>
+          <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl">
+            présence digitale
+          </span>
+          <span className="block mt-2">avec élégance</span>
+        </h1>
+      </div>
+      
+      <p ref={subtitleRef} className="text-xl md:text-2xl text-gray-100 max-w-xl opacity-0 drop-shadow-md leading-relaxed">
+        Nous concevons des expériences web sur mesure qui combinent 
+        <span className="font-medium text-white"> esthétique contemporaine</span> et 
+        <span className="font-medium text-white"> performance technique</span> pour donner vie à votre vision.
+      </p>
+      
+      <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
+        <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-r from-teal-500 to-blue-500 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 border-0 text-lg font-medium py-6">
+          <span className="relative z-10 flex items-center">
+            Discuter de votre projet 
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </span>
+          <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+        </Button>
+        
+        <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/70 text-white hover:border-teal-300 hover:bg-teal-900/30 transition-all duration-300 text-lg font-medium py-6">
+          Voir notre portfolio
+        </Button>
+      </div>
+      
+      {/* Stats section */}
+      <div ref={statsRef}>
+        <HeroStats />
+      </div>
+      
+      {/* Client logos */}
+      <HeroClientLogos />
+    </div>
+  );
+};
+
+export default HeroContent;
