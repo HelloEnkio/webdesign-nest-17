@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import HeroStats from './HeroStats';
 import HeroClientLogos from './HeroClientLogos';
 
@@ -32,16 +32,20 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
       </p>
       
       <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
-        <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-r from-teal-500 to-blue-500 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 border-0 text-lg font-medium py-6">
+        <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-br from-teal-400 via-teal-500 to-cyan-600 hover:shadow-xl hover:shadow-teal-500/30 transition-all duration-300 border-0 text-lg font-medium py-7 px-8">
+          <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-cyan-400 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:translate-y-0"></span>
+          <span className="absolute inset-0 w-full h-full flex items-center justify-center bg-[radial-gradient(circle_at_50%_120%,rgba(120,255,215,0.2)_10%,transparent_80%)]"></span>
           <span className="relative z-10 flex items-center">
+            <Sparkles className="w-5 h-5 mr-2" />
             Discuter de votre projet 
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </span>
-          <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
         </Button>
         
-        <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/70 text-white hover:border-teal-300 hover:bg-teal-900/30 transition-all duration-300 text-lg font-medium py-6">
-          Voir notre portfolio
+        <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/70 text-white hover:border-teal-300 hover:bg-teal-900/30 backdrop-blur-sm transition-all duration-300 text-lg font-medium py-7 px-8 hover:shadow-lg hover:shadow-teal-900/20">
+          <span className="relative z-10 flex items-center">
+            Voir notre portfolio
+          </span>
         </Button>
       </div>
       
