@@ -55,12 +55,12 @@ const Hero: React.FC = () => {
           loop
           playsInline
           className="absolute w-full h-full object-cover"
-          style={{ filter: 'brightness(0.8) saturate(1.2)' }}
+          style={{ filter: 'brightness(0.85) saturate(1.1)' }}
         >
-          <source src="https://videos.pexels.com/video-files/3163534/3163534-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+          <source src="https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4" type="video/mp4" />
         </video>
         {/* Overlay to ensure text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/80 to-purple-900/70 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-900/70 to-blue-900/60 mix-blend-multiply"></div>
         {/* Additional subtle patterns */}
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPC9zdmc+')] opacity-20"></div>
       </div>
@@ -73,8 +73,8 @@ const Hero: React.FC = () => {
               <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight text-white">
                 Créez votre<br /> 
                 <span className="relative inline-block">
-                  <span className="relative z-10 bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">présence digitale</span>
-                  <span className="absolute bottom-2 left-0 w-full h-3 bg-gradient-to-r from-indigo-500/30 to-purple-500/30 rounded-lg -z-10 opacity-70"></span>
+                  <span className="relative z-10 bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">présence digitale</span>
+                  <span className="absolute bottom-2 left-0 w-full h-3 bg-gradient-to-r from-teal-500/30 to-blue-500/30 rounded-lg -z-10 opacity-70"></span>
                 </span><br /> 
                 avec élégance
               </h1>
@@ -87,15 +87,15 @@ const Hero: React.FC = () => {
             </p>
             
             <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
-              <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 border-0">
+              <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-r from-teal-600 to-blue-600 hover:shadow-lg hover:shadow-teal-500/20 transition-all duration-300 border-0">
                 <span className="relative z-10 flex items-center">
                   Discuter de votre projet 
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               </Button>
               
-              <Button variant="outline" size="lg" className="rounded-full border-2 border-indigo-300/30 text-white hover:border-indigo-300/50 hover:bg-indigo-900/20 transition-all duration-300">
+              <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/30 text-white hover:border-teal-300/50 hover:bg-teal-900/20 transition-all duration-300">
                 Voir notre portfolio
               </Button>
             </div>
@@ -103,22 +103,22 @@ const Hero: React.FC = () => {
             {/* Stats */}
             <div ref={statsRef} className="grid grid-cols-3 gap-4 pt-6 opacity-0">
               <div className="space-y-1 p-4 rounded-xl bg-white/10 backdrop-blur-md shadow-sm border border-white/20">
-                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">150+</p>
+                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">150+</p>
                 <p className="text-sm text-gray-300">Projets livrés</p>
               </div>
               <div className="space-y-1 p-4 rounded-xl bg-white/10 backdrop-blur-md shadow-sm border border-white/20">
-                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">98%</p>
+                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">98%</p>
                 <p className="text-sm text-gray-300">Clients satisfaits</p>
               </div>
               <div className="space-y-1 p-4 rounded-xl bg-white/10 backdrop-blur-md shadow-sm border border-white/20">
-                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">10+</p>
+                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">10+</p>
                 <p className="text-sm text-gray-300">Ans d'expérience</p>
               </div>
             </div>
             
             {/* Clients logos */}
             <div className="pt-4 opacity-80">
-              <p className="text-xs uppercase text-indigo-200 font-medium tracking-wider mb-3">Ils nous font confiance</p>
+              <p className="text-xs uppercase text-teal-200 font-medium tracking-wider mb-3">Ils nous font confiance</p>
               <div className="flex gap-6 items-center">
                 <div className="h-8 w-auto text-gray-300">
                   <svg viewBox="0 0 124 34" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -167,29 +167,29 @@ const Hero: React.FC = () => {
           {/* Hero Image area with floating elements */}
           <div ref={imageRef} className="relative opacity-0 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl perspective">
             {/* Glassmorphism container instead of image */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-purple-500/10 to-transparent backdrop-blur-sm rounded-2xl border border-white/10"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-600/20 via-blue-500/10 to-transparent backdrop-blur-sm rounded-2xl border border-white/10"></div>
             
             {/* Interactive floating elements */}
-            <div className="absolute bottom-12 left-6 w-48 h-48 glass-morphism p-5 rounded-2xl shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-indigo-500/20 backdrop-blur-lg bg-white/10 border border-white/20">
+            <div className="absolute bottom-12 left-6 w-48 h-48 glass-morphism p-5 rounded-2xl shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-teal-500/20 backdrop-blur-lg bg-white/10 border border-white/20">
               <div className="w-full h-full flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold text-white">Design UI/UX</div>
                   <div className="flex space-x-1">
-                    <div className="w-2 h-2 rounded-full bg-indigo-400"></div>
-                    <div className="w-2 h-2 rounded-full bg-purple-400"></div>
+                    <div className="w-2 h-2 rounded-full bg-teal-400"></div>
                     <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
                   </div>
                 </div>
                 
                 <div className="space-y-3 mt-2">
                   <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full w-3/4 bg-indigo-500 rounded-full"></div>
+                    <div className="h-full w-3/4 bg-teal-500 rounded-full"></div>
                   </div>
                   <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full w-1/2 bg-purple-500 rounded-full"></div>
+                    <div className="h-full w-1/2 bg-blue-500 rounded-full"></div>
                   </div>
                   <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full w-5/6 bg-blue-500 rounded-full"></div>
+                    <div className="h-full w-5/6 bg-cyan-500 rounded-full"></div>
                   </div>
                 </div>
                 
@@ -202,7 +202,7 @@ const Hero: React.FC = () => {
             
             <div className="absolute top-10 right-6 glass-morphism p-4 rounded-xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-xl transition-transform duration-500 hover:translate-x-1 hover:translate-y-1">
               <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white">
+                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white">
                   <CheckCircle size={16} />
                 </div>
                 <div>
@@ -214,10 +214,10 @@ const Hero: React.FC = () => {
             
             {/* Code snippet floating element */}
             <div className="absolute top-1/2 -translate-y-1/2 -right-5 glass-morphism p-3 rounded-lg backdrop-blur-lg bg-gray-900/80 shadow-xl text-xs font-mono text-gray-200 w-44 transition-transform duration-500 hover:translate-x-1 border border-gray-700/50">
-              <div className="mb-1 text-indigo-400">.design-section {"{"}</div>
-              <div className="pl-3 mb-1"><span className="text-purple-400">display:</span> flex;</div>
-              <div className="pl-3 mb-1"><span className="text-purple-400">align-items:</span> center;</div>
-              <div className="pl-3 mb-1"><span className="text-purple-400">justify-content:</span> space-between;</div>
+              <div className="mb-1 text-teal-400">.design-section {"{"}</div>
+              <div className="pl-3 mb-1"><span className="text-blue-400">display:</span> flex;</div>
+              <div className="pl-3 mb-1"><span className="text-blue-400">align-items:</span> center;</div>
+              <div className="pl-3 mb-1"><span className="text-blue-400">justify-content:</span> space-between;</div>
               <div>{"}"}</div>
             </div>
           </div>
