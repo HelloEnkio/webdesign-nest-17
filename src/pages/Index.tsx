@@ -11,6 +11,10 @@ import { Toaster } from '@/components/ui/toaster';
 
 const Index: React.FC = () => {
   useEffect(() => {
+    // Précharger la vidéo pour une meilleure performance
+    const videoPreload = new Image();
+    videoPreload.src = 'https://videos.pexels.com/video-files/3163534/3163534-uhd_2560_1440_30fps.mp4';
+    
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
