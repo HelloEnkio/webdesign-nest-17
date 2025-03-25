@@ -11,7 +11,10 @@ import {
 } from "react"
 import {
   AnimatePresence,
+  AnimatePresenceProps,
   motion,
+  MotionProps,
+  Transition,
 } from "framer-motion"
 
 import { cn } from "@/lib/utils"
@@ -22,7 +25,7 @@ interface TextRotateProps {
   initial?: any
   animate?: any
   exit?: any
-  animatePresenceMode?: "sync" | "wait" | "popLayout"
+  animatePresenceMode?: AnimatePresenceProps["mode"]
   animatePresenceInitial?: boolean
   staggerDuration?: number
   staggerFrom?: "first" | "last" | "center" | number | "random"
@@ -73,6 +76,7 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
     ref
   ) => {
     const [currentTextIndex, setCurrentTextIndex] = useState(0)
+    const [isAnimating, setIsAnimating] = useState(false)
 
     // Function to split text into characters with support for unicode and emojis
     const splitIntoCharacters = (text: string): string[] => {
@@ -116,11 +120,21 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
 
     // Helper function to handle index changes and trigger callback
     const handleIndexChange = useCallback((newIndex: number) => {
+      if (isAnimating) return
+      
+      setIsAnimating(true)
       setCurrentTextIndex(newIndex)
       onNext?.(newIndex)
-    }, [onNext])
+      
+      // Reset the animation state after transition completes
+      setTimeout(() => {
+        setIsAnimating(false)
+      }, 400) // Match this with your animation duration
+    }, [onNext, isAnimating])
 
     const next = useCallback(() => {
+      if (isAnimating) return
+      
       const nextIndex = currentTextIndex === texts.length - 1
         ? (loop ? 0 : currentTextIndex)
         : currentTextIndex + 1
@@ -128,9 +142,11 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       if (nextIndex !== currentTextIndex) {
         handleIndexChange(nextIndex)
       }
-    }, [currentTextIndex, texts.length, loop, handleIndexChange])
+    }, [currentTextIndex, texts.length, loop, handleIndexChange, isAnimating])
 
     const previous = useCallback(() => {
+      if (isAnimating) return
+      
       const prevIndex = currentTextIndex === 0
         ? (loop ? texts.length - 1 : currentTextIndex)
         : currentTextIndex - 1
@@ -138,20 +154,24 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       if (prevIndex !== currentTextIndex) {
         handleIndexChange(prevIndex)
       }
-    }, [currentTextIndex, texts.length, loop, handleIndexChange])
+    }, [currentTextIndex, texts.length, loop, handleIndexChange, isAnimating])
 
     const jumpTo = useCallback((index: number) => {
+      if (isAnimating) return
+      
       const validIndex = Math.max(0, Math.min(index, texts.length - 1))
       if (validIndex !== currentTextIndex) {
         handleIndexChange(validIndex)
       }
-    }, [texts.length, currentTextIndex, handleIndexChange])
+    }, [texts.length, currentTextIndex, handleIndexChange, isAnimating])
 
     const reset = useCallback(() => {
+      if (isAnimating) return
+      
       if (currentTextIndex !== 0) {
         handleIndexChange(0)
       }
-    }, [currentTextIndex, handleIndexChange])
+    }, [currentTextIndex, handleIndexChange, isAnimating])
 
     // Expose all navigation functions via ref
     useImperativeHandle(ref, () => ({
@@ -164,9 +184,15 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
 
     useEffect(() => {
       if (!auto) return
-      const intervalId = setInterval(next, rotationInterval)
+      
+      const intervalId = setInterval(() => {
+        if (!isAnimating) {
+          next()
+        }
+      }, rotationInterval)
+      
       return () => clearInterval(intervalId)
-    }, [next, rotationInterval, auto])
+    }, [next, rotationInterval, auto, isAnimating])
 
     return (
       <motion.span

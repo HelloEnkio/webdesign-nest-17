@@ -40,18 +40,20 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
             avec{" "}
             <TextRotate 
               texts={rotatingWords}
-              rotationInterval={3000}
-              staggerDuration={0.03}
+              rotationInterval={4000}
+              staggerDuration={0.02}
               transition={{ 
                 type: "spring", 
-                damping: 25, 
-                stiffness: 300 
+                damping: 30,
+                stiffness: 400,
+                duration: 0.4
               }}
+              animatePresenceMode="sync"
               mainClassName="inline-flex overflow-hidden text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
               elementLevelClassName="text-transparent bg-clip-text inline-block"
-              initial={{ y: "100%", opacity: 0 }}
+              initial={{ y: "80%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "-100%", opacity: 0 }}
+              exit={{ y: "-80%", opacity: 0 }}
             />
           </motion.span>
         </h1>
