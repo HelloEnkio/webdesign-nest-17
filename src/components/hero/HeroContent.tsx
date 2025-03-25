@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import HeroStats from './HeroStats';
 import HeroClientLogos from './HeroClientLogos';
+import { TextRotate } from '@/components/ui/text-rotate';
+import { motion } from 'framer-motion';
 
 interface HeroContentProps {
   titleRef: React.RefObject<HTMLHeadingElement>;
@@ -13,15 +15,38 @@ interface HeroContentProps {
 }
 
 const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, buttonsRef, statsRef }) => {
+  const rotatingWords = [
+    "élégance",
+    "créativité",
+    "professionnalisme",
+    "efficacité",
+    "innovation",
+    "expertise",
+    "originalité",
+    "perfection"
+  ];
+
   return (
     <div className="lg:col-span-7 space-y-8 md:space-y-10 relative">
       <div className="space-y-4">
         <h1 ref={titleRef} className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight text-white drop-shadow-md">
-          <span className="block mb-2">Créez votre</span>
+          <motion.span className="block mb-2">Créez votre</motion.span>
           <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl">
-            présence digitale
+            <motion.span className="block">
+              présence digitale
+            </motion.span>
           </span>
-          <span className="block mt-2">avec élégance</span>
+          <motion.span className="block mt-2">
+            avec{" "}
+            <TextRotate 
+              texts={rotatingWords}
+              rotationInterval={3000}
+              staggerDuration={0.03}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              mainClassName="overflow-hidden text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
+              elementLevelClassName="text-transparent bg-clip-text"
+            />
+          </motion.span>
         </h1>
       </div>
       
