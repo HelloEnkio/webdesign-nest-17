@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from './ui/button';
 import { Mail, MapPin, Phone, Send, MessageCircle, Sparkles } from 'lucide-react';
@@ -399,7 +398,8 @@ const Contact: React.FC = () => {
       </div>
       
       {/* Add this to your global CSS or tailwind config */}
-      <style jsx>{`
+      <style>
+        {`
         @keyframes floatUp {
           0%, 100% {
             transform: translateY(0);
@@ -427,9 +427,11 @@ const Contact: React.FC = () => {
         .perspective {
           perspective: 1000px;
         }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };
 
 export default Contact;
+
