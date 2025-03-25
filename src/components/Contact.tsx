@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import Button from './ui/Button';
+import { Button } from './ui/button';
 import AnimatedCard from './ui/AnimatedCard';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
