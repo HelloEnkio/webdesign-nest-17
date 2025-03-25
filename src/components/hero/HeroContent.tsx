@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -38,25 +39,26 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
             </motion.span>
           </span>
           <motion.span className="block mt-2">
-            avec{" "}
-            <TextRotate 
-              ref={textRotateRef}
-              texts={rotatingWords}
-              rotationInterval={5000}
-              staggerDuration={0.02}
-              transition={{ 
-                type: "spring", 
-                damping: 30,
-                stiffness: 400,
-                duration: 0.4
-              }}
-              animatePresenceMode="sync"
-              mainClassName="inline-flex overflow-hidden text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
-              elementLevelClassName="text-transparent bg-clip-text inline-block"
-              initial={{ y: "80%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "-80%", opacity: 0 }}
-            />
+            avec <span className="inline-flex">
+              <TextRotate 
+                ref={textRotateRef}
+                texts={rotatingWords}
+                rotationInterval={4000}
+                staggerDuration={0.01}
+                transition={{ 
+                  type: "spring", 
+                  damping: 25,
+                  stiffness: 400,
+                  duration: 0.3
+                }}
+                animatePresenceMode="sync"
+                mainClassName="inline-flex overflow-hidden text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
+                elementLevelClassName="text-transparent bg-clip-text inline-block"
+                initial={{ y: "50%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "-50%", opacity: 0 }}
+              />
+            </span>
           </motion.span>
         </h1>
       </div>
