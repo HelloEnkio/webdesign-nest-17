@@ -3,22 +3,20 @@
 
 import {
   forwardRef,
-  useEffect,
   useImperativeHandle,
-  useMemo,
-  useState
+  useMemo
 } from "react"
 import {
   AnimatePresence,
   AnimatePresenceProps,
   motion,
-  Transition,
 } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 import { useTextRotate } from "@/hooks/use-text-rotate"
 import { getStaggerDelay } from "@/utils/text-utils"
 import { TextRotateCharacter } from "./text-rotate-character"
+import { useTypingEffect } from "@/hooks/use-typing-effect"
 
 interface TextRotateProps {
   texts: string[]
@@ -82,11 +80,6 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
     },
     ref
   ) => {
-    const [displayText, setDisplayText] = useState("");
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [isDone, setIsDone] = useState(false);
-    const [pauseTyping, setPauseTyping] = useState(false);
-    
     const { 
       currentTextIndex, 
       next, 
@@ -111,71 +104,20 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       setRotationSpeed
     }), [next, previous, jumpTo, reset, setRotationSpeed]);
 
-    // Reset the animation when the current word changes
-    useEffect(() => {
-      if (typingMode) {
-        setDisplayText("");
-        setIsDeleting(false);
-        setIsDone(false);
-        setPauseTyping(false);
-      }
-    }, [currentTextIndex, typingMode]);
-
-    // Handle typing effect
-    useEffect(() => {
-      if (!typingMode) return;
-      
-      const currentWord = texts[currentTextIndex];
-      
-      const typeNextChar = () => {
-        if (isDeleting) {
-          // Deleting mode
-          if (displayText.length > 0) {
-            setDisplayText(prev => prev.slice(0, -1));
-          } else {
-            setIsDeleting(false);
-            next(); // Move to the next word when deletion is complete
-          }
-        } else if (pauseTyping) {
-          // We're pausing before deletion
-          setTimeout(() => {
-            setPauseTyping(false);
-            setIsDeleting(true);
-          }, pauseBeforeDelete);
-        } else {
-          // Typing mode
-          if (displayText.length < currentWord.length) {
-            setDisplayText(prev => currentWord.slice(0, prev.length + 1));
-          } else if (displayText.length === currentWord.length) {
-            setPauseTyping(true);
-          }
-        }
-      };
-      
-      // Set up typing/deleting animation interval
-      const intervalSpeed = isDeleting ? deletingSpeed : 
-                           pauseTyping ? pauseBeforeDelete : typingSpeed;
-      
-      const typingInterval = setTimeout(typeNextChar, intervalSpeed);
-      
-      return () => clearTimeout(typingInterval);
-    }, [
-      typingMode, 
-      displayText, 
-      currentTextIndex, 
-      isDeleting, 
-      pauseTyping,
-      texts, 
-      typingSpeed, 
-      deletingSpeed, 
-      pauseBeforeDelete, 
-      next
-    ]);
+    // Handle typing effect if enabled
+    const { displayText, isDeleting } = useTypingEffect({
+      enabled: typingMode,
+      currentWord: texts[currentTextIndex],
+      typingSpeed,
+      deletingSpeed,
+      pauseBeforeDelete,
+      onComplete: next
+    });
 
     // Prepare the text elements for rendering
     const elements = useMemo(() => {
       if (typingMode) {
-        return Array.from(displayText);
+        return Array.from(displayText || "");
       } else {
         const currentText = texts[currentTextIndex];
         
