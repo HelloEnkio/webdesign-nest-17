@@ -1,10 +1,9 @@
-
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import HeroStats from './HeroStats';
 import HeroClientLogos from './HeroClientLogos';
-import { TextRotate, TextRotateRef } from '@/components/ui/text-rotate';
+import { TypingAnimation } from '@/components/ui/typing-animation';
 import { motion } from 'framer-motion';
 
 interface HeroContentProps {
@@ -25,8 +24,6 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
     "originalité",
     "perfection"
   ];
-  
-  const textRotateRef = useRef<TextRotateRef>(null);
 
   return (
     <div className="lg:col-span-7 space-y-8 md:space-y-10 relative">
@@ -39,17 +36,14 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
             </motion.span>
           </span>
           <motion.span className="block mt-2">
-            avec <span className="inline-flex">
-              <TextRotate 
-                ref={textRotateRef}
+            avec{" "}
+            <span className="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl">
+              <TypingAnimation 
                 texts={rotatingWords}
-                typingMode={true}
                 typingSpeed={100}
                 deletingSpeed={60}
                 pauseBeforeDelete={2000}
                 showCursor={true}
-                mainClassName="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
-                elementLevelClassName="text-transparent bg-clip-text inline-block"
               />
             </span>
           </motion.span>
