@@ -38,10 +38,6 @@ interface TextRotateProps {
   mainClassName?: string
   splitLevelClassName?: string
   elementLevelClassName?: string
-  showSpeedControl?: boolean
-  minSpeed?: number
-  maxSpeed?: number
-  speedControlClassName?: string
   typingMode?: boolean
   typingSpeed?: number
   deletingSpeed?: number
@@ -77,10 +73,6 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       mainClassName,
       splitLevelClassName,
       elementLevelClassName,
-      showSpeedControl = false,
-      minSpeed = 1000,
-      maxSpeed = 8000,
-      speedControlClassName,
       typingMode = false,
       typingSpeed = 50,
       deletingSpeed = 30,
@@ -90,10 +82,10 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
     },
     ref
   ) => {
-    const [currentSpeed, setCurrentSpeed] = useState(rotationInterval);
     const [displayText, setDisplayText] = useState("");
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDone, setIsDone] = useState(false);
+    const [pauseTyping, setPauseTyping] = useState(false);
     
     const { 
       currentTextIndex, 
@@ -104,7 +96,7 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       setRotationSpeed 
     } = useTextRotate({
       texts,
-      rotationInterval: !typingMode ? currentSpeed : 100000, // Very long interval when in typing mode
+      rotationInterval: !typingMode ? rotationInterval : 100000, // Very long interval when in typing mode
       loop,
       auto: !typingMode && auto, // Disable auto when in typing mode
       onNext
@@ -116,64 +108,63 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       previous,
       jumpTo,
       reset,
-      setRotationSpeed: (speed: number) => {
-        setCurrentSpeed(speed);
-        setRotationSpeed(speed);
-      }
+      setRotationSpeed
     }), [next, previous, jumpTo, reset, setRotationSpeed]);
+
+    // Reset the animation when the current word changes
+    useEffect(() => {
+      if (typingMode) {
+        setDisplayText("");
+        setIsDeleting(false);
+        setIsDone(false);
+        setPauseTyping(false);
+      }
+    }, [currentTextIndex, typingMode]);
 
     // Handle typing effect
     useEffect(() => {
       if (!typingMode) return;
-
+      
       const currentWord = texts[currentTextIndex];
       
-      const typeText = () => {
+      const typeNextChar = () => {
         if (isDeleting) {
           // Deleting mode
           if (displayText.length > 0) {
-            const newText = displayText.slice(0, -1);
-            setDisplayText(newText);
-            
-            setTimeout(typeText, deletingSpeed);
+            setDisplayText(prev => prev.slice(0, -1));
           } else {
             setIsDeleting(false);
-            setIsDone(true);
-            setTimeout(() => {
-              next();
-              setIsDone(false);
-            }, 100);
+            next(); // Move to the next word when deletion is complete
           }
+        } else if (pauseTyping) {
+          // We're pausing before deletion
+          setTimeout(() => {
+            setPauseTyping(false);
+            setIsDeleting(true);
+          }, pauseBeforeDelete);
         } else {
           // Typing mode
           if (displayText.length < currentWord.length) {
-            const newText = currentWord.slice(0, displayText.length + 1);
-            setDisplayText(newText);
-            
-            setTimeout(typeText, typingSpeed);
-          } else {
-            // Done typing, pause before delete
-            setTimeout(() => {
-              setIsDeleting(true);
-              typeText();
-            }, pauseBeforeDelete);
+            setDisplayText(prev => currentWord.slice(0, prev.length + 1));
+          } else if (displayText.length === currentWord.length) {
+            setPauseTyping(true);
           }
         }
       };
       
-      // Reset when word changes
-      if (!isDeleting && !isDone && displayText.length === 0) {
-        typeText();
-      }
+      // Set up typing/deleting animation interval
+      const intervalSpeed = isDeleting ? deletingSpeed : 
+                           pauseTyping ? pauseBeforeDelete : typingSpeed;
       
-      // Cleanup
-      return () => {};
+      const typingInterval = setTimeout(typeNextChar, intervalSpeed);
+      
+      return () => clearTimeout(typingInterval);
     }, [
       typingMode, 
       displayText, 
       currentTextIndex, 
       isDeleting, 
-      isDone, 
+      pauseTyping,
       texts, 
       typingSpeed, 
       deletingSpeed, 
@@ -260,7 +251,7 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
               ))}
               {showCursor && (
                 <motion.span
-                  className={cn("inline-block w-0.5 h-5 bg-teal-300 ml-0.5", {
+                  className={cn("inline-block w-0.5 h-6 bg-teal-300 ml-0.5", {
                     "animate-pulse": !isDeleting
                   })}
                   initial={{ opacity: 0 }}

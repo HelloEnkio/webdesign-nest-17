@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -43,9 +44,9 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
                 ref={textRotateRef}
                 texts={rotatingWords}
                 typingMode={true}
-                typingSpeed={80}
-                deletingSpeed={50}
-                pauseBeforeDelete={1800}
+                typingSpeed={100}
+                deletingSpeed={60}
+                pauseBeforeDelete={2000}
                 showCursor={true}
                 mainClassName="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
                 elementLevelClassName="text-transparent bg-clip-text inline-block"
