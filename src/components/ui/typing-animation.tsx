@@ -71,7 +71,7 @@ export function TypingAnimation({
       {showCursor && (
         <span 
           className={cn(
-            "inline-block w-0.5 h-6 bg-teal-300 ml-0.5",
+            "inline-block w-0.5 h-9 bg-teal-300 ml-0.5",
             isDeleting ? "opacity-50" : "animate-pulse"
           )}
         />
