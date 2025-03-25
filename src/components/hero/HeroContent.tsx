@@ -42,9 +42,16 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
               texts={rotatingWords}
               rotationInterval={3000}
               staggerDuration={0.03}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              mainClassName="overflow-hidden text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
-              elementLevelClassName="text-transparent bg-clip-text"
+              transition={{ 
+                type: "spring", 
+                damping: 25, 
+                stiffness: 300 
+              }}
+              mainClassName="inline-flex overflow-hidden text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
+              elementLevelClassName="text-transparent bg-clip-text inline-block"
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "-100%", opacity: 0 }}
             />
           </motion.span>
         </h1>
@@ -56,6 +63,7 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
         <span className="font-medium text-white"> performance technique</span> pour donner vie à votre vision.
       </p>
       
+      {/* Boutons */}
       <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
         <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-br from-teal-400 via-teal-500 to-cyan-600 hover:shadow-xl hover:shadow-teal-500/30 transition-all duration-300 border-0 text-lg font-medium py-7 px-8">
           <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-cyan-400 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:translate-y-0"></span>
