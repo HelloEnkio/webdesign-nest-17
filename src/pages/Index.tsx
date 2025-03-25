@@ -7,6 +7,7 @@ import Portfolio from '@/components/Portfolio';
 import Process from '@/components/Process';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import { Toaster } from '@/components/ui/toaster';
 
 const Index: React.FC = () => {
   useEffect(() => {
@@ -44,6 +45,7 @@ const Index: React.FC = () => {
       <Process />
       <Contact />
       <Footer />
+      <Toaster />
     </div>
   );
 };
