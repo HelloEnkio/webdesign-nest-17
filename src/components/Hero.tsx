@@ -77,7 +77,7 @@ const Hero: React.FC = () => {
 
   return (
     <section id="home" className="relative pt-28 pb-20 md:pt-32 md:pb-24 overflow-hidden">
-      {/* Video Background */}
+      {/* Video Background with stronger overlay for better text readability */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
         <video
           ref={videoRef}
@@ -86,72 +86,72 @@ const Hero: React.FC = () => {
           loop
           playsInline
           className="absolute w-full h-full object-cover"
-          style={{ filter: 'brightness(0.85) saturate(1.1)' }}
+          style={{ filter: 'brightness(0.6) saturate(1.2)' }} // Darkened for better text contrast
         >
           <source src="https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4" type="video/mp4" />
         </video>
-        {/* Overlay to ensure text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-900/70 to-blue-900/60 mix-blend-multiply"></div>
+        {/* Stronger gradient overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90 to-blue-900/80 mix-blend-multiply"></div>
         {/* Additional subtle patterns */}
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPC9zdmc+')] opacity-20"></div>
       </div>
 
       <div className="section-container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <div className="space-y-6 md:space-y-8 relative">
-            <div className="space-y-2 relative">
-              <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight text-white">
+          {/* Text Content - Improved contrast and readability */}
+          <div className="space-y-8 md:space-y-10 relative">
+            <div className="space-y-4 relative">
+              <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight text-white drop-shadow-md">
                 Créez votre<br /> 
                 <span className="relative inline-block">
                   <span className="relative z-10 bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">présence digitale</span>
-                  <span className="absolute bottom-2 left-0 w-full h-3 bg-gradient-to-r from-teal-500/30 to-blue-500/30 rounded-lg -z-10 opacity-70"></span>
+                  <span className="absolute bottom-2 left-0 w-full h-3 bg-gradient-to-r from-teal-500/40 to-blue-500/40 rounded-lg -z-10 opacity-70"></span>
                 </span><br /> 
                 avec élégance
               </h1>
             </div>
             
-            <p ref={subtitleRef} className="text-lg md:text-xl text-gray-200 max-w-xl opacity-0">
+            <p ref={subtitleRef} className="text-xl md:text-2xl text-gray-100 max-w-xl opacity-0 drop-shadow-md leading-relaxed">
               Nous concevons des expériences web sur mesure qui combinent 
               <span className="font-medium text-white"> esthétique contemporaine</span> et 
               <span className="font-medium text-white"> performance technique</span> pour donner vie à votre vision.
             </p>
             
             <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
-              <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-r from-teal-600 to-blue-600 hover:shadow-lg hover:shadow-teal-500/20 transition-all duration-300 border-0">
+              <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-r from-teal-500 to-blue-500 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 border-0 text-lg font-medium py-6">
                 <span className="relative z-10 flex items-center">
                   Discuter de votre projet 
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               </Button>
               
-              <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/30 text-white hover:border-teal-300/50 hover:bg-teal-900/20 transition-all duration-300">
+              <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/50 text-white hover:border-teal-300/70 hover:bg-teal-900/30 transition-all duration-300 text-lg font-medium py-6">
                 Voir notre portfolio
               </Button>
             </div>
             
-            {/* Stats */}
+            {/* Stats - Enhanced for better readability */}
             <div ref={statsRef} className="grid grid-cols-3 gap-4 pt-6 opacity-0">
-              <div className="space-y-1 p-4 rounded-xl bg-white/10 backdrop-blur-md shadow-sm border border-white/20">
-                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">150+</p>
-                <p className="text-sm text-gray-300">Projets livrés</p>
+              <div className="space-y-2 p-5 rounded-xl bg-white/15 backdrop-blur-md shadow-lg border border-white/30">
+                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">150+</p>
+                <p className="text-sm md:text-base text-gray-200 font-medium">Projets livrés</p>
               </div>
-              <div className="space-y-1 p-4 rounded-xl bg-white/10 backdrop-blur-md shadow-sm border border-white/20">
-                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">98%</p>
-                <p className="text-sm text-gray-300">Clients satisfaits</p>
+              <div className="space-y-2 p-5 rounded-xl bg-white/15 backdrop-blur-md shadow-lg border border-white/30">
+                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">98%</p>
+                <p className="text-sm md:text-base text-gray-200 font-medium">Clients satisfaits</p>
               </div>
-              <div className="space-y-1 p-4 rounded-xl bg-white/10 backdrop-blur-md shadow-sm border border-white/20">
-                <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">10+</p>
-                <p className="text-sm text-gray-300">Ans d'expérience</p>
+              <div className="space-y-2 p-5 rounded-xl bg-white/15 backdrop-blur-md shadow-lg border border-white/30">
+                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">10+</p>
+                <p className="text-sm md:text-base text-gray-200 font-medium">Ans d'expérience</p>
               </div>
             </div>
             
-            {/* Clients logos */}
-            <div className="pt-4 opacity-80">
-              <p className="text-xs uppercase text-teal-200 font-medium tracking-wider mb-3">Ils nous font confiance</p>
-              <div className="flex gap-6 items-center">
-                <div className="h-8 w-auto text-gray-300">
+            {/* Clients logos - Enhanced contrast */}
+            <div className="pt-4 opacity-90">
+              <p className="text-sm uppercase text-teal-200 font-medium tracking-wider mb-4">Ils nous font confiance</p>
+              <div className="flex gap-8 items-center">
+                <div className="h-8 w-auto text-gray-200 hover:text-white transition-colors">
                   <svg viewBox="0 0 124 34" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M31.1 17C31.1 26.5 24.5 33 15 33C5.5 33 0 26.5 0 17C0 7.5 5.5 1 15 1C24.5 1 31.1 7.5 31.1 17Z" />
                     <path d="M43.5 25.4V9.2H48.4V25.4H43.5ZM43.2 7C43.2 6.1 43.5 5.3 44.1 4.7C44.7 4.1 45.5 3.8 46.4 3.8C47.3 3.8 48.1 4.1 48.7 4.7C49.3 5.3 49.6 6 49.6 6.9C49.6 7.8 49.3 8.6 48.7 9.2C48.1 9.8 47.3 10.1 46.4 10.1C45.5 10.1 44.7 9.8 44.1 9.2C43.5 8.6 43.2 7.9 43.2 7Z" />
@@ -162,7 +162,7 @@ const Hero: React.FC = () => {
                     <path d="M124 25.4V9.2H118.9V25.4H124Z" />
                   </svg>
                 </div>
-                <div className="h-8 w-auto text-gray-300">
+                <div className="h-8 w-auto text-gray-200 hover:text-white transition-colors">
                   <svg viewBox="0 0 124 34" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 25.4H4.9V9.2H0V25.4ZM2.4 7.7C3.3 7.7 4.1 7.4 4.7 6.8C5.3 6.2 5.6 5.4 5.6 4.5C5.6 3.6 5.3 2.8 4.7 2.2C4.1 1.6 3.3 1.3 2.4 1.3C1.5 1.3 0.7 1.6 0.1 2.2C-0.5 2.8 -0.8 3.6 -0.8 4.5C-0.8 5.4 -0.5 6.2 0.1 6.8C0.7 7.4 1.5 7.7 2.4 7.7Z" />
                     <path d="M10.3 25.4H15.2V15.7C15.2 14.8 15.5 14.1 16 13.6C16.5 13.1 17.2 12.8 18 12.8C18.8 12.8 19.5 13.1 20 13.6C20.5 14.1 20.8 14.8 20.8 15.7V25.4H25.7V14.6C25.7 12.4 25.2 10.7 24.1 9.5C23 8.3 21.6 7.7 19.8 7.7C18.3 7.7 17 8.2 15.9 9.2V8.1H10.8V25.4H10.3Z" />
@@ -174,7 +174,7 @@ const Hero: React.FC = () => {
                     <path d="M68.6 25.4V19.9H62.4V15.7H68.9V10.2H75.4V15.7H81.9V19.9H75.4V25.4H68.6Z" />
                   </svg>
                 </div>
-                <div className="h-6 w-auto text-gray-300">
+                <div className="h-6 w-auto text-gray-200 hover:text-white transition-colors">
                   <svg viewBox="0 0 124 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.2 7.2L13.1 19.9H9.4L6.6 11.9L3.8 19.9H0.1L0 19.6L4.1 7.2H7.8L10.6 15.2L13.4 7.2H17.2Z" />
                     <path d="M18.3 13.6C18.3 12.2 18.7 11 19.5 10.2C20.3 9.4 21.5 9 22.9 9C24.3 9 25.5 9.4 26.3 10.2C27.1 11 27.5 12.2 27.5 13.6C27.5 15 27.1 16.2 26.3 17C25.5 17.8 24.3 18.2 22.9 18.2C21.5 18.2 20.3 17.8 19.5 17C18.7 16.2 18.3 15 18.3 13.6ZM22.9 15.6C23.4 15.6 23.8 15.4 24.1 15.1C24.4 14.8 24.5 14.3 24.5 13.6C24.5 12.9 24.3 12.4 24 12.1C23.7 11.8 23.3 11.6 22.8 11.6C22.3 11.6 21.9 11.8 21.6 12.1C21.3 12.4 21.2 12.9 21.2 13.6C21.2 14.3 21.4 14.8 21.7 15.1C22 15.4 22.4 15.6 22.9 15.6Z" />
@@ -195,13 +195,13 @@ const Hero: React.FC = () => {
             </div>
           </div>
           
-          {/* Hero Image area with website examples carousel */}
+          {/* Hero Image area with website examples carousel - Enhanced visibility */}
           <div ref={imageRef} className="relative opacity-0 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl perspective">
-            {/* Glassmorphism container */}
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-600/20 via-blue-500/10 to-transparent backdrop-blur-sm rounded-2xl border border-white/10"></div>
+            {/* Glassmorphism container - Improved contrast */}
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-700/30 via-blue-600/20 to-transparent backdrop-blur-md rounded-2xl border border-white/20 shadow-xl"></div>
             
-            {/* Interactive floating elements */}
-            <div className="absolute bottom-12 left-6 w-48 h-48 glass-morphism p-5 rounded-2xl shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-teal-500/20 backdrop-blur-lg bg-white/10 border border-white/20">
+            {/* Interactive floating elements - Enhanced visibility */}
+            <div className="absolute bottom-12 left-6 w-48 h-48 glass-morphism p-5 rounded-2xl shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-teal-500/30 backdrop-blur-lg bg-white/20 border border-white/30">
               <div className="w-full h-full flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold text-white">Design UI/UX</div>
@@ -213,60 +213,60 @@ const Hero: React.FC = () => {
                 </div>
                 
                 <div className="space-y-3 mt-2">
-                  <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
                     <div className="h-full w-3/4 bg-teal-500 rounded-full"></div>
                   </div>
-                  <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
                     <div className="h-full w-1/2 bg-blue-500 rounded-full"></div>
                   </div>
-                  <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
                     <div className="h-full w-5/6 bg-cyan-500 rounded-full"></div>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between mt-auto">
-                  <div className="text-xs text-gray-300">Progress</div>
+                  <div className="text-xs text-gray-200">Progress</div>
                   <div className="text-xs font-semibold text-white">75%</div>
                 </div>
               </div>
             </div>
             
-            {/* Code snippet floating element */}
-            <div className="absolute top-1/2 -translate-y-1/2 -right-5 glass-morphism p-3 rounded-lg backdrop-blur-lg bg-gray-900/80 shadow-xl text-xs font-mono text-gray-200 w-44 transition-transform duration-500 hover:translate-x-1 border border-gray-700/50">
-              <div className="mb-1 text-teal-400">.design-section {"{"}</div>
-              <div className="pl-3 mb-1"><span className="text-blue-400">display:</span> flex;</div>
-              <div className="pl-3 mb-1"><span className="text-blue-400">align-items:</span> center;</div>
-              <div className="pl-3 mb-1"><span className="text-blue-400">justify-content:</span> space-between;</div>
+            {/* Code snippet floating element - Enhanced contrast */}
+            <div className="absolute top-1/2 -translate-y-1/2 -right-5 glass-morphism p-3 rounded-lg backdrop-blur-lg bg-gray-900/90 shadow-xl text-xs font-mono text-gray-100 w-44 transition-transform duration-500 hover:translate-x-1 border border-gray-700/70">
+              <div className="mb-1 text-teal-300">.design-section {"{"}</div>
+              <div className="pl-3 mb-1"><span className="text-blue-300">display:</span> flex;</div>
+              <div className="pl-3 mb-1"><span className="text-blue-300">align-items:</span> center;</div>
+              <div className="pl-3 mb-1"><span className="text-blue-300">justify-content:</span> space-between;</div>
               <div>{"}"}</div>
             </div>
             
-            {/* Website examples carousel */}
+            {/* Website examples carousel - Enhanced visibility */}
             <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-md">
               <Carousel className="w-full">
                 <CarouselContent>
                   {websiteExamples.map((example) => (
                     <CarouselItem key={example.id}>
-                      <AnimatedCard className="p-0 overflow-hidden border border-white/20 shadow-xl bg-black/30 backdrop-blur-md">
+                      <AnimatedCard className="p-0 overflow-hidden border border-white/30 shadow-xl bg-black/40 backdrop-blur-md">
                         <div className="relative group">
                           <img 
                             src={example.image} 
                             alt={example.title}
                             className="w-full h-44 object-cover brightness-90"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80"></div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-90"></div>
                           <div className="absolute bottom-0 left-0 right-0 p-4 transform transition-transform group-hover:translate-y-0">
                             <div className="flex items-center gap-2 mb-2">
-                              <div className="bg-white/20 backdrop-blur-sm p-1 rounded-md">
+                              <div className="bg-white/30 backdrop-blur-sm p-1 rounded-md">
                                 {example.icon}
                               </div>
                               <h3 className="text-white font-semibold text-lg">{example.title}</h3>
                             </div>
-                            <p className="text-gray-200 text-sm mb-3">{example.description}</p>
+                            <p className="text-gray-100 text-sm mb-3">{example.description}</p>
                             <div className="flex gap-2 flex-wrap">
                               {example.tags.map((tag, index) => (
                                 <span 
                                   key={index} 
-                                  className="text-xs py-1 px-2 bg-white/10 backdrop-blur-sm rounded-full text-gray-200"
+                                  className="text-xs py-1 px-2 bg-white/20 backdrop-blur-sm rounded-full text-gray-100 font-medium"
                                 >
                                   {tag}
                                 </span>
@@ -278,31 +278,31 @@ const Hero: React.FC = () => {
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="left-2 bg-white/10 text-white border-white/20 hover:bg-white/20" />
-                <CarouselNext className="right-2 bg-white/10 text-white border-white/20 hover:bg-white/20" />
+                <CarouselPrevious className="left-2 bg-white/20 text-white border-white/30 hover:bg-white/30" />
+                <CarouselNext className="right-2 bg-white/20 text-white border-white/30 hover:bg-white/30" />
               </Carousel>
             </div>
             
-            {/* Small device preview with mockup */}
+            {/* Small device preview with mockup - Enhanced visibility */}
             <HoverCard>
               <HoverCardTrigger asChild>
-                <div className="absolute right-6 top-10 glass-morphism p-4 rounded-xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-xl transition-transform duration-500 hover:translate-x-1 hover:translate-y-1 cursor-pointer">
+                <div className="absolute right-6 top-10 glass-morphism p-4 rounded-xl backdrop-blur-lg bg-white/20 border border-white/30 shadow-xl transition-transform duration-500 hover:translate-x-1 hover:translate-y-1 cursor-pointer">
                   <div className="flex items-center gap-4">
                     <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white">
                       <CheckCircle size={16} />
                     </div>
                     <div>
                       <div className="text-xs font-semibold text-white">Site Responsif</div>
-                      <div className="text-xs text-gray-300">Compatible tous écrans</div>
+                      <div className="text-xs text-gray-200">Compatible tous écrans</div>
                     </div>
                   </div>
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent className="w-80 bg-white/10 backdrop-blur-xl border-white/20 text-white">
+              <HoverCardContent className="w-80 bg-white/20 backdrop-blur-xl border-white/30 text-white">
                 <div className="flex justify-between space-x-4">
                   <div className="space-y-1">
                     <h4 className="text-sm font-semibold">Design Responsive</h4>
-                    <p className="text-xs text-gray-300">
+                    <p className="text-xs text-gray-200">
                       Nos designs s'adaptent parfaitement à tous les formats d'écrans et appareils pour une expérience utilisateur optimale.
                     </p>
                   </div>
