@@ -76,7 +76,7 @@ const Hero: React.FC = () => {
   ];
 
   return (
-    <section id="home" className="relative pt-28 pb-20 md:pt-32 md:pb-24 overflow-hidden">
+    <section id="home" className="relative pt-24 pb-20 md:pt-28 md:pb-24 overflow-hidden">
       {/* Video Background with stronger overlay for better text readability */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
         <video
@@ -86,28 +86,27 @@ const Hero: React.FC = () => {
           loop
           playsInline
           className="absolute w-full h-full object-cover"
-          style={{ filter: 'brightness(0.6) saturate(1.2)' }} // Darkened for better text contrast
+          style={{ filter: 'brightness(0.4) saturate(1.2)' }} // Darkened for better text contrast
         >
           <source src="https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4" type="video/mp4" />
         </video>
         {/* Stronger gradient overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90 to-blue-900/80 mix-blend-multiply"></div>
-        {/* Additional subtle patterns */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-blue-950/85 to-teal-950/80"></div>
+        {/* Additional subtle patterns for depth */}
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPC9zdmc+')] opacity-20"></div>
       </div>
 
       <div className="section-container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content - Improved contrast and readability */}
-          <div className="space-y-8 md:space-y-10 relative">
-            <div className="space-y-4 relative">
-              <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight text-white drop-shadow-md">
-                Créez votre<br /> 
-                <span className="relative inline-block">
-                  <span className="relative z-10 bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">présence digitale</span>
-                  <span className="absolute bottom-2 left-0 w-full h-3 bg-gradient-to-r from-teal-500/40 to-blue-500/40 rounded-lg -z-10 opacity-70"></span>
-                </span><br /> 
-                avec élégance
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Text Content - Left Side (spans 7 columns) */}
+          <div className="lg:col-span-7 space-y-8 md:space-y-10 relative">
+            <div className="space-y-4">
+              <h1 ref={titleRef} className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight text-white drop-shadow-md">
+                <span className="block mb-2">Créez votre</span>
+                <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl">
+                  présence digitale
+                </span>
+                <span className="block mt-2">avec élégance</span>
               </h1>
             </div>
             
@@ -126,23 +125,23 @@ const Hero: React.FC = () => {
                 <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               </Button>
               
-              <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/50 text-white hover:border-teal-300/70 hover:bg-teal-900/30 transition-all duration-300 text-lg font-medium py-6">
+              <Button variant="outline" size="lg" className="rounded-full border-2 border-teal-300/70 text-white hover:border-teal-300 hover:bg-teal-900/30 transition-all duration-300 text-lg font-medium py-6">
                 Voir notre portfolio
               </Button>
             </div>
             
             {/* Stats - Enhanced for better readability */}
             <div ref={statsRef} className="grid grid-cols-3 gap-4 pt-6 opacity-0">
-              <div className="space-y-2 p-5 rounded-xl bg-white/15 backdrop-blur-md shadow-lg border border-white/30">
-                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">150+</p>
+              <div className="space-y-2 p-5 rounded-xl bg-white/10 backdrop-blur-md shadow-lg border border-white/20">
+                <p className="text-3xl md:text-4xl font-bold text-teal-300">150+</p>
                 <p className="text-sm md:text-base text-gray-200 font-medium">Projets livrés</p>
               </div>
-              <div className="space-y-2 p-5 rounded-xl bg-white/15 backdrop-blur-md shadow-lg border border-white/30">
-                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">98%</p>
+              <div className="space-y-2 p-5 rounded-xl bg-white/10 backdrop-blur-md shadow-lg border border-white/20">
+                <p className="text-3xl md:text-4xl font-bold text-teal-300">98%</p>
                 <p className="text-sm md:text-base text-gray-200 font-medium">Clients satisfaits</p>
               </div>
-              <div className="space-y-2 p-5 rounded-xl bg-white/15 backdrop-blur-md shadow-lg border border-white/30">
-                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">10+</p>
+              <div className="space-y-2 p-5 rounded-xl bg-white/10 backdrop-blur-md shadow-lg border border-white/20">
+                <p className="text-3xl md:text-4xl font-bold text-teal-300">10+</p>
                 <p className="text-sm md:text-base text-gray-200 font-medium">Ans d'expérience</p>
               </div>
             </div>
@@ -195,120 +194,106 @@ const Hero: React.FC = () => {
             </div>
           </div>
           
-          {/* Hero Image area with website examples carousel - Enhanced visibility */}
-          <div ref={imageRef} className="relative opacity-0 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl perspective">
-            {/* Glassmorphism container - Improved contrast */}
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-700/30 via-blue-600/20 to-transparent backdrop-blur-md rounded-2xl border border-white/20 shadow-xl"></div>
-            
-            {/* Interactive floating elements - Enhanced visibility */}
-            <div className="absolute bottom-12 left-6 w-48 h-48 glass-morphism p-5 rounded-2xl shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-teal-500/30 backdrop-blur-lg bg-white/20 border border-white/30">
-              <div className="w-full h-full flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold text-white">Design UI/UX</div>
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 rounded-full bg-teal-400"></div>
-                    <div className="w-2 h-2 rounded-full bg-blue-400"></div>
-                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+          {/* Right Side - Website Examples (spans 5 columns) */}
+          <div ref={imageRef} className="lg:col-span-5 opacity-0 h-[400px] md:h-[500px] lg:h-auto relative">
+            {/* Main showcase container - with improved visibility */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-900/40 to-teal-900/40 backdrop-blur-md border border-white/20 shadow-2xl overflow-hidden">
+              {/* Website examples carousel - Enhanced visibility */}
+              <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-md z-10">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {websiteExamples.map((example) => (
+                      <CarouselItem key={example.id}>
+                        <AnimatedCard className="p-0 overflow-hidden border-0 shadow-xl bg-black/40 backdrop-blur-md">
+                          <div className="relative group">
+                            <img 
+                              src={example.image} 
+                              alt={example.title}
+                              className="w-full h-44 object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-90"></div>
+                            <div className="absolute bottom-0 left-0 right-0 p-4 transform transition-transform group-hover:translate-y-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                <div className="bg-white/20 backdrop-blur-sm p-1 rounded-md">
+                                  {example.icon}
+                                </div>
+                                <h3 className="text-white font-semibold text-lg">{example.title}</h3>
+                              </div>
+                              <p className="text-gray-100 text-sm mb-3">{example.description}</p>
+                              <div className="flex gap-2 flex-wrap">
+                                {example.tags.map((tag, index) => (
+                                  <span 
+                                    key={index} 
+                                    className="text-xs py-1 px-2 bg-teal-900/70 backdrop-blur-sm rounded-full text-teal-100 font-medium"
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </AnimatedCard>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-2 bg-white/10 text-white border-white/20 hover:bg-white/20" />
+                  <CarouselNext className="right-2 bg-white/10 text-white border-white/20 hover:bg-white/20" />
+                </Carousel>
+              </div>
+              
+              {/* Code snippet with enhanced contrast */}
+              <div className="absolute bottom-10 right-4 p-3 rounded-lg backdrop-blur-lg bg-black/80 shadow-xl text-xs font-mono text-gray-200 w-44 border border-teal-900/70 z-20">
+                <div className="mb-1 text-teal-300">.design-section {"{"}</div>
+                <div className="pl-3 mb-1"><span className="text-cyan-300">display:</span> flex;</div>
+                <div className="pl-3 mb-1"><span className="text-cyan-300">align-items:</span> center;</div>
+                <div className="pl-3 mb-1"><span className="text-cyan-300">justify-content:</span> space-between;</div>
+                <div>{"}"}</div>
+              </div>
+              
+              {/* Site Responsive badge with contrast improvement */}
+              <div className="absolute top-10 right-4 p-4 rounded-xl backdrop-blur-lg bg-teal-900/30 border border-teal-500/30 shadow-xl z-20">
+                <div className="flex items-center gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white">
+                    <CheckCircle size={16} />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-white">Site Responsif</div>
+                    <div className="text-xs text-gray-200">Compatible tous écrans</div>
                   </div>
                 </div>
-                
-                <div className="space-y-3 mt-2">
-                  <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
-                    <div className="h-full w-3/4 bg-teal-500 rounded-full"></div>
+              </div>
+              
+              {/* Design UI/UX floating card - Enhanced visibility */}
+              <div className="absolute bottom-28 left-4 w-48 p-5 rounded-2xl shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-teal-500/30 backdrop-blur-lg bg-gradient-to-br from-teal-900/60 to-blue-900/60 border border-teal-500/20 z-10">
+                <div className="w-full h-full flex flex-col justify-between">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-semibold text-white">Design UI/UX</div>
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 rounded-full bg-teal-400"></div>
+                      <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                      <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    </div>
                   </div>
-                  <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
-                    <div className="h-full w-1/2 bg-blue-500 rounded-full"></div>
+                  
+                  <div className="space-y-3 mt-2">
+                    <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full w-3/4 bg-teal-500 rounded-full"></div>
+                    </div>
+                    <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full w-1/2 bg-blue-500 rounded-full"></div>
+                    </div>
+                    <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full w-5/6 bg-cyan-500 rounded-full"></div>
+                    </div>
                   </div>
-                  <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
-                    <div className="h-full w-5/6 bg-cyan-500 rounded-full"></div>
+                  
+                  <div className="flex items-center justify-between mt-auto">
+                    <div className="text-xs text-gray-200">Progress</div>
+                    <div className="text-xs font-semibold text-white">75%</div>
                   </div>
-                </div>
-                
-                <div className="flex items-center justify-between mt-auto">
-                  <div className="text-xs text-gray-200">Progress</div>
-                  <div className="text-xs font-semibold text-white">75%</div>
                 </div>
               </div>
             </div>
-            
-            {/* Code snippet floating element - Enhanced contrast */}
-            <div className="absolute top-1/2 -translate-y-1/2 -right-5 glass-morphism p-3 rounded-lg backdrop-blur-lg bg-gray-900/90 shadow-xl text-xs font-mono text-gray-100 w-44 transition-transform duration-500 hover:translate-x-1 border border-gray-700/70">
-              <div className="mb-1 text-teal-300">.design-section {"{"}</div>
-              <div className="pl-3 mb-1"><span className="text-blue-300">display:</span> flex;</div>
-              <div className="pl-3 mb-1"><span className="text-blue-300">align-items:</span> center;</div>
-              <div className="pl-3 mb-1"><span className="text-blue-300">justify-content:</span> space-between;</div>
-              <div>{"}"}</div>
-            </div>
-            
-            {/* Website examples carousel - Enhanced visibility */}
-            <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-md">
-              <Carousel className="w-full">
-                <CarouselContent>
-                  {websiteExamples.map((example) => (
-                    <CarouselItem key={example.id}>
-                      <AnimatedCard className="p-0 overflow-hidden border border-white/30 shadow-xl bg-black/40 backdrop-blur-md">
-                        <div className="relative group">
-                          <img 
-                            src={example.image} 
-                            alt={example.title}
-                            className="w-full h-44 object-cover brightness-90"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-90"></div>
-                          <div className="absolute bottom-0 left-0 right-0 p-4 transform transition-transform group-hover:translate-y-0">
-                            <div className="flex items-center gap-2 mb-2">
-                              <div className="bg-white/30 backdrop-blur-sm p-1 rounded-md">
-                                {example.icon}
-                              </div>
-                              <h3 className="text-white font-semibold text-lg">{example.title}</h3>
-                            </div>
-                            <p className="text-gray-100 text-sm mb-3">{example.description}</p>
-                            <div className="flex gap-2 flex-wrap">
-                              {example.tags.map((tag, index) => (
-                                <span 
-                                  key={index} 
-                                  className="text-xs py-1 px-2 bg-white/20 backdrop-blur-sm rounded-full text-gray-100 font-medium"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </AnimatedCard>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-2 bg-white/20 text-white border-white/30 hover:bg-white/30" />
-                <CarouselNext className="right-2 bg-white/20 text-white border-white/30 hover:bg-white/30" />
-              </Carousel>
-            </div>
-            
-            {/* Small device preview with mockup - Enhanced visibility */}
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <div className="absolute right-6 top-10 glass-morphism p-4 rounded-xl backdrop-blur-lg bg-white/20 border border-white/30 shadow-xl transition-transform duration-500 hover:translate-x-1 hover:translate-y-1 cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white">
-                      <CheckCircle size={16} />
-                    </div>
-                    <div>
-                      <div className="text-xs font-semibold text-white">Site Responsif</div>
-                      <div className="text-xs text-gray-200">Compatible tous écrans</div>
-                    </div>
-                  </div>
-                </div>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80 bg-white/20 backdrop-blur-xl border-white/30 text-white">
-                <div className="flex justify-between space-x-4">
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Design Responsive</h4>
-                    <p className="text-xs text-gray-200">
-                      Nos designs s'adaptent parfaitement à tous les formats d'écrans et appareils pour une expérience utilisateur optimale.
-                    </p>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
           </div>
         </div>
       </div>

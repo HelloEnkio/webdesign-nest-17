@@ -12,8 +12,11 @@ import { Toaster } from '@/components/ui/toaster';
 const Index: React.FC = () => {
   useEffect(() => {
     // Précharger la vidéo et les images pour une meilleure performance
-    const videoPreload = new Image();
-    videoPreload.src = 'https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4';
+    const videoPreload = document.createElement('link');
+    videoPreload.rel = 'preload';
+    videoPreload.href = 'https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4';
+    videoPreload.as = 'video';
+    document.head.appendChild(videoPreload);
     
     // Preload example images
     const preloadImages = [
@@ -49,6 +52,7 @@ const Index: React.FC = () => {
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.removeEventListener('click', function() {});
       });
+      document.head.removeChild(videoPreload);
     };
   }, []);
 
