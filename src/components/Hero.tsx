@@ -1,7 +1,10 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Button } from './ui/button';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle, ExternalLink, Laptop, Monitor } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
+import AnimatedCard from './ui/AnimatedCard';
 
 const Hero: React.FC = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -43,6 +46,34 @@ const Hero: React.FC = () => {
       video.play().catch(e => console.log("Autoplay prevented:", e));
     }
   }, []);
+
+  // Website examples data
+  const websiteExamples = [
+    {
+      id: 1,
+      title: "E-commerce Premium",
+      description: "Boutique en ligne moderne avec paiement intégré",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
+      icon: <Monitor size={16} className="text-teal-400" />,
+      tags: ["Shopify", "React", "TailwindCSS"]
+    },
+    {
+      id: 2,
+      title: "Portfolio Créatif",
+      description: "Mise en valeur de projets artistiques",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+      icon: <Laptop size={16} className="text-blue-400" />,
+      tags: ["NextJS", "Motion", "Darkmode"]
+    },
+    {
+      id: 3,
+      title: "Application SaaS",
+      description: "Dashboard interactif avec analyses en temps réel",
+      image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80",
+      icon: <ExternalLink size={16} className="text-cyan-400" />,
+      tags: ["Vue", "GraphQL", "Typescript"]
+    }
+  ];
 
   return (
     <section id="home" className="relative pt-28 pb-20 md:pt-32 md:pb-24 overflow-hidden">
@@ -164,9 +195,9 @@ const Hero: React.FC = () => {
             </div>
           </div>
           
-          {/* Hero Image area with floating elements */}
+          {/* Hero Image area with website examples carousel */}
           <div ref={imageRef} className="relative opacity-0 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl perspective">
-            {/* Glassmorphism container instead of image */}
+            {/* Glassmorphism container */}
             <div className="absolute inset-0 bg-gradient-to-br from-teal-600/20 via-blue-500/10 to-transparent backdrop-blur-sm rounded-2xl border border-white/10"></div>
             
             {/* Interactive floating elements */}
@@ -200,18 +231,6 @@ const Hero: React.FC = () => {
               </div>
             </div>
             
-            <div className="absolute top-10 right-6 glass-morphism p-4 rounded-xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-xl transition-transform duration-500 hover:translate-x-1 hover:translate-y-1">
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white">
-                  <CheckCircle size={16} />
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-white">Site Responsif</div>
-                  <div className="text-xs text-gray-300">Compatible tous écrans</div>
-                </div>
-              </div>
-            </div>
-            
             {/* Code snippet floating element */}
             <div className="absolute top-1/2 -translate-y-1/2 -right-5 glass-morphism p-3 rounded-lg backdrop-blur-lg bg-gray-900/80 shadow-xl text-xs font-mono text-gray-200 w-44 transition-transform duration-500 hover:translate-x-1 border border-gray-700/50">
               <div className="mb-1 text-teal-400">.design-section {"{"}</div>
@@ -220,6 +239,76 @@ const Hero: React.FC = () => {
               <div className="pl-3 mb-1"><span className="text-blue-400">justify-content:</span> space-between;</div>
               <div>{"}"}</div>
             </div>
+            
+            {/* Website examples carousel */}
+            <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-md">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {websiteExamples.map((example) => (
+                    <CarouselItem key={example.id}>
+                      <AnimatedCard className="p-0 overflow-hidden border border-white/20 shadow-xl bg-black/30 backdrop-blur-md">
+                        <div className="relative group">
+                          <img 
+                            src={example.image} 
+                            alt={example.title}
+                            className="w-full h-44 object-cover brightness-90"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80"></div>
+                          <div className="absolute bottom-0 left-0 right-0 p-4 transform transition-transform group-hover:translate-y-0">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="bg-white/20 backdrop-blur-sm p-1 rounded-md">
+                                {example.icon}
+                              </div>
+                              <h3 className="text-white font-semibold text-lg">{example.title}</h3>
+                            </div>
+                            <p className="text-gray-200 text-sm mb-3">{example.description}</p>
+                            <div className="flex gap-2 flex-wrap">
+                              {example.tags.map((tag, index) => (
+                                <span 
+                                  key={index} 
+                                  className="text-xs py-1 px-2 bg-white/10 backdrop-blur-sm rounded-full text-gray-200"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </AnimatedCard>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2 bg-white/10 text-white border-white/20 hover:bg-white/20" />
+                <CarouselNext className="right-2 bg-white/10 text-white border-white/20 hover:bg-white/20" />
+              </Carousel>
+            </div>
+            
+            {/* Small device preview with mockup */}
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <div className="absolute right-6 top-10 glass-morphism p-4 rounded-xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-xl transition-transform duration-500 hover:translate-x-1 hover:translate-y-1 cursor-pointer">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white">
+                      <CheckCircle size={16} />
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-white">Site Responsif</div>
+                      <div className="text-xs text-gray-300">Compatible tous écrans</div>
+                    </div>
+                  </div>
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80 bg-white/10 backdrop-blur-xl border-white/20 text-white">
+                <div className="flex justify-between space-x-4">
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">Design Responsive</h4>
+                    <p className="text-xs text-gray-300">
+                      Nos designs s'adaptent parfaitement à tous les formats d'écrans et appareils pour une expérience utilisateur optimale.
+                    </p>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           </div>
         </div>
       </div>

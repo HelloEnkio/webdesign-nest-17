@@ -11,9 +11,21 @@ import { Toaster } from '@/components/ui/toaster';
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Précharger la vidéo pour une meilleure performance
+    // Précharger la vidéo et les images pour une meilleure performance
     const videoPreload = new Image();
     videoPreload.src = 'https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4';
+    
+    // Preload example images
+    const preloadImages = [
+      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80'
+    ];
+    
+    preloadImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
     
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
