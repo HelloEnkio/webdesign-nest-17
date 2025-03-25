@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 
 interface UseTextRotateProps {
   texts: string[];
@@ -18,6 +18,19 @@ export function useTextRotate({
 }: UseTextRotateProps) {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const intervalRef = useRef<number | null>(null);
+  const currentIntervalRef = useRef(rotationInterval);
+
+  // Update the ref when rotationInterval changes
+  useEffect(() => {
+    currentIntervalRef.current = rotationInterval;
+    
+    // Reset interval with new value if auto is enabled
+    if (auto && intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+      startInterval();
+    }
+  }, [rotationInterval, auto]);
 
   // Helper function to handle index changes and trigger callback
   const handleIndexChange = useCallback((newIndex: number) => {
@@ -74,17 +87,39 @@ export function useTextRotate({
     }
   }, [currentTextIndex, handleIndexChange, isAnimating]);
 
-  useEffect(() => {
-    if (!auto) return;
+  // Function to start the interval
+  const startInterval = useCallback(() => {
+    if (!auto) return null;
     
-    const intervalId = setInterval(() => {
+    return window.setInterval(() => {
       if (!isAnimating) {
         next();
       }
-    }, rotationInterval);
+    }, currentIntervalRef.current);
+  }, [auto, isAnimating, next]);
+
+  // Setup and cleanup interval
+  useEffect(() => {
+    if (!auto) return;
     
-    return () => clearInterval(intervalId);
-  }, [next, rotationInterval, auto, isAnimating]);
+    intervalRef.current = startInterval() as number;
+    
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [auto, startInterval]);
+
+  // Function to update the rotation speed dynamically
+  const setRotationSpeed = useCallback((newInterval: number) => {
+    currentIntervalRef.current = newInterval;
+    
+    if (auto && intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = startInterval() as number;
+    }
+  }, [auto, startInterval]);
 
   return {
     currentTextIndex,
@@ -92,6 +127,7 @@ export function useTextRotate({
     next,
     previous,
     jumpTo,
-    reset
+    reset,
+    setRotationSpeed
   };
 }

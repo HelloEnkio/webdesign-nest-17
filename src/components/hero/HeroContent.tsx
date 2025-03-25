@@ -1,10 +1,10 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import HeroStats from './HeroStats';
 import HeroClientLogos from './HeroClientLogos';
-import { TextRotate } from '@/components/ui/text-rotate';
+import { TextRotate, TextRotateRef } from '@/components/ui/text-rotate';
 import { motion } from 'framer-motion';
 
 interface HeroContentProps {
@@ -25,6 +25,8 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
     "originalité",
     "perfection"
   ];
+  
+  const textRotateRef = useRef<TextRotateRef>(null);
 
   return (
     <div className="lg:col-span-7 space-y-8 md:space-y-10 relative">
@@ -39,8 +41,9 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
           <motion.span className="block mt-2">
             avec{" "}
             <TextRotate 
+              ref={textRotateRef}
               texts={rotatingWords}
-              rotationInterval={4000}
+              rotationInterval={5000}
               staggerDuration={0.02}
               transition={{ 
                 type: "spring", 
@@ -54,6 +57,10 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
               initial={{ y: "80%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "-80%", opacity: 0 }}
+              showSpeedControl={true}
+              minSpeed={2000}
+              maxSpeed={8000}
+              speedControlClassName="max-w-xs mt-4"
             />
           </motion.span>
         </h1>
