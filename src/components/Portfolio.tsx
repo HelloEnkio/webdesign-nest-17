@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from './ui/button';
 import { ArrowRight, ExternalLink } from 'lucide-react';
+import { GlareCard } from './ui/glare-card';
+import { motion } from 'framer-motion';
 
 interface PortfolioItemProps {
   title: string;
@@ -39,37 +41,60 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ title, category, image, c
   }, [delay]);
   
   return (
-    <div ref={itemRef} className="opacity-0 group relative">
-      <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[4/3]">
-        <div 
-          className="h-full w-full bg-cover bg-center transition-all duration-700 group-hover:scale-105"
-          style={{ backgroundImage: `url(${image})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/30"></div>
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-sm flex items-center justify-center">
-            <Button className="rounded-full bg-white text-black hover:bg-white/90 hover:text-black flex items-center gap-2 shadow-xl">
-              Voir le projet <ExternalLink size={14} />
-            </Button>
+    <motion.div 
+      ref={itemRef} 
+      className="opacity-0 group h-full"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: delay * 0.1 }}
+    >
+      <GlareCard className="h-full bg-gradient-to-br from-slate-900 to-indigo-950/90">
+        <div className="h-full flex flex-col">
+          <div 
+            className="h-48 w-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${image})` }}
+          >
+            <div className="relative h-full w-full">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/30"></div>
+              
+              {client && (
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-black">
+                  {client}
+                </div>
+              )}
+              
+              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-black">
+                {category}
+              </div>
+              
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button className="rounded-full bg-white text-black hover:bg-white/90 hover:text-black flex items-center gap-2 shadow-xl">
+                  Voir le projet <ExternalLink size={14} />
+                </Button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-5 flex-1 flex flex-col">
+            <h3 className="text-xl font-semibold text-white">{title}</h3>
+            <p className="text-sm text-gray-300 mt-1">
+              Création d'interface, identité visuelle, développement
+            </p>
+            <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+              <div className="flex space-x-1">
+                <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
+                <span className="w-2 h-2 rounded-full bg-teal-400"></span>
+                <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+              </div>
+              <button className="text-xs text-white/80 hover:text-white flex items-center gap-1 transition-colors">
+                Détails <ArrowRight size={12} />
+              </button>
+            </div>
           </div>
         </div>
-        
-        {client && (
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
-            {client}
-          </div>
-        )}
-        
-        <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
-          {category}
-        </div>
-      </div>
-      <div>
-        <h3 className="text-xl font-semibold">{title}</h3>
-        <p className="text-sm text-neutral-500 mt-1">
-          Création d'interface, identité visuelle, développement
-        </p>
-      </div>
-    </div>
+      </GlareCard>
+    </motion.div>
   );
 };
 
@@ -151,7 +176,14 @@ const Portfolio: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-r from-indigo-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
       
       <div className="section-container relative z-10">
-        <div ref={headerRef} className="text-center mb-16 opacity-0">
+        <motion.div 
+          ref={headerRef} 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
           <div className="inline-flex items-center rounded-full mb-4 bg-black/5 px-3 py-1">
             <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
             <span className="text-xs font-medium">NOTRE PORTFOLIO</span>
@@ -168,8 +200,8 @@ const Portfolio: React.FC = () => {
           
           {/* Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-12 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
-            {filters.map((filter) => (
-              <button
+            {filters.map((filter, index) => (
+              <motion.button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`px-4 py-2 text-sm rounded-full transition-all duration-300 ${
@@ -177,14 +209,19 @@ const Portfolio: React.FC = () => {
                     ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md' 
                     : 'bg-white/70 text-neutral-600 hover:bg-white'
                 }`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 {filter}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-full">
           {filteredItems.map((item, index) => (
             <PortfolioItem
               key={index}
@@ -192,15 +229,22 @@ const Portfolio: React.FC = () => {
               category={item.category}
               client={item.client}
               image={item.image}
-              delay={index * 100}
+              delay={index}
             />
           ))}
         </div>
         
         <div className="text-center mt-16">
-          <Button variant="outline" size="lg" className="rounded-full border-2 border-neutral-200 hover:border-neutral-300 inline-flex items-center gap-2 text-base px-6 py-6 h-auto">
-            Explorer tous nos projets <ArrowRight className="ml-1 h-4 w-4" />
-          </Button>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <Button variant="outline" size="lg" className="rounded-full border-2 border-neutral-200 hover:border-neutral-300 inline-flex items-center gap-2 text-base px-6 py-6 h-auto">
+              Explorer tous nos projets <ArrowRight className="ml-1 h-4 w-4" />
+            </Button>
+          </motion.div>
         </div>
       </div>
     </section>
