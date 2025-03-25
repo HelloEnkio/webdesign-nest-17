@@ -1,15 +1,12 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Button } from './ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
-
 const Hero: React.FC = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     // Simple animation on mount
     const title = titleRef.current;
@@ -17,7 +14,6 @@ const Hero: React.FC = () => {
     const buttons = buttonsRef.current;
     const image = imageRef.current;
     const stats = statsRef.current;
-
     if (title) title.classList.add('fade-in');
     if (subtitle) {
       subtitle.classList.add('fade-in');
@@ -36,9 +32,7 @@ const Hero: React.FC = () => {
       stats.classList.add('stagger-4');
     }
   }, []);
-
-  return (
-    <section id="home" className="relative pt-28 pb-20 md:pt-32 md:pb-24 overflow-hidden">
+  return <section id="home" className="relative pt-28 pb-20 md:pt-32 md:pb-24 overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-gradient-to-br from-purple-400/20 to-blue-500/10 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-60 -right-40 w-[600px] h-[600px] bg-gradient-to-br from-yellow-400/10 to-pink-500/10 rounded-full blur-3xl"></div>
@@ -48,23 +42,13 @@ const Hero: React.FC = () => {
           {/* Text Content */}
           <div className="space-y-6 md:space-y-8 relative">
             {/* Small floating design element */}
-            <div className="absolute -left-12 -top-10 rotate-12 w-28 h-28 bg-white shadow-xl rounded-lg p-3 border border-gray-100 hidden lg:flex items-center justify-center">
-              <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-blue-50 rounded flex items-center justify-center">
-                <span className="text-xs text-black/70 font-semibold tracking-wider">DESIGN•WEB</span>
-              </div>
-            </div>
+            
             
             <div className="space-y-2 relative">
               {/* Badge */}
-              <div className="inline-flex items-center rounded-full mb-2 bg-black/5 px-3 py-1">
-                <span className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
-                <span className="text-xs font-medium">AGENCE DE DESIGN WEB</span>
-              </div>
               
-              <h1 
-                ref={titleRef}
-                className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight"
-              >
+              
+              <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight md:leading-tight lg:leading-tight opacity-0 tracking-tight">
                 Créez votre<br /> 
                 <span className="relative inline-block">
                   <span className="relative z-10 bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">présence digitale</span>
@@ -74,19 +58,13 @@ const Hero: React.FC = () => {
               </h1>
             </div>
             
-            <p 
-              ref={subtitleRef}
-              className="text-lg md:text-xl text-neutral-600 max-w-xl opacity-0"
-            >
+            <p ref={subtitleRef} className="text-lg md:text-xl text-neutral-600 max-w-xl opacity-0">
               Nous concevons des expériences web sur mesure qui combinent 
               <span className="font-medium text-black"> esthétique contemporaine</span> et 
               <span className="font-medium text-black"> performance technique</span> pour donner vie à votre vision.
             </p>
             
-            <div 
-              ref={buttonsRef} 
-              className="flex flex-col sm:flex-row gap-4 opacity-0"
-            >
+            <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
               <Button size="lg" className="rounded-full group relative overflow-hidden bg-gradient-to-r from-indigo-600 to-blue-600 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 border-0">
                 <span className="relative z-10 flex items-center">
                   Discuter de votre projet 
@@ -165,10 +143,7 @@ const Hero: React.FC = () => {
           </div>
           
           {/* Hero Image */}
-          <div 
-            ref={imageRef}
-            className="relative opacity-0 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl perspective"
-          >
+          <div ref={imageRef} className="relative opacity-0 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl perspective">
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY5MTAzODk4Mg&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080')] bg-cover bg-center">
               {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/30 via-black/5 to-transparent"></div>
@@ -228,8 +203,6 @@ const Hero: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
