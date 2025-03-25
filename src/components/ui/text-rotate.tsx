@@ -1,3 +1,4 @@
+
 "use client"
 
 import {
@@ -16,9 +17,8 @@ import {
 
 import { cn } from "@/lib/utils"
 import { useTextRotate } from "@/hooks/use-text-rotate"
-import { getStaggerDelay, prepareTextElements } from "@/utils/text-utils"
+import { getStaggerDelay } from "@/utils/text-utils"
 import { TextRotateCharacter } from "./text-rotate-character"
-import { Slider } from "./slider"
 
 interface TextRotateProps {
   texts: string[]
@@ -42,6 +42,11 @@ interface TextRotateProps {
   minSpeed?: number
   maxSpeed?: number
   speedControlClassName?: string
+  typingMode?: boolean
+  typingSpeed?: number
+  deletingSpeed?: number
+  pauseBeforeDelete?: number
+  showCursor?: boolean
 }
 
 export interface TextRotateRef {
@@ -76,11 +81,19 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       minSpeed = 1000,
       maxSpeed = 8000,
       speedControlClassName,
+      typingMode = false,
+      typingSpeed = 50,
+      deletingSpeed = 30,
+      pauseBeforeDelete = 1500,
+      showCursor = true,
       ...props
     },
     ref
   ) => {
     const [currentSpeed, setCurrentSpeed] = useState(rotationInterval);
+    const [displayText, setDisplayText] = useState("");
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isDone, setIsDone] = useState(false);
     
     const { 
       currentTextIndex, 
@@ -91,18 +104,11 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       setRotationSpeed 
     } = useTextRotate({
       texts,
-      rotationInterval: currentSpeed,
+      rotationInterval: !typingMode ? currentSpeed : 100000, // Very long interval when in typing mode
       loop,
-      auto,
+      auto: !typingMode && auto, // Disable auto when in typing mode
       onNext
     });
-
-    // Handle speed slider changes
-    const handleSpeedChange = (value: number[]) => {
-      const newSpeed = value[0];
-      setCurrentSpeed(newSpeed);
-      setRotationSpeed(newSpeed);
-    };
 
     // Expose navigation functions via ref
     useImperativeHandle(ref, () => ({
@@ -116,11 +122,83 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       }
     }), [next, previous, jumpTo, reset, setRotationSpeed]);
 
+    // Handle typing effect
+    useEffect(() => {
+      if (!typingMode) return;
+
+      const currentWord = texts[currentTextIndex];
+      
+      const typeText = () => {
+        if (isDeleting) {
+          // Deleting mode
+          if (displayText.length > 0) {
+            const newText = displayText.slice(0, -1);
+            setDisplayText(newText);
+            
+            setTimeout(typeText, deletingSpeed);
+          } else {
+            setIsDeleting(false);
+            setIsDone(true);
+            setTimeout(() => {
+              next();
+              setIsDone(false);
+            }, 100);
+          }
+        } else {
+          // Typing mode
+          if (displayText.length < currentWord.length) {
+            const newText = currentWord.slice(0, displayText.length + 1);
+            setDisplayText(newText);
+            
+            setTimeout(typeText, typingSpeed);
+          } else {
+            // Done typing, pause before delete
+            setTimeout(() => {
+              setIsDeleting(true);
+              typeText();
+            }, pauseBeforeDelete);
+          }
+        }
+      };
+      
+      // Reset when word changes
+      if (!isDeleting && !isDone && displayText.length === 0) {
+        typeText();
+      }
+      
+      // Cleanup
+      return () => {};
+    }, [
+      typingMode, 
+      displayText, 
+      currentTextIndex, 
+      isDeleting, 
+      isDone, 
+      texts, 
+      typingSpeed, 
+      deletingSpeed, 
+      pauseBeforeDelete, 
+      next
+    ]);
+
     // Prepare the text elements for rendering
     const elements = useMemo(() => {
-      const currentText = texts[currentTextIndex];
-      return prepareTextElements(currentText, splitBy);
-    }, [texts, currentTextIndex, splitBy]);
+      if (typingMode) {
+        return Array.from(displayText);
+      } else {
+        const currentText = texts[currentTextIndex];
+        
+        if (splitBy === "characters") {
+          return Array.from(currentText);
+        } else if (splitBy === "words") {
+          return currentText.split(" ");
+        } else if (splitBy === "lines") {
+          return currentText.split("\n");
+        } else {
+          return currentText.split(splitBy);
+        }
+      }
+    }, [texts, currentTextIndex, splitBy, typingMode, displayText]);
 
     return (
       <div className="flex flex-col">
@@ -130,64 +208,69 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
           layout
           transition={transition}
         >
-          <span className="sr-only">{texts[currentTextIndex]}</span>
+          <span className="sr-only">{typingMode ? displayText : texts[currentTextIndex]}</span>
 
-          <AnimatePresence
-            mode={animatePresenceMode}
-            initial={animatePresenceInitial}
-          >
-            <motion.div
-              key={currentTextIndex}
-              className={cn(
-                "flex flex-wrap",
-                splitBy === "lines" && "flex-col w-full"
-              )}
-              layout
-              aria-hidden="true"
+          {!typingMode ? (
+            <AnimatePresence
+              mode={animatePresenceMode}
+              initial={animatePresenceInitial}
             >
-              {elements.map((wordObj, wordIndex, array) => {
-                const previousCharsCount = array
-                  .slice(0, wordIndex)
-                  .reduce((sum, word) => sum + word.characters.length, 0);
-                
-                const totalChars = array.reduce(
-                  (sum, word) => sum + word.characters.length, 0
-                );
-
-                return (
-                  <span
-                    key={wordIndex}
-                    className={cn("inline-flex", splitLevelClassName)}
-                  >
-                    {wordObj.characters.map((char, charIndex) => (
-                      <TextRotateCharacter
-                        key={charIndex}
-                        char={char}
-                        initial={initial}
-                        animate={animate}
-                        exit={exit}
-                        transition={{
-                          ...transition,
-                          delay: getStaggerDelay(
-                            previousCharsCount + charIndex,
-                            totalChars,
-                            staggerFrom,
-                            staggerDuration
-                          ),
-                        }}
-                        className={elementLevelClassName}
-                      />
-                    ))}
-                    {wordObj.needsSpace && (
-                      <span className="whitespace-pre"> </span>
-                    )}
-                  </span>
-                );
-              })}
-            </motion.div>
-          </AnimatePresence>
+              <motion.div
+                key={currentTextIndex}
+                className={cn(
+                  "flex flex-wrap",
+                  splitBy === "lines" && "flex-col w-full"
+                )}
+                layout
+                aria-hidden="true"
+              >
+                {elements.map((char, index, array) => (
+                  <TextRotateCharacter
+                    key={index}
+                    char={char}
+                    initial={initial}
+                    animate={animate}
+                    exit={exit}
+                    transition={{
+                      ...transition,
+                      delay: getStaggerDelay(
+                        index,
+                        array.length,
+                        staggerFrom,
+                        staggerDuration
+                      ),
+                    }}
+                    className={elementLevelClassName}
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            <div className="flex items-center">
+              {elements.map((char, index) => (
+                <TextRotateCharacter
+                  key={index}
+                  char={char}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.1 }}
+                  className={elementLevelClassName}
+                />
+              ))}
+              {showCursor && (
+                <motion.span
+                  className={cn("inline-block w-0.5 h-5 bg-teal-300 ml-0.5", {
+                    "animate-pulse": !isDeleting
+                  })}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                />
+              )}
+            </div>
+          )}
         </motion.span>
-        
       </div>
     );
   }

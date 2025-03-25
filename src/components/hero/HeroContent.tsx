@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -43,20 +42,13 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
               <TextRotate 
                 ref={textRotateRef}
                 texts={rotatingWords}
-                rotationInterval={4000}
-                staggerDuration={0.01}
-                transition={{ 
-                  type: "spring", 
-                  damping: 25,
-                  stiffness: 400,
-                  duration: 0.3
-                }}
-                animatePresenceMode="sync"
-                mainClassName="inline-flex overflow-hidden text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
+                typingMode={true}
+                typingSpeed={80}
+                deletingSpeed={50}
+                pauseBeforeDelete={1800}
+                showCursor={true}
+                mainClassName="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl"
                 elementLevelClassName="text-transparent bg-clip-text inline-block"
-                initial={{ y: "50%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: "-50%", opacity: 0 }}
               />
             </span>
           </motion.span>
