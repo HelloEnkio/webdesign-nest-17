@@ -12,7 +12,7 @@ interface TypingCursorProps {
 export function TypingCursor({ isDeleting, className }: TypingCursorProps) {
   return (
     <motion.span
-      className={cn("inline-block w-0.5 h-10 bg-teal-300 ml-0.5", {
+      className={cn("inline-block w-0.5 h-[1.5em] bg-teal-300 ml-0.5", {
         "animate-pulse": !isDeleting
       }, className)}
       initial={{ opacity: 0 }}
