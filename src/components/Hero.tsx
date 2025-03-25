@@ -219,11 +219,11 @@ const Hero: React.FC = () => {
             
             {/* Code snippet floating element */}
             <div className="absolute top-1/2 -translate-y-1/2 -right-5 glass-morphism p-3 rounded-lg backdrop-blur-lg bg-gray-900/90 shadow-xl text-xs font-mono text-gray-200 w-44 transition-transform duration-500 hover:translate-x-1">
-              <div className="mb-1 text-blue-400">.design-section {</div>
+              <div className="mb-1 text-blue-400">.design-section {"{"}</div>
               <div className="pl-3 mb-1"><span className="text-purple-400">display:</span> flex;</div>
               <div className="pl-3 mb-1"><span className="text-purple-400">align-items:</span> center;</div>
               <div className="pl-3 mb-1"><span className="text-purple-400">justify-content:</span> space-between;</div>
-              <div>}</div>
+              <div>{"}"}</div>
             </div>
           </div>
         </div>
