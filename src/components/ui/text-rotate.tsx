@@ -3,21 +3,21 @@
 
 import {
   forwardRef,
-  useCallback,
   useEffect,
   useImperativeHandle,
-  useMemo,
-  useState,
+  useMemo
 } from "react"
 import {
   AnimatePresence,
   AnimatePresenceProps,
   motion,
-  MotionProps,
   Transition,
 } from "framer-motion"
 
 import { cn } from "@/lib/utils"
+import { useTextRotate } from "@/hooks/use-text-rotate"
+import { getStaggerDelay, prepareTextElements } from "@/utils/text-utils"
+import { TextRotateCharacter } from "./text-rotate-character"
 
 interface TextRotateProps {
   texts: string[]
@@ -30,8 +30,8 @@ interface TextRotateProps {
   staggerDuration?: number
   staggerFrom?: "first" | "last" | "center" | number | "random"
   transition?: any
-  loop?: boolean // Whether to start from the first text when the last one is reached
-  auto?: boolean // Whether to start the animation automatically
+  loop?: boolean 
+  auto?: boolean 
   splitBy?: "words" | "characters" | "lines" | string
   onNext?: (index: number) => void
   mainClassName?: string
@@ -46,23 +46,18 @@ export interface TextRotateRef {
   reset: () => void
 }
 
-interface WordObject {
-  characters: string[]
-  needsSpace: boolean
-}
-
 const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
   (
     {
       texts,
-      transition = { type: "spring", damping: 25, stiffness: 300 },
-      initial = { y: "100%", opacity: 0 },
+      transition = { type: "spring", damping: 30, stiffness: 400, duration: 0.4 },
+      initial = { y: "80%", opacity: 0 },
       animate = { y: 0, opacity: 1 },
-      exit = { y: "-120%", opacity: 0 },
-      animatePresenceMode = "wait",
+      exit = { y: "-80%", opacity: 0 },
+      animatePresenceMode = "sync",
       animatePresenceInitial = false,
-      rotationInterval = 2000,
-      staggerDuration = 0,
+      rotationInterval = 4000,
+      staggerDuration = 0.02,
       staggerFrom = "first",
       loop = true,
       auto = true,
@@ -75,124 +70,33 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
     },
     ref
   ) => {
-    const [currentTextIndex, setCurrentTextIndex] = useState(0)
-    const [isAnimating, setIsAnimating] = useState(false)
+    const { 
+      currentTextIndex, 
+      next, 
+      previous, 
+      jumpTo, 
+      reset 
+    } = useTextRotate({
+      texts,
+      rotationInterval,
+      loop,
+      auto,
+      onNext
+    });
 
-    // Function to split text into characters with support for unicode and emojis
-    const splitIntoCharacters = (text: string): string[] => {
-      // Fallback for browsers that don't support Intl.Segmenter
-      return Array.from(text)
-    }
-
-    const elements = useMemo(() => {
-      const currentText = texts[currentTextIndex]
-      if (splitBy === "characters") {
-        const text = currentText.split(" ")
-        return text.map((word, i) => ({
-          characters: splitIntoCharacters(word),
-          needsSpace: i !== text.length - 1,
-        }))
-      }
-      return splitBy === "words"
-        ? currentText.split(" ")
-        : splitBy === "lines"
-          ? currentText.split("\n")
-          : currentText.split(splitBy)
-    }, [texts, currentTextIndex, splitBy])
-
-    const getStaggerDelay = useCallback(
-      (index: number, totalChars: number) => {
-        const total = totalChars
-        if (staggerFrom === "first") return index * staggerDuration
-        if (staggerFrom === "last") return (total - 1 - index) * staggerDuration
-        if (staggerFrom === "center") {
-          const center = Math.floor(total / 2)
-          return Math.abs(center - index) * staggerDuration
-        }
-        if (staggerFrom === "random") {
-          const randomIndex = Math.floor(Math.random() * total)
-          return Math.abs(randomIndex - index) * staggerDuration
-        }
-        return Math.abs((staggerFrom as number) - index) * staggerDuration
-      },
-      [staggerFrom, staggerDuration]
-    )
-
-    // Helper function to handle index changes and trigger callback
-    const handleIndexChange = useCallback((newIndex: number) => {
-      if (isAnimating) return
-      
-      setIsAnimating(true)
-      setCurrentTextIndex(newIndex)
-      onNext?.(newIndex)
-      
-      // Reset the animation state after transition completes
-      setTimeout(() => {
-        setIsAnimating(false)
-      }, 400) // Match this with your animation duration
-    }, [onNext, isAnimating])
-
-    const next = useCallback(() => {
-      if (isAnimating) return
-      
-      const nextIndex = currentTextIndex === texts.length - 1
-        ? (loop ? 0 : currentTextIndex)
-        : currentTextIndex + 1
-      
-      if (nextIndex !== currentTextIndex) {
-        handleIndexChange(nextIndex)
-      }
-    }, [currentTextIndex, texts.length, loop, handleIndexChange, isAnimating])
-
-    const previous = useCallback(() => {
-      if (isAnimating) return
-      
-      const prevIndex = currentTextIndex === 0
-        ? (loop ? texts.length - 1 : currentTextIndex)
-        : currentTextIndex - 1
-      
-      if (prevIndex !== currentTextIndex) {
-        handleIndexChange(prevIndex)
-      }
-    }, [currentTextIndex, texts.length, loop, handleIndexChange, isAnimating])
-
-    const jumpTo = useCallback((index: number) => {
-      if (isAnimating) return
-      
-      const validIndex = Math.max(0, Math.min(index, texts.length - 1))
-      if (validIndex !== currentTextIndex) {
-        handleIndexChange(validIndex)
-      }
-    }, [texts.length, currentTextIndex, handleIndexChange, isAnimating])
-
-    const reset = useCallback(() => {
-      if (isAnimating) return
-      
-      if (currentTextIndex !== 0) {
-        handleIndexChange(0)
-      }
-    }, [currentTextIndex, handleIndexChange, isAnimating])
-
-    // Expose all navigation functions via ref
+    // Expose navigation functions via ref
     useImperativeHandle(ref, () => ({
       next,
       previous,
       jumpTo,
       reset,
-    }), [next, previous, jumpTo, reset])
+    }), [next, previous, jumpTo, reset]);
 
-
-    useEffect(() => {
-      if (!auto) return
-      
-      const intervalId = setInterval(() => {
-        if (!isAnimating) {
-          next()
-        }
-      }, rotationInterval)
-      
-      return () => clearInterval(intervalId)
-    }, [next, rotationInterval, auto, isAnimating])
+    // Prepare the text elements for rendering
+    const elements = useMemo(() => {
+      const currentText = texts[currentTextIndex];
+      return prepareTextElements(currentText, splitBy);
+    }, [texts, currentTextIndex, splitBy]);
 
     return (
       <motion.span
@@ -216,16 +120,14 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
             layout
             aria-hidden="true"
           >
-            {(splitBy === "characters"
-              ? (elements as WordObject[])
-              : (elements as string[]).map((el, i) => ({
-                  characters: [el],
-                  needsSpace: i !== elements.length - 1,
-                }))
-            ).map((wordObj, wordIndex, array) => {
+            {elements.map((wordObj, wordIndex, array) => {
               const previousCharsCount = array
                 .slice(0, wordIndex)
-                .reduce((sum, word) => sum + word.characters.length, 0)
+                .reduce((sum, word) => sum + word.characters.length, 0);
+              
+              const totalChars = array.reduce(
+                (sum, word) => sum + word.characters.length, 0
+              );
 
               return (
                 <span
@@ -233,39 +135,37 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
                   className={cn("inline-flex", splitLevelClassName)}
                 >
                   {wordObj.characters.map((char, charIndex) => (
-                    <motion.span
+                    <TextRotateCharacter
+                      key={charIndex}
+                      char={char}
                       initial={initial}
                       animate={animate}
                       exit={exit}
-                      key={charIndex}
                       transition={{
                         ...transition,
                         delay: getStaggerDelay(
                           previousCharsCount + charIndex,
-                          array.reduce(
-                            (sum, word) => sum + word.characters.length,
-                            0
-                          )
+                          totalChars,
+                          staggerFrom,
+                          staggerDuration
                         ),
                       }}
-                      className={cn("inline-block", elementLevelClassName)}
-                    >
-                      {char}
-                    </motion.span>
+                      className={elementLevelClassName}
+                    />
                   ))}
                   {wordObj.needsSpace && (
                     <span className="whitespace-pre"> </span>
                   )}
                 </span>
-              )
+              );
             })}
           </motion.div>
         </AnimatePresence>
       </motion.span>
-    )
+    );
   }
-)
+);
 
-TextRotate.displayName = "TextRotate"
+TextRotate.displayName = "TextRotate";
 
-export { TextRotate }
+export { TextRotate };
