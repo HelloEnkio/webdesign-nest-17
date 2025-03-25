@@ -193,7 +193,7 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
               ))}
               {showCursor && (
                 <motion.span
-                  className={cn("inline-block w-0.5 h-9 bg-teal-300 ml-0.5", {
+                  className={cn("inline-block w-0.5 h-10 bg-teal-300 ml-0.5", {
                     "animate-pulse": !isDeleting
                   })}
                   initial={{ opacity: 0 }}
