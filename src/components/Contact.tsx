@@ -1,6 +1,5 @@
 
 import React, { useEffect, useRef } from 'react';
-import { MessageCircle } from 'lucide-react';
 import ContactHeader from './contact/ContactHeader';
 import ContactForm from './contact/ContactForm';
 import ContactInfo from './contact/ContactInfo';
@@ -59,17 +58,13 @@ const Contact: React.FC = () => {
   }, []);
   
   return (
-    <section id="contact" className="py-20 overflow-hidden relative bg-gradient-to-b from-white via-slate-50 to-white">
-      {/* Animated background elements */}
-      <div className="absolute top-40 left-10 w-72 h-72 bg-blue-100 rounded-full filter blur-[100px] opacity-60 animate-pulse"></div>
-      <div className="absolute bottom-40 right-10 w-96 h-96 bg-indigo-100 rounded-full filter blur-[100px] opacity-60 animate-pulse" style={{ animationDelay: '1s' }}></div>
-      
-      <div className="section-container relative z-10">
+    <section id="contact" className="py-20 bg-gray-50">
+      <div className="section-container">
         <div ref={headerRef} className="opacity-0">
           <ContactHeader />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Form */}
           <div ref={formRef} className="opacity-0">
             <ContactForm />

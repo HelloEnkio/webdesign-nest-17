@@ -34,7 +34,7 @@ const FormInput: React.FC<FormInputProps> = ({
     <div className={`relative ${className}`}>
       <label 
         htmlFor={id} 
-        className={`block text-sm font-medium mb-1 transition-all duration-300 ${isActive ? 'text-indigo-600' : 'text-neutral-700'}`}
+        className={`block text-sm font-medium mb-1.5 transition-colors ${isActive ? 'text-indigo-600' : 'text-gray-700'}`}
       >
         {label}
       </label>
@@ -49,7 +49,7 @@ const FormInput: React.FC<FormInputProps> = ({
             onBlur={onBlur}
             required
             rows={rows}
-            className="w-full px-4 py-3 rounded-lg bg-white/70 border border-neutral-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300"
+            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-all duration-200"
             placeholder={placeholder}
           />
         ) : (
@@ -62,12 +62,9 @@ const FormInput: React.FC<FormInputProps> = ({
             onFocus={onFocus}
             onBlur={onBlur}
             required
-            className="w-full px-4 py-3 rounded-lg bg-white/70 border border-neutral-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300"
+            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-all duration-200"
             placeholder={placeholder}
           />
-        )}
-        {isActive && (
-          <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full animate-pulse"></div>
         )}
       </div>
     </div>
