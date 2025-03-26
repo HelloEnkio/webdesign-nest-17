@@ -26,6 +26,14 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
     "perfection"
   ];
 
+  const scrollToPortfolio = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const portfolioSection = document.getElementById('portfolio');
+    if (portfolioSection) {
+      portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="lg:col-span-7 space-y-8 md:space-y-10 relative">
       <div className="space-y-4">
@@ -81,6 +89,7 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
           variant="outline" 
           size="lg" 
           className="portfolio-button group relative overflow-hidden rounded-full transition-all duration-300 border-2 border-white/70 hover:border-white/90 backdrop-blur-sm py-4 px-6"
+          onClick={scrollToPortfolio}
         >
           {/* Animated gradient background */}
           <span className="absolute inset-0 bg-gradient-to-r from-purple-500/80 via-indigo-500/80 to-cyan-500/80 opacity-0 group-hover:opacity-90 transition-opacity duration-500"></span>

@@ -38,18 +38,36 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
           {/* Logo */}
           <a href="#" className="flex items-center">
             <div className="h-9 w-9 mr-3 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">S</div>
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-black to-neutral-500 bg-clip-text text-transparent">
+            <span className={cn(
+              "text-xl font-bold tracking-tight bg-gradient-to-r bg-clip-text text-transparent",
+              isScrolled ? "from-black to-neutral-500" : "from-white to-gray-300"
+            )}>
               Studio<span className="font-light">.Web</span>
             </span>
           </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <a href="#home" className="navbar-item">Accueil</a>
-            <a href="#services" className="navbar-item">Services</a>
-            <a href="#portfolio" className="navbar-item">Portfolio</a>
-            <a href="#process" className="navbar-item">Processus</a>
-            <a href="#contact" className="navbar-item">Contact</a>
+            <a href="#home" className={cn(
+              "navbar-item",
+              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+            )}>Accueil</a>
+            <a href="#services" className={cn(
+              "navbar-item",
+              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+            )}>Services</a>
+            <a href="#portfolio" className={cn(
+              "navbar-item",
+              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+            )}>Portfolio</a>
+            <a href="#process" className={cn(
+              "navbar-item",
+              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+            )}>Processus</a>
+            <a href="#contact" className={cn(
+              "navbar-item",
+              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+            )}>Contact</a>
             
             <Button size="sm" className="ml-4 rounded-full px-5 bg-gradient-to-r from-indigo-600 to-blue-600 border-0">
               Démarrer un projet
@@ -58,7 +76,10 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-md text-neutral-700 hover:bg-neutral-100 transition-colors"
+            className={cn(
+              "md:hidden p-2 rounded-md transition-colors",
+              isScrolled ? "text-neutral-700 hover:bg-neutral-100" : "text-white hover:bg-white/10"
+            )}
             onClick={toggleMobileMenu}
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
