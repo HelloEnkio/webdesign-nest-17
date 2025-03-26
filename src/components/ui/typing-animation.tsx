@@ -26,6 +26,9 @@ export function TypingAnimation({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout>();
+  
+  // Détermine le texte le plus long pour maintenir une largeur minimale
+  const longestText = texts.reduce((a, b) => a.length > b.length ? a : b, "");
 
   useEffect(() => {
     const typeText = () => {
@@ -67,7 +70,17 @@ export function TypingAnimation({
   }, [currentText, currentIndex, isDeleting, texts, typingSpeed, deletingSpeed, pauseBeforeDelete]);
 
   return (
-    <span className={cn("inline-flex items-center", className)}>
+    <span 
+      className={cn(
+        "inline-flex items-center relative", 
+        className
+      )}
+      style={{ 
+        minWidth: `${longestText.length * 0.6}em`,  
+        minHeight: "1.2em",
+        display: "inline-flex"
+      }}
+    >
       {currentText}
       {showCursor && <TypingCursor isDeleting={isDeleting} />}
     </span>
