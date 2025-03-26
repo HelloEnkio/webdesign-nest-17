@@ -1,3 +1,4 @@
+
 import React, { useEffect, lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -15,50 +16,54 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Explicitly enable browser's default scroll restoration behavior
+    // Explicitement activer la restauration de défilement du navigateur
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'auto';
     }
     
-    // Handle smooth scrolling for anchor links only
-    const handleAnchorClick = function(e: Event) {
-      const anchor = this as HTMLAnchorElement;
+    // On ne gère que les clics sur les liens d'ancrage dans la page
+    const handleAnchorClick = (e: Event) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a');
+      
+      if (!anchor) return;
+      
       const href = anchor.getAttribute('href');
       
-      // Only handle anchor links within the page
       if (href && href.startsWith('#')) {
         e.preventDefault();
         
-        const targetId = href.slice(1);
-        const target = document.getElementById(targetId);
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
         
-        if (target) {
-          window.scrollTo({
-            top: target.offsetTop - 80, // Accounting for navbar height
-            behavior: 'smooth'
+        if (targetElement) {
+          // Utiliser scrollIntoView pour une meilleure compatibilité cross-browser
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
           });
+          
+          // Mettre à jour l'URL sans recharger la page
+          window.history.pushState(null, '', href);
         }
       }
     };
     
-    // Only add listeners to anchor links within the page
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', handleAnchorClick);
-    });
+    // Ajouter l'écouteur d'événements pour les clics
+    document.addEventListener('click', handleAnchorClick);
     
-    // Preload non-critical resources with lowest priority after core content is visible
-    setTimeout(() => {
-      // Preconnect to external origins
+    // Ne pas surcharger avec trop de tâches de préchargement
+    const timer = setTimeout(() => {
+      // Préconnect et préchargement comme avant
       const preconnect = document.createElement('link');
       preconnect.rel = 'preconnect';
       preconnect.href = 'https://cdn.pixabay.com';
       document.head.appendChild(preconnect);
       
-      // Only start preloading the background video after critical content is rendered
       const videoPreload = new Request('https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4');
       fetch(videoPreload).catch(() => {});
       
-      // Preload non-critical images with lowest priority
+      // Précharger les images non critiques
       ['https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80',
        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
        'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80'
@@ -69,10 +74,10 @@ const Index: React.FC = () => {
       });
     }, 500);
     
+    // Nettoyage
     return () => {
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.removeEventListener('click', handleAnchorClick);
-      });
+      document.removeEventListener('click', handleAnchorClick);
+      clearTimeout(timer);
     };
   }, []);
 
