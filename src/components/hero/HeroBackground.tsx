@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 
 interface HeroBackgroundProps {
   videoRef: React.RefObject<HTMLVideoElement>;
+  videoLoaded?: boolean;
 }
 
 const siteExamples = [
@@ -32,84 +33,92 @@ const siteExamples = [
   }
 ];
 
-const HeroBackground: React.FC<HeroBackgroundProps> = ({ videoRef }) => {
+const HeroBackground: React.FC<HeroBackgroundProps> = ({ videoRef, videoLoaded = false }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [carouselLoaded, setCarouselLoaded] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % siteExamples.length);
     }, 5000);
+    
+    // Delay loading the carousel until after initial render
+    setTimeout(() => {
+      setCarouselLoaded(true);
+    }, 2500);
+    
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+    <>
+      {/* Video background - only shown once loaded */}
       <video
         ref={videoRef}
-        autoPlay
         muted
         loop
         playsInline
-        className="absolute w-full h-full object-cover"
+        className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
         style={{ filter: 'brightness(0.3) saturate(1.2)' }}
-      >
-        <source src="https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4" type="video/mp4" />
-      </video>
+      />
       
-      {/* Gradient overlay for better text readability */}
+      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-blue-950/85 to-teal-950/80"></div>
       
-      {/* Additional subtle patterns for depth */}
+      {/* Subtle patterns - loaded with CSS to improve performance */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPC9zdmc+')] opacity-20"></div>
       
-      {/* Floating carousel in the corner */}
-      <div className="absolute bottom-10 right-10 w-64 h-36 rounded-xl overflow-hidden shadow-2xl">
-        <Carousel className="w-full h-full" setApi={() => {}}>
-          <CarouselContent className="h-full">
-            {siteExamples.map((example, index) => (
-              <CarouselItem key={example.id} className="h-full">
-                <div className={`relative w-full h-full transition-opacity duration-500 ${index === activeIndex ? 'opacity-100' : 'opacity-0'}`}>
-                  <img 
-                    src={example.image} 
-                    alt={example.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-2 flex items-center space-x-2">
-                    <div className="bg-black/30 backdrop-blur-sm rounded-md p-1">
-                      {example.icon}
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-white truncate">{example.title}</p>
-                      <p className="text-xs text-white/70 truncate">{example.description}</p>
+      {/* Floating carousel - only shown once the main content is visible */}
+      {carouselLoaded && (
+        <div className="absolute bottom-10 right-10 w-64 h-36 rounded-xl overflow-hidden shadow-2xl opacity-0 animate-fade-in" style={{animationDelay: "1s", animationFillMode: "forwards"}}>
+          <Carousel className="w-full h-full" setApi={() => {}}>
+            <CarouselContent className="h-full">
+              {siteExamples.map((example, index) => (
+                <CarouselItem key={example.id} className="h-full">
+                  <div className={`relative w-full h-full transition-opacity duration-500 ${index === activeIndex ? 'opacity-100' : 'opacity-0'}`}>
+                    <img 
+                      src={example.image} 
+                      alt={example.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 p-2 flex items-center space-x-2">
+                      <div className="bg-black/30 backdrop-blur-sm rounded-md p-1">
+                        {example.icon}
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-white truncate">{example.title}</p>
+                        <p className="text-xs text-white/70 truncate">{example.description}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          
-          <div className="absolute top-2 right-2 flex space-x-1">
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="h-6 w-6 p-0 bg-black/20 border-white/10 hover:bg-black/40 backdrop-blur-sm"
-              onClick={() => setActiveIndex((prev) => (prev - 1 + siteExamples.length) % siteExamples.length)}
-            >
-              <ChevronLeft className="h-3 w-3 text-white" />
-            </Button>
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="h-6 w-6 p-0 bg-black/20 border-white/10 hover:bg-black/40 backdrop-blur-sm"
-              onClick={() => setActiveIndex((prev) => (prev + 1) % siteExamples.length)}
-            >
-              <ChevronRight className="h-3 w-3 text-white" />
-            </Button>
-          </div>
-        </Carousel>
-      </div>
-    </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            
+            <div className="absolute top-2 right-2 flex space-x-1">
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="h-6 w-6 p-0 bg-black/20 border-white/10 hover:bg-black/40 backdrop-blur-sm"
+                onClick={() => setActiveIndex((prev) => (prev - 1 + siteExamples.length) % siteExamples.length)}
+              >
+                <ChevronLeft className="h-3 w-3 text-white" />
+              </Button>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="h-6 w-6 p-0 bg-black/20 border-white/10 hover:bg-black/40 backdrop-blur-sm"
+                onClick={() => setActiveIndex((prev) => (prev + 1) % siteExamples.length)}
+              >
+                <ChevronRight className="h-3 w-3 text-white" />
+              </Button>
+            </div>
+          </Carousel>
+        </div>
+      )}
+    </>
   );
 };
 
