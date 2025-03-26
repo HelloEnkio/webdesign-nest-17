@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Code, Layout, Palette, Smartphone, Globe, ArrowRight, Box, Zap, Database, X, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -500,4 +501,106 @@ const Services: React.FC = () => {
                 <h4 className="font-medium mb-2">SEO Technique</h4>
                 <ul className="space-y-1 text-sm text-gray-600">
                   <li className="flex items-center gap-2">
-                    <svg className="h-4 w-4 text-amber-600" xmlns="http
+                    <svg className="h-4 w-4 text-amber-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Optimisation pour les appareils mobiles
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg className="h-4 w-4 text-amber-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Vitesse de chargement des pages
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg className="h-4 w-4 text-amber-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Sécurité du site (HTTPS)
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <Button className="mt-8 bg-gradient-to-r from-amber-600 to-amber-500">
+          Audit SEO gratuit
+          <ChevronRight className="ml-2 h-4 w-4" />
+        </Button>
+      </ServiceDetails>
+    )
+  };
+
+  return (
+    <section id="services" className="py-20 bg-white">
+      <div className="container mx-auto px-4">
+        <div ref={headerRef} className="text-center mb-16 opacity-0">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Nos Services</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Des solutions digitales complètes pour donner vie à votre vision et accélérer votre croissance.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ServiceCard 
+            icon={<Layout className="text-indigo-600" size={28} />}
+            title="Design UI/UX"
+            description="Création d'interfaces utilisateurs élégantes et intuitives qui offrent une expérience utilisateur exceptionnelle."
+            bgColor="bg-gradient-to-r from-indigo-500 to-indigo-600"
+            delay={100}
+            onShowDetails={() => handleShowDetails("Design UI/UX")}
+          />
+          
+          <ServiceCard 
+            icon={<Code className="text-purple-600" size={28} />}
+            title="Développement Web"
+            description="Développement d'applications web performantes, évolutives et sécurisées avec les dernières technologies."
+            bgColor="bg-gradient-to-r from-purple-500 to-purple-600"
+            delay={200}
+            onShowDetails={() => handleShowDetails("Développement Web")}
+          />
+          
+          <ServiceCard 
+            icon={<Smartphone className="text-blue-600" size={28} />}
+            title="Site Responsive"
+            description="Sites web parfaitement adaptés à tous les appareils, de l'ordinateur de bureau au smartphone."
+            bgColor="bg-gradient-to-r from-blue-500 to-blue-600"
+            delay={300}
+            onShowDetails={() => handleShowDetails("Site Responsive")}
+          />
+          
+          <ServiceCard 
+            icon={<Palette className="text-pink-600" size={28} />}
+            title="Identité Visuelle"
+            description="Création d'identités de marque mémorables qui reflètent les valeurs et la personnalité de votre entreprise."
+            bgColor="bg-gradient-to-r from-pink-500 to-pink-600"
+            delay={400}
+            onShowDetails={() => handleShowDetails("Identité Visuelle")}
+          />
+          
+          <ServiceCard 
+            icon={<Zap className="text-amber-600" size={28} />}
+            title="Performance & SEO"
+            description="Optimisation de votre présence en ligne pour améliorer la visibilité sur les moteurs de recherche."
+            bgColor="bg-gradient-to-r from-amber-500 to-amber-600"
+            delay={500}
+            onShowDetails={() => handleShowDetails("Performance & SEO")}
+          />
+        </div>
+        
+        <Dialog open={!!activeService} onOpenChange={() => handleCloseDetails()}>
+          <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="sr-only">{activeService}</DialogTitle>
+              <button 
+                onClick={handleCloseDetails} 
+                className="absolute right-4 top-4 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              >
+                <X size={20} className="text-gray-500" />
+              </button>
+            </DialogHeader>
+            
+            {activeService && serviceDetails[activeService]}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </section>
+  );
+};
+
+export default Services;
