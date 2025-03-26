@@ -80,20 +80,26 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
         <Button 
           variant="outline" 
           size="lg" 
-          className="group relative overflow-hidden rounded-full transition-all duration-300 border-2 border-white/70 hover:border-white/90 backdrop-blur-sm py-4 px-6"
+          className="portfolio-button group relative overflow-hidden rounded-full transition-all duration-300 border-2 border-white/70 hover:border-white/90 backdrop-blur-sm py-4 px-6"
         >
-          {/* Light background for better contrast with dark text */}
-          <span className="absolute inset-0 bg-white/80 transition-colors duration-300"></span>
-          <span className="absolute inset-0 bg-white/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+          {/* Animated gradient background */}
+          <span className="absolute inset-0 bg-gradient-to-r from-purple-500/80 via-indigo-500/80 to-cyan-500/80 opacity-0 group-hover:opacity-90 transition-opacity duration-500"></span>
           
-          {/* Subtle light effect */}
-          <span className="absolute inset-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0.3)_70%)]"></span>
+          {/* Animated particles effect */}
+          <span className="absolute inset-0 overflow-hidden">
+            <span className="particle-1 absolute w-2 h-2 rounded-full bg-white/80 opacity-0 group-hover:opacity-80"></span>
+            <span className="particle-2 absolute w-1.5 h-1.5 rounded-full bg-cyan-300/90 opacity-0 group-hover:opacity-90"></span>
+            <span className="particle-3 absolute w-1 h-1 rounded-full bg-purple-300/80 opacity-0 group-hover:opacity-80"></span>
+          </span>
+          
+          {/* Subtle shimmer effect */}
+          <span className="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           
           {/* Border glow effect */}
-          <span className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 blur-md bg-white/60 group-hover:blur transition-all duration-500"></span>
+          <span className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 blur-md bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 group-hover:blur transition-all duration-500"></span>
           
-          {/* Content - dark blue text for good contrast on light background */}
-          <span className="relative z-10 font-medium text-blue-900 flex items-center justify-center">
+          {/* Content - text changes color on hover */}
+          <span className="relative z-10 font-medium text-white/90 group-hover:text-white flex items-center justify-center transition-colors duration-300">
             Voir notre portfolio
           </span>
         </Button>

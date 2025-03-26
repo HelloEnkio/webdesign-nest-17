@@ -116,6 +116,34 @@
   .animated-border {
     @apply relative after:absolute after:inset-0 after:border-b after:border-black/[0.08] hover:after:border-black/20 after:transition-colors;
   }
+  
+  /* Portfolio button animation */
+  .portfolio-button .particle-1 {
+    top: 20%;
+    left: 50%;
+    animation: floatingParticle1 3s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  
+  .portfolio-button .particle-2 {
+    top: 50%;
+    left: 20%;
+    animation: floatingParticle2 4s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  
+  .portfolio-button .particle-3 {
+    top: 70%;
+    left: 70%;
+    animation: floatingParticle3 3.5s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  
+  .portfolio-button:hover .particle-1,
+  .portfolio-button:hover .particle-2,
+  .portfolio-button:hover .particle-3 {
+    animation-play-state: running;
+  }
 }
 
 /* Animations */
@@ -142,6 +170,28 @@
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+/* Portfolio button particle animations */
+@keyframes floatingParticle1 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translate(-30px, -40px); opacity: 0; }
+}
+
+@keyframes floatingParticle2 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translate(40px, -25px); opacity: 0; }
+}
+
+@keyframes floatingParticle3 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translate(-20px, -30px); opacity: 0; }
 }
 
 .fade-in {
