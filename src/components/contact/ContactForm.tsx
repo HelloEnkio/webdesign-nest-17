@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Send, ChevronRight, ChevronLeft, Mail, Phone, User, MessageSquare } from 'lucide-react';
+import { Send, ChevronRight, ChevronLeft, Mail, Phone, User, MessageSquare, ExternalLink } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -169,9 +169,19 @@ const ContactForm = () => {
   };
   
   return (
-    <div ref={formContainerRef} className="lg:col-span-2">
+    <div ref={formContainerRef}>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 transition-all duration-300 hover:shadow-md">
-        <h3 className="text-lg font-semibold mb-6 text-gray-900">Discutons de votre projet</h3>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Discutons de votre projet</h3>
+          <a 
+            href="mailto:contact@studio-web.fr" 
+            className="flex items-center text-indigo-600 hover:text-indigo-700 transition-colors mt-2 md:mt-0"
+          >
+            <Mail className="w-4 h-4 mr-2" />
+            contact@studio-web.fr
+            <ExternalLink className="w-3 h-3 ml-1" />
+          </a>
+        </div>
         
         {/* Barre de progression */}
         <div className="mb-8">
