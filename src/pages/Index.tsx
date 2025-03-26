@@ -16,33 +16,32 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Force scroll to top on component mount with high priority
-    window.scrollTo(0, 0);
+    // Disable browser's default scroll restoration
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
     
-    // Use a second scroll to top with a slight delay to ensure it works even after all content is loaded
-    const timer = setTimeout(() => {
+    // Only set up anchor link handling - no initial scroll to top in this component
+    // (the ScrollToTop component in App.tsx handles that)
+    const handleAnchorClick = function(e: Event) {
+      e.preventDefault();
+      
+      const anchor = this as HTMLAnchorElement;
+      const href = anchor.getAttribute('href');
+      if (!href) return;
+      
+      const target = document.querySelector(href);
+      if (!target) return;
+      
       window.scrollTo({
-        top: 0,
-        behavior: 'auto'
+        top: (target as HTMLElement).offsetTop - 80, // Accounting for navbar height
+        behavior: 'smooth'
       });
-    }, 50);
+    };
     
     // Handle smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const href = this.getAttribute('href');
-        if (!href) return;
-        
-        const target = document.querySelector(href);
-        if (!target) return;
-        
-        window.scrollTo({
-          top: (target as HTMLElement).offsetTop - 80, // Accounting for navbar height
-          behavior: 'smooth'
-        });
-      });
+      anchor.addEventListener('click', handleAnchorClick);
     });
     
     // Preload non-critical resources with lowest priority after core content is visible
@@ -69,9 +68,8 @@ const Index: React.FC = () => {
     }, 500); // Delay loading non-critical resources until after core content is displayed
     
     return () => {
-      clearTimeout(timer);
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.removeEventListener('click', function() {});
+        anchor.removeEventListener('click', handleAnchorClick);
       });
     };
   }, []);

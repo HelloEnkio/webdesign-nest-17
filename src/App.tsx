@@ -20,15 +20,17 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    // Force scroll to top with highest priority
+    // Disable browser's default scroll restoration
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    
+    // Force scroll to top immediately
     window.scrollTo(0, 0);
     
-    // Double-check with a slight delay to ensure it works after suspense resolution
+    // Additional scroll reset with a slight delay to ensure it works after all content is loaded
     const timer = setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'auto'
-      });
+      window.scrollTo(0, 0);
     }, 100);
     
     return () => clearTimeout(timer);
