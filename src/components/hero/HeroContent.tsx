@@ -80,17 +80,17 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
         <Button 
           variant="outline" 
           size="lg" 
-          className="group relative overflow-hidden rounded-full transition-all duration-300 border-2 border-teal-400/50 hover:border-teal-400/70 backdrop-blur-sm py-4 px-6"
+          className="group relative overflow-hidden rounded-full transition-all duration-300 border-2 border-white/60 hover:border-white/80 backdrop-blur-sm py-4 px-6"
         >
-          {/* Gradient background - visible even without hover */}
-          <span className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 transition-colors duration-300"></span>
-          <span className="absolute inset-0 bg-gradient-to-r from-teal-500/30 to-cyan-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+          {/* New solid background for better visibility */}
+          <span className="absolute inset-0 bg-white/20 transition-colors duration-300"></span>
+          <span className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           
-          {/* Light effect on hover */}
-          <span className="absolute inset-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.15)_0%,transparent_60%)]"></span>
+          {/* Light effect */}
+          <span className="absolute inset-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.3)_0%,transparent_70%)]"></span>
           
           {/* Border glow effect */}
-          <span className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 blur-md bg-gradient-to-r from-teal-400/40 to-cyan-400/40 group-hover:blur transition-all duration-500"></span>
+          <span className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 blur-md bg-white/40 group-hover:blur transition-all duration-500"></span>
           
           {/* Content */}
           <span className="relative z-10 font-medium text-white flex items-center justify-center">
