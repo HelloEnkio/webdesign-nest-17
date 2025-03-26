@@ -1,106 +1,20 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from './ui/button';
-import { ArrowRight, ExternalLink } from 'lucide-react';
-import { GlareCard } from './ui/glare-card';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { PortfolioCarousel } from './ui/portfolio-carousel';
 
-interface PortfolioItemProps {
+interface SlideData {
   title: string;
+  button: string;
+  src: string;
   category: string;
-  image: string;
   client?: string;
-  delay?: number;
 }
-
-const PortfolioItem: React.FC<PortfolioItemProps> = ({ title, category, image, client, delay = 0 }) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            itemRef.current?.classList.add('animate-fade-up');
-          }, delay);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    
-    if (itemRef.current) {
-      observer.observe(itemRef.current);
-    }
-    
-    return () => {
-      if (itemRef.current) {
-        observer.unobserve(itemRef.current);
-      }
-    };
-  }, [delay]);
-  
-  return (
-    <motion.div 
-      ref={itemRef} 
-      className="opacity-0 group h-full"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: delay * 0.1 }}
-    >
-      <GlareCard className="h-full bg-gradient-to-br from-slate-900 to-indigo-950/90">
-        <div className="h-full flex flex-col">
-          <div 
-            className="h-48 w-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${image})` }}
-          >
-            <div className="relative h-full w-full">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/30"></div>
-              
-              {client && (
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-black">
-                  {client}
-                </div>
-              )}
-              
-              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-black">
-                {category}
-              </div>
-              
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button className="rounded-full bg-white text-black hover:bg-white/90 hover:text-black flex items-center gap-2 shadow-xl">
-                  Voir le projet <ExternalLink size={14} />
-                </Button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-5 flex-1 flex flex-col">
-            <h3 className="text-xl font-semibold text-white">{title}</h3>
-            <p className="text-sm text-gray-300 mt-1">
-              Création d'interface, identité visuelle, développement
-            </p>
-            <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-              <div className="flex space-x-1">
-                <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
-                <span className="w-2 h-2 rounded-full bg-teal-400"></span>
-                <span className="w-2 h-2 rounded-full bg-purple-400"></span>
-              </div>
-              <button className="text-xs text-white/80 hover:text-white flex items-center gap-1 transition-colors">
-                Détails <ArrowRight size={12} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </GlareCard>
-    </motion.div>
-  );
-};
 
 const Portfolio: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
   const [activeFilter, setActiveFilter] = useState('Tous');
   
   const filters = ['Tous', 'Web Design', 'E-commerce', 'Branding', 'Marketing'];
@@ -126,48 +40,50 @@ const Portfolio: React.FC = () => {
     };
   }, []);
   
-  const portfolioItems = [
+  const portfolioItems: SlideData[] = [
     {
       title: "Plateforme Immobilière Moderne",
       category: "Web Design",
       client: "Immo+",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2426&q=80"
+      button: "Voir le projet",
+      src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2426&q=80"
     },
     {
       title: "E-commerce Mode Haut de Gamme",
       category: "E-commerce",
       client: "Maison Élégance",
-      image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+      button: "Voir le projet",
+      src: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
     {
       title: "Application Gestion Immobilière",
       category: "Web Design",
       client: "PropertyTech",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2344&q=80"
+      button: "Voir le projet",
+      src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2344&q=80"
     },
     {
       title: "Refonte Corporate Finance",
       category: "Branding",
       client: "FinanceGroup",
-      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+      button: "Voir le projet",
+      src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
     {
       title: "Campagne Marketing Luxe",
       category: "Marketing",
       client: "Prestige Paris",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+      button: "Voir le projet",
+      src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
     {
       title: "Plateforme Éducative Interactive",
       category: "Web Design",
       client: "EduTech Future",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+      button: "Voir le projet",
+      src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
   ];
-  
-  const filteredItems = activeFilter === 'Tous' 
-    ? portfolioItems 
-    : portfolioItems.filter(item => item.category === activeFilter);
   
   return (
     <section id="portfolio" className="py-28 relative">
@@ -199,7 +115,7 @@ const Portfolio: React.FC = () => {
           </p>
           
           {/* Filter */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
+          <div className="flex flex-wrap justify-center gap-2 mb-16 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
             {filters.map((filter, index) => (
               <motion.button
                 key={filter}
@@ -221,17 +137,9 @@ const Portfolio: React.FC = () => {
           </div>
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-full">
-          {filteredItems.map((item, index) => (
-            <PortfolioItem
-              key={index}
-              title={item.title}
-              category={item.category}
-              client={item.client}
-              image={item.image}
-              delay={index}
-            />
-          ))}
+        {/* Carousel */}
+        <div className="mb-20">
+          <PortfolioCarousel slides={portfolioItems} activeFilter={activeFilter} />
         </div>
         
         <div className="text-center mt-16">
