@@ -41,7 +41,7 @@ const ContactForm = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [contactType, setContactType] = useState<'email' | 'phone' | null>(null);
+  const [contactType, setContactType] = useState<'email' | 'phone' | 'uncertain' | null>(null);
   
   // Liste des types de projets disponibles
   const projectTypes = [
@@ -52,18 +52,28 @@ const ContactForm = () => {
     "Autre"
   ];
   
-  // Détecter automatiquement si l'utilisateur entre un email ou un numéro de téléphone
+  // Détecter de façon plus souple si l'utilisateur entre un email ou un numéro de téléphone
   useEffect(() => {
     const value = formState.contact;
     
-    // Regex pour email et téléphone
+    // Regex pour email et téléphone (plus souples)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
+    const strongPhoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
+    const loosePhoneRegex = /\d{6,}/; // Au moins 6 chiffres consécutifs
     
     if (emailRegex.test(value)) {
       setContactType('email');
-    } else if (phoneRegex.test(value)) {
+    } else if (strongPhoneRegex.test(value)) {
       setContactType('phone');
+    } else if (loosePhoneRegex.test(value)) {
+      // Si on trouve au moins 6 chiffres, on considère que c'est probablement un téléphone
+      setContactType('phone');
+    } else if (value.includes('@')) {
+      // Si on trouve un @ quelque part, on considère que c'est probablement un email
+      setContactType('email');
+    } else if (value.trim().length > 5) {
+      // Si on a au moins quelques caractères, on accepte comme incertain
+      setContactType('uncertain');
     } else {
       setContactType(null);
     }
@@ -109,7 +119,8 @@ const ContactForm = () => {
       case 2:
         return formState.projectDescription.trim().length > 0;
       case 3:
-        return contactType !== null;
+        // Plus souple - accepte même si incertain tant qu'il y a du contenu
+        return contactType !== null && formState.contact.trim().length > 3;
       default:
         return true;
     }
@@ -136,10 +147,20 @@ const ContactForm = () => {
         setCurrentStep(0);
         setIsSubmitting(false);
         
+        // Message de succès adapté selon le type de contact détecté
+        let contactMessage = "";
+        if (contactType === 'email') {
+          contactMessage = "Nous vous recontacterons rapidement par e-mail.";
+        } else if (contactType === 'phone') {
+          contactMessage = "Nous vous rappellerons dans les plus brefs délais.";
+        } else {
+          contactMessage = "Nous vous recontacterons très bientôt.";
+        }
+        
         // Afficher toast de succès
         toast({
           title: "Message envoyé !",
-          description: "Nous vous contacterons bientôt via " + (contactType === 'email' ? 'email' : 'téléphone') + ".",
+          description: contactMessage,
           variant: "default",
         });
 
@@ -173,6 +194,18 @@ const ContactForm = () => {
       x: direction < 0 ? 50 : -50,
       opacity: 0
     })
+  };
+
+  // Retourne un message d'encouragement en fonction du type de contact détecté
+  const getContactFeedbackMessage = () => {
+    if (contactType === 'email') {
+      return "Format d'email détecté. Parfait !";
+    } else if (contactType === 'phone') {
+      return "Format de téléphone détecté. Parfait !";
+    } else if (contactType === 'uncertain' && formState.contact.trim().length > 3) {
+      return "C'est noté, nous utiliserons ces coordonnées pour vous contacter.";
+    }
+    return "";
   };
   
   return (
@@ -344,12 +377,14 @@ const ContactForm = () => {
                             ? "border-indigo-400 focus:ring-indigo-400" 
                             : contactType === 'phone' 
                               ? "border-green-400 focus:ring-green-400" 
-                              : "border-gray-200 focus:border-indigo-400 focus:ring-indigo-400"
+                              : contactType === 'uncertain'
+                                ? "border-yellow-400 focus:ring-yellow-400"
+                                : "border-gray-200 focus:border-indigo-400 focus:ring-indigo-400"
                         )}
                         autoFocus
                       />
                       
-                      {contactType && (
+                      {(contactType === 'email' || contactType === 'phone' || contactType === 'uncertain') && formState.contact.trim().length > 3 && (
                         <motion.div 
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -358,12 +393,17 @@ const ContactForm = () => {
                           {contactType === 'email' ? (
                             <span className="text-indigo-600 flex items-center">
                               <Mail size={16} className="mr-2" />
-                              Format d'email détecté
+                              {getContactFeedbackMessage()}
                             </span>
-                          ) : (
+                          ) : contactType === 'phone' ? (
                             <span className="text-green-600 flex items-center">
                               <Phone size={16} className="mr-2" />
-                              Format de téléphone détecté
+                              {getContactFeedbackMessage()}
+                            </span>
+                          ) : (
+                            <span className="text-yellow-600 flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3Z"></path><path d="M16 3v4"></path><path d="M8 3v4"></path><path d="M12 18v3"></path></svg>
+                              {getContactFeedbackMessage()}
                             </span>
                           )}
                         </motion.div>
