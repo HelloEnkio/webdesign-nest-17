@@ -15,30 +15,7 @@ interface SlideData {
 
 const Portfolio: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
-  const [activeFilter, setActiveFilter] = useState('Tous');
-  
-  const filters = ['Tous', 'Web Design', 'E-commerce', 'Branding', 'Marketing'];
-  
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          headerRef.current?.classList.add('animate-fade-up');
-        }
-      },
-      { threshold: 0.1 }
-    );
-    
-    if (headerRef.current) {
-      observer.observe(headerRef.current);
-    }
-    
-    return () => {
-      if (headerRef.current) {
-        observer.unobserve(headerRef.current);
-      }
-    };
-  }, []);
+  const [currentIndex, setCurrentIndex] = useState(0);
   
   const portfolioItems: SlideData[] = [
     {
@@ -85,8 +62,41 @@ const Portfolio: React.FC = () => {
     },
   ];
   
+  // Get unique categories for the selector
+  const categories = portfolioItems.map(item => item.category);
+  const uniqueCategories = Array.from(new Set(categories));
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          headerRef.current?.classList.add('animate-fade-up');
+        }
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (headerRef.current) {
+      observer.observe(headerRef.current);
+    }
+    
+    return () => {
+      if (headerRef.current) {
+        observer.unobserve(headerRef.current);
+      }
+    };
+  }, []);
+  
+  // Select a position based on category
+  const handleCategorySelect = (category: string) => {
+    const index = portfolioItems.findIndex(item => item.category === category);
+    if (index !== -1) {
+      setCurrentIndex(index);
+    }
+  };
+  
   return (
-    <section id="portfolio" className="py-28 relative">
+    <section id="portfolio" className="py-20 relative">
       {/* Design elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-l from-blue-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-r from-indigo-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
@@ -94,7 +104,7 @@ const Portfolio: React.FC = () => {
       <div className="section-container relative z-10">
         <motion.div 
           ref={headerRef} 
-          className="text-center mb-16"
+          className="text-center mb-10"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -109,40 +119,49 @@ const Portfolio: React.FC = () => {
             Découvrez nos <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">réalisations</span>
           </h2>
           
-          <p className="text-neutral-600 max-w-2xl mx-auto mb-12 text-lg">
+          <p className="text-neutral-600 max-w-2xl mx-auto mb-8 text-lg">
             Explorez notre sélection de projets qui illustrent notre capacité à créer des solutions 
             web uniques alliant esthétique et performance technique.
           </p>
           
-          {/* Filter */}
-          <div className="flex flex-wrap justify-center gap-2 mb-16 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
-            {filters.map((filter, index) => (
-              <motion.button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 text-sm rounded-full transition-all duration-300 ${
-                  activeFilter === filter 
-                    ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md' 
-                    : 'bg-white/70 text-neutral-600 hover:bg-white'
-                }`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {filter}
-              </motion.button>
-            ))}
+          {/* Category Selector - now as position selector */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
+            {uniqueCategories.map((category, index) => {
+              // Find the index of the first item with this category
+              const categoryIndex = portfolioItems.findIndex(item => item.category === category);
+              
+              return (
+                <motion.button
+                  key={category}
+                  onClick={() => handleCategorySelect(category)}
+                  className={`px-4 py-2 text-sm rounded-full transition-all duration-300 ${
+                    portfolioItems[currentIndex].category === category
+                      ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md' 
+                      : 'bg-white/70 text-neutral-600 hover:bg-white'
+                  }`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {category}
+                </motion.button>
+              );
+            })}
           </div>
         </motion.div>
         
-        {/* Carousel */}
-        <div className="mb-20">
-          <PortfolioCarousel slides={portfolioItems} activeFilter={activeFilter} />
+        {/* Carousel - now closer to the selector */}
+        <div className="mb-16">
+          <PortfolioCarousel 
+            slides={portfolioItems} 
+            currentIndex={currentIndex}
+            setCurrentIndex={setCurrentIndex}
+          />
         </div>
         
-        <div className="text-center mt-16">
+        <div className="text-center mt-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

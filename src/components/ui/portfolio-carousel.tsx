@@ -139,38 +139,23 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
 interface PortfolioCarouselProps {
   slides: SlideData[];
-  activeFilter: string;
+  currentIndex: number;
+  setCurrentIndex: (index: number) => void;
 }
 
-export function PortfolioCarousel({ slides, activeFilter }: PortfolioCarouselProps) {
-  const [current, setCurrent] = useState(0);
+export function PortfolioCarousel({ 
+  slides, 
+  currentIndex,
+  setCurrentIndex
+}: PortfolioCarouselProps) {
   
-  // Filter slides based on active filter
-  const filteredSlides = activeFilter === 'Tous' 
-    ? slides 
-    : slides.filter(slide => slide.category === activeFilter);
-  
-  // Reset current slide when filter changes
-  useEffect(() => {
-    setCurrent(0);
-  }, [activeFilter]);
-
   const handleSlideClick = (index: number) => {
-    if (current !== index) {
-      setCurrent(index);
+    if (currentIndex !== index) {
+      setCurrentIndex(index);
     }
   };
 
   const id = useId();
-
-  // If no slides match the filter
-  if (filteredSlides.length === 0) {
-    return (
-      <div className="w-full py-20 text-center">
-        <p className="text-lg text-gray-500">Aucun projet dans cette catégorie</p>
-      </div>
-    );
-  }
 
   return (
     <div
@@ -180,28 +165,28 @@ export function PortfolioCarousel({ slides, activeFilter }: PortfolioCarouselPro
       <ul
         className="absolute flex mx-[-4vmin] transition-transform duration-1000 ease-in-out"
         style={{
-          transform: `translateX(-${current * (100 / filteredSlides.length)}%)`,
+          transform: `translateX(-${currentIndex * (100 / slides.length)}%)`,
         }}
       >
-        {filteredSlides.map((slide, index) => (
+        {slides.map((slide, index) => (
           <Slide
             key={index}
             slide={slide}
             index={index}
-            current={current}
+            current={currentIndex}
             handleSlideClick={handleSlideClick}
           />
         ))}
       </ul>
       
       {/* Pagination indicators */}
-      <div className="absolute flex justify-center w-full bottom-[-60px] gap-2">
-        {filteredSlides.map((_, index) => (
+      <div className="absolute flex justify-center w-full bottom-[-30px] gap-2">
+        {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrent(index)}
+            onClick={() => setCurrentIndex(index)}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              current === index 
+              currentIndex === index 
                 ? 'bg-indigo-600 scale-125' 
                 : 'bg-gray-300 hover:bg-gray-400'
             }`}
