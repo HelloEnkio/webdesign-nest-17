@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Code, Layout, Palette, Smartphone, Globe, ArrowRight, Box, Zap, Database, X, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,7 +20,7 @@ interface ServiceDetailsProps {
   title: string;
   icon: React.ReactNode;
   bgColor: string;
-  children: React.ReactNode; // Added the missing children property
+  children: React.ReactNode;
 }
 
 // Composant de détails pour la modal
@@ -127,7 +126,6 @@ const Services: React.FC = () => {
     };
   }, []);
   
-  // Contenu détaillé pour chaque service
   const serviceDetails: Record<string, React.ReactNode> = {
     "Design UI/UX": (
       <ServiceDetails 
@@ -373,7 +371,6 @@ const Services: React.FC = () => {
       </ServiceDetails>
     ),
     
-    // Ajouter des contenus détaillés pour les autres services ici
     "Identité Visuelle": (
       <ServiceDetails 
         title="Identité Visuelle"
@@ -587,12 +584,6 @@ const Services: React.FC = () => {
           <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="sr-only">{activeService}</DialogTitle>
-              <button 
-                onClick={handleCloseDetails} 
-                className="absolute right-4 top-4 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-              >
-                <X size={20} className="text-gray-500" />
-              </button>
             </DialogHeader>
             
             {activeService && serviceDetails[activeService]}
