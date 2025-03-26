@@ -46,13 +46,14 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
           </span>
           <motion.span className="block mt-2">
             avec{" "}
-            <span className="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl min-h-[1.25em] min-w-[150px]">
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-xl" style={{ minHeight: "1.4em", verticalAlign: "middle" }}>
               <TypingAnimation 
                 texts={rotatingWords}
                 typingSpeed={100}
                 deletingSpeed={60}
                 pauseBeforeDelete={2000}
                 showCursor={true}
+                className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300"
               />
             </span>
           </motion.span>

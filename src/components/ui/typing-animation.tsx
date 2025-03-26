@@ -72,17 +72,26 @@ export function TypingAnimation({
   return (
     <span 
       className={cn(
-        "inline-flex items-center relative", 
+        "inline-block relative", 
         className
       )}
       style={{ 
         minWidth: `${longestText.length * 0.6}em`,  
-        minHeight: "1.2em",
-        display: "inline-flex"
+        minHeight: "1.4em", // Slightly taller to avoid any jumps
+        position: "relative"
       }}
     >
-      {currentText}
-      {showCursor && <TypingCursor isDeleting={isDeleting} />}
+      <span className="inline-block">{currentText}</span>
+      {showCursor && (
+        <TypingCursor 
+          isDeleting={isDeleting} 
+          className="absolute top-0 h-full"
+          style={{ 
+            height: "100%", 
+            marginTop: "0" 
+          }}
+        />
+      )}
     </span>
   );
 }
