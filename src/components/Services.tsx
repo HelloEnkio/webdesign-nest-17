@@ -500,4 +500,4 @@ const Services: React.FC = () => {
                 <h4 className="font-medium mb-2">SEO Technique</h4>
                 <ul className="space-y-1 text-sm text-gray-600">
                   <li className="flex items-center gap-2">
-                    <svg className="h-4 w-4 text-amber-600"
+                    <svg className="h-4 w-4 text-amber-600" xmlns="http
