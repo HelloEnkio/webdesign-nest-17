@@ -82,18 +82,18 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
           size="lg" 
           className="group relative overflow-hidden rounded-full transition-all duration-300 border-2 border-white/60 hover:border-white/80 backdrop-blur-sm py-4 px-6"
         >
-          {/* New solid background for better visibility */}
-          <span className="absolute inset-0 bg-white/20 transition-colors duration-300"></span>
-          <span className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+          {/* Darker background for better contrast with text */}
+          <span className="absolute inset-0 bg-gray-800/40 transition-colors duration-300"></span>
+          <span className="absolute inset-0 bg-gray-800/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           
           {/* Light effect */}
-          <span className="absolute inset-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.3)_0%,transparent_70%)]"></span>
+          <span className="absolute inset-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2)_0%,transparent_70%)]"></span>
           
           {/* Border glow effect */}
           <span className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 blur-md bg-white/40 group-hover:blur transition-all duration-500"></span>
           
-          {/* Content */}
-          <span className="relative z-10 font-medium text-white flex items-center justify-center">
+          {/* Content - now with cyan text color for better contrast */}
+          <span className="relative z-10 font-medium text-cyan-300 flex items-center justify-center">
             Voir notre portfolio
           </span>
         </Button>
