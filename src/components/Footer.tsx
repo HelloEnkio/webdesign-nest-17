@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
@@ -90,15 +91,15 @@ const Footer: React.FC = () => {
           </p>
           
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <a href="#" className="text-neutral-400 hover:text-white transition-colors">
+            <Link to="/mentions-legales" className="text-neutral-400 hover:text-white transition-colors">
               Mentions légales
-            </a>
-            <a href="#" className="text-neutral-400 hover:text-white transition-colors">
+            </Link>
+            <Link to="/politique-confidentialite" className="text-neutral-400 hover:text-white transition-colors">
               Politique de confidentialité
-            </a>
-            <a href="#" className="text-neutral-400 hover:text-white transition-colors">
+            </Link>
+            <Link to="/cgv" className="text-neutral-400 hover:text-white transition-colors">
               CGV
-            </a>
+            </Link>
           </div>
         </div>
       </div>
