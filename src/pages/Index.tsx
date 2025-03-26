@@ -16,13 +16,12 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Disable browser's default scroll restoration
+    // Enable browser's default scroll restoration to maintain position on refresh
     if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+      history.scrollRestoration = 'auto';
     }
     
-    // Only set up anchor link handling - no initial scroll to top in this component
-    // (the ScrollToTop component in App.tsx handles that)
+    // Handle smooth scrolling for anchor links
     const handleAnchorClick = function(e: Event) {
       e.preventDefault();
       
@@ -39,7 +38,6 @@ const Index: React.FC = () => {
       });
     };
     
-    // Handle smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', handleAnchorClick);
     });

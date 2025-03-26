@@ -15,25 +15,35 @@ const CGV = lazy(() => import("./pages/CGV"));
 
 const queryClient = new QueryClient();
 
-// ScrollToTop component to ensure all route changes start at the top
+// ScrollToTop component to ensure navigation between different routes starts at the top
+// but refreshes preserve scroll position
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    // Disable browser's default scroll restoration
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    // Only scroll to top when navigating between routes, not on refresh
+    const isNavigatingBetweenRoutes = sessionStorage.getItem('isNavigating') === 'true';
+    
+    if (isNavigatingBetweenRoutes) {
+      window.scrollTo(0, 0);
+      sessionStorage.removeItem('isNavigating');
     }
     
-    // Force scroll to top immediately
-    window.scrollTo(0, 0);
+    // Set up navigation tracking for future navigations
+    const handleLinkClick = () => {
+      sessionStorage.setItem('isNavigating', 'true');
+    };
     
-    // Additional scroll reset with a slight delay to ensure it works after all content is loaded
-    const timer = setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 100);
+    // Add event listeners to all anchor links that navigate between pages
+    document.querySelectorAll('a:not([href^="#"])').forEach(anchor => {
+      anchor.addEventListener('click', handleLinkClick);
+    });
     
-    return () => clearTimeout(timer);
+    return () => {
+      document.querySelectorAll('a:not([href^="#"])').forEach(anchor => {
+        anchor.removeEventListener('click', handleLinkClick);
+      });
+    };
   }, [pathname]);
   
   return null;
