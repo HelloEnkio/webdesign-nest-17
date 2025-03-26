@@ -16,6 +16,9 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
+    // Ensure page scrolls to top on page load/refresh
+    window.scrollTo(0, 0);
+    
     // Handle smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
@@ -43,9 +46,7 @@ const Index: React.FC = () => {
       document.head.appendChild(preconnect);
       
       // Only start preloading the background video after critical content is rendered
-      const videoPreload = new Request('https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4', {
-        priority: 'low'
-      });
+      const videoPreload = new Request('https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4');
       fetch(videoPreload).catch(() => {});
       
       // Preload non-critical images with lowest priority

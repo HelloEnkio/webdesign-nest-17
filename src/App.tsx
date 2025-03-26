@@ -1,10 +1,10 @@
 
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -15,12 +15,24 @@ const CGV = lazy(() => import("./pages/CGV"));
 
 const queryClient = new QueryClient();
 
+// ScrollToTop component to ensure all route changes start at the top
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-black via-blue-950 to-teal-950"></div>}>
           <Routes>
             <Route path="/" element={<Index />} />
