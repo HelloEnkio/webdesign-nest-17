@@ -20,7 +20,18 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
+    // Force scroll to top with highest priority
     window.scrollTo(0, 0);
+    
+    // Double-check with a slight delay to ensure it works after suspense resolution
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+      });
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [pathname]);
   
   return null;

@@ -16,8 +16,16 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Ensure page scrolls to top on page load/refresh
+    // Force scroll to top on component mount with high priority
     window.scrollTo(0, 0);
+    
+    // Use a second scroll to top with a slight delay to ensure it works even after all content is loaded
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+      });
+    }, 50);
     
     // Handle smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -61,6 +69,7 @@ const Index: React.FC = () => {
     }, 500); // Delay loading non-critical resources until after core content is displayed
     
     return () => {
+      clearTimeout(timer);
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.removeEventListener('click', function() {});
       });
