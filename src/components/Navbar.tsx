@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowUp } from 'lucide-react';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 
@@ -26,6 +26,13 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <nav
       className={cn(
@@ -37,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" onClick={scrollToTop} className="flex items-center">
             <div className="h-9 w-9 mr-3 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">S</div>
             <span className={cn(
               "text-xl font-bold tracking-tight bg-gradient-to-r bg-clip-text text-transparent",
@@ -49,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <Link to="/#home" className={cn(
+            <Link to="/#home" onClick={scrollToTop} className={cn(
               "navbar-item",
               !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
             )}>Accueil</Link>
@@ -96,7 +103,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
         )}
       >
         <div className="px-4 py-4 space-y-4">
-          <Link to="/#home" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Accueil</Link>
+          <Link to="/#home" onClick={scrollToTop} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Accueil</Link>
           <Link to="/#services" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Services</Link>
           <Link to="/#portfolio" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Portfolio</Link>
           <Link to="/#process" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Processus</Link>
