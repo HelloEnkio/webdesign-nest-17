@@ -49,7 +49,6 @@ const Contact: React.FC = () => {
         </div>
         
         <div>
-          {/* Contact Form - Now full width */}
           <div ref={formRef} className="opacity-0 max-w-4xl mx-auto">
             <ContactForm />
           </div>
