@@ -1,4 +1,3 @@
-
 import React, { useEffect, lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -16,28 +15,33 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Enable browser's default scroll restoration to maintain position on refresh
+    // Explicitly enable browser's default scroll restoration behavior
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'auto';
     }
     
-    // Handle smooth scrolling for anchor links
+    // Handle smooth scrolling for anchor links only
     const handleAnchorClick = function(e: Event) {
-      e.preventDefault();
-      
       const anchor = this as HTMLAnchorElement;
       const href = anchor.getAttribute('href');
-      if (!href) return;
       
-      const target = document.querySelector(href);
-      if (!target) return;
-      
-      window.scrollTo({
-        top: (target as HTMLElement).offsetTop - 80, // Accounting for navbar height
-        behavior: 'smooth'
-      });
+      // Only handle anchor links within the page
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        
+        const targetId = href.slice(1);
+        const target = document.getElementById(targetId);
+        
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 80, // Accounting for navbar height
+            behavior: 'smooth'
+          });
+        }
+      }
     };
     
+    // Only add listeners to anchor links within the page
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', handleAnchorClick);
     });
@@ -63,7 +67,7 @@ const Index: React.FC = () => {
         img.setAttribute('loading', 'lazy');
         img.src = src;
       });
-    }, 500); // Delay loading non-critical resources until after core content is displayed
+    }, 500);
     
     return () => {
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {

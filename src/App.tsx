@@ -1,10 +1,10 @@
 
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -15,35 +15,19 @@ const CGV = lazy(() => import("./pages/CGV"));
 
 const queryClient = new QueryClient();
 
-// ScrollToTop component to ensure navigation between different routes starts at the top
-// but refreshes preserve scroll position
+// ScrollToTop component that ONLY scrolls on navigation between routes, not on refresh
 const ScrollToTop = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   
-  useEffect(() => {
-    // Only scroll to top when navigating between routes, not on refresh
-    const isNavigatingBetweenRoutes = sessionStorage.getItem('isNavigating') === 'true';
+  // We use React Router's useNavigate hook to detect actual navigation between routes
+  // This avoids interfering with browser's native scroll restoration on refresh
+  React.useEffect(() => {
+    // Only scroll to top on actual navigation between different routes
+    window.scrollTo(0, 0);
     
-    if (isNavigatingBetweenRoutes) {
-      window.scrollTo(0, 0);
-      sessionStorage.removeItem('isNavigating');
-    }
-    
-    // Set up navigation tracking for future navigations
-    const handleLinkClick = () => {
-      sessionStorage.setItem('isNavigating', 'true');
-    };
-    
-    // Add event listeners to all anchor links that navigate between pages
-    document.querySelectorAll('a:not([href^="#"])').forEach(anchor => {
-      anchor.addEventListener('click', handleLinkClick);
-    });
-    
-    return () => {
-      document.querySelectorAll('a:not([href^="#"])').forEach(anchor => {
-        anchor.removeEventListener('click', handleLinkClick);
-      });
-    };
+    // This effect only runs when pathname changes, which happens on navigation
+    // but not on refresh at the same URL
   }, [pathname]);
   
   return null;
