@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -66,7 +65,6 @@ const Portfolio: React.FC = () => {
     },
   ];
   
-  // Get unique categories for the selector
   const categories = portfolioItems.map(item => item.category);
   const uniqueCategories = Array.from(new Set(categories));
   
@@ -91,7 +89,6 @@ const Portfolio: React.FC = () => {
     };
   }, []);
   
-  // Select a position based on category
   const handleCategorySelect = (category: string) => {
     const index = portfolioItems.findIndex(item => item.category === category);
     if (index !== -1) {
@@ -101,7 +98,6 @@ const Portfolio: React.FC = () => {
   
   return (
     <section id="portfolio" className="py-20 relative">
-      {/* Design elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-l from-blue-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-r from-indigo-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
       
@@ -128,7 +124,6 @@ const Portfolio: React.FC = () => {
             web uniques alliant esthétique et performance technique.
           </p>
           
-          {/* Category Selector - now as position selector - moved closer to carousel */}
           <div className="flex flex-wrap justify-center gap-2 mb-8 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
             {uniqueCategories.map((category, index) => {
               return (
@@ -153,7 +148,6 @@ const Portfolio: React.FC = () => {
           </div>
         </motion.div>
         
-        {/* Carousel - now closer to the selector */}
         <div className="mb-16">
           <PortfolioCarousel 
             slides={portfolioItems} 
