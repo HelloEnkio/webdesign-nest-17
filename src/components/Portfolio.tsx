@@ -4,14 +4,15 @@ import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { PortfolioCarousel } from './ui/portfolio-carousel';
+import { DemoLandingPage } from './ui/demo-landing-page';
 
 interface SlideData {
   title: string;
-  button: string;
   src: string;
   category: string;
-  client?: string;
   description?: string;
+  landingPageContent?: React.ReactNode;
+  autoScroll?: boolean;
 }
 
 const Portfolio: React.FC = () => {
@@ -20,53 +21,47 @@ const Portfolio: React.FC = () => {
   
   const portfolioItems: SlideData[] = [
     {
-      title: "Landing Page Biotech Startup",
+      title: "Landing Pages",
       category: "Landing Pages",
-      client: "GeneticaLabs",
-      button: "Voir le projet",
-      description: "Page d'accueil moderne pour une startup de biotechnologie",
-      src: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+      description: "Page d'accueil moderne pour une startup",
+      src: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80",
+      landingPageContent: <DemoLandingPage />,
+      autoScroll: true
     },
     {
       title: "Plateforme Immobilière Moderne",
       category: "Web Design",
-      client: "Immo+",
-      button: "Voir le projet",
+      description: "Interface intuitive pour agences immobilières",
       src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2426&q=80"
     },
     {
       title: "E-commerce Mode Haut de Gamme",
       category: "E-commerce",
-      client: "Maison Élégance",
-      button: "Voir le projet",
+      description: "Boutique en ligne élégante pour produits de luxe",
       src: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
     {
       title: "Application Gestion Immobilière",
       category: "Web Design",
-      client: "PropertyTech",
-      button: "Voir le projet",
+      description: "Dashboard complet pour gestion locative",
       src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2344&q=80"
     },
     {
       title: "Refonte Corporate Finance",
       category: "Branding",
-      client: "FinanceGroup",
-      button: "Voir le projet",
+      description: "Identité visuelle pour groupe financier",
       src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
     {
       title: "Campagne Marketing Luxe",
       category: "Marketing",
-      client: "Prestige Paris",
-      button: "Voir le projet",
+      description: "Stratégie digitale pour marque premium",
       src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
     {
       title: "Plateforme Éducative Interactive",
       category: "Web Design",
-      client: "EduTech Future",
-      button: "Voir le projet",
+      description: "Solution e-learning innovante",
       src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
     },
   ];
@@ -134,7 +129,7 @@ const Portfolio: React.FC = () => {
           </p>
           
           {/* Category Selector - now as position selector - moved closer to carousel */}
-          <div className="flex flex-wrap justify-center gap-2 mb-2 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
+          <div className="flex flex-wrap justify-center gap-2 mb-8 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
             {uniqueCategories.map((category, index) => {
               return (
                 <motion.button

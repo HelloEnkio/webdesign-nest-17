@@ -5,11 +5,11 @@ import { ArrowRight } from "lucide-react";
 
 interface SlideData {
   title: string;
-  button: string;
   src: string;
   category: string;
-  client?: string;
   description?: string;
+  landingPageContent?: React.ReactNode;
+  autoScroll?: boolean;
 }
 
 interface SlideProps {
@@ -21,10 +21,14 @@ interface SlideProps {
 
 const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const xRef = useRef(0);
   const yRef = useRef(0);
-  const frameRef = useRef<number>();
+  const animationRef = useRef<number>();
+  const scrollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollingRef = useRef(false);
 
   useEffect(() => {
     const animate = () => {
@@ -36,17 +40,79 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
       slideRef.current.style.setProperty("--x", `${x}px`);
       slideRef.current.style.setProperty("--y", `${y}px`);
 
-      frameRef.current = requestAnimationFrame(animate);
+      animationRef.current = requestAnimationFrame(animate);
     };
 
-    frameRef.current = requestAnimationFrame(animate);
+    animationRef.current = requestAnimationFrame(animate);
 
     return () => {
-      if (frameRef.current) {
-        cancelAnimationFrame(frameRef.current);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
   }, []);
+
+  // Auto scroll effect when this slide is current
+  useEffect(() => {
+    if (current === index && slide.autoScroll && frameRef.current && contentRef.current) {
+      const startAutoScroll = () => {
+        if (scrollingRef.current) return;
+        
+        scrollingRef.current = true;
+        const frame = frameRef.current;
+        const content = contentRef.current;
+        
+        if (!frame || !content) return;
+        
+        const contentHeight = content.scrollHeight;
+        const frameHeight = frame.clientHeight;
+        const scrollDistance = contentHeight - frameHeight;
+        
+        if (scrollDistance <= 0) return;
+        
+        let start = 0;
+        const duration = 8000; // 8 seconds to scroll through
+        
+        const animateScroll = (timestamp: number) => {
+          if (!start) start = timestamp;
+          const elapsed = timestamp - start;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          if (frame) {
+            frame.scrollTop = progress * scrollDistance;
+          }
+          
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+          } else {
+            // Reset after reaching bottom
+            setTimeout(() => {
+              if (frame) {
+                frame.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  scrollingRef.current = false;
+                  // Start again after a delay
+                  scrollTimerRef.current = setTimeout(startAutoScroll, 3000);
+                }, 1000);
+              }
+            }, 2000);
+          }
+        };
+        
+        requestAnimationFrame(animateScroll);
+      };
+      
+      // Start auto-scrolling after a delay
+      scrollTimerRef.current = setTimeout(startAutoScroll, 2000);
+      
+      return () => {
+        if (scrollTimerRef.current) {
+          clearTimeout(scrollTimerRef.current);
+        }
+        scrollingRef.current = false;
+      };
+    }
+  }, [current, index, slide.autoScroll]);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const el = slideRef.current;
@@ -66,7 +132,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     event.currentTarget.style.opacity = "1";
   };
 
-  const { src, button, title, category, client, description } = slide;
+  const { src, title, category, description, landingPageContent } = slide;
 
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
@@ -94,34 +160,28 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                 : "none",
           }}
         >
-          {/* Website mockup frame */}
-          <div className="absolute inset-0 flex flex-col rounded-[1%] overflow-hidden">
-            {/* Browser top bar - only shown when current */}
-            {current === index && (
-              <div className="h-6 bg-gray-800 flex items-center px-2 z-10">
-                <div className="flex space-x-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
-                </div>
-                <div className="mx-auto bg-gray-700 rounded-sm px-2 py-0.5 text-[10px] text-gray-300">
-                  {client}.com
-                </div>
+          {/* Website content frame */}
+          <div 
+            ref={frameRef}
+            className="absolute inset-0 flex flex-col rounded-[1%] overflow-auto hide-scrollbar"
+          >
+            {landingPageContent ? (
+              <div ref={contentRef} className="w-full h-full">
+                {landingPageContent}
               </div>
+            ) : (
+              <img
+                className="flex-1 w-full h-full object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+                style={{
+                  opacity: current === index ? 1 : 0.5,
+                }}
+                alt={title}
+                src={src}
+                onLoad={imageLoaded}
+                loading="eager"
+                decoding="sync"
+              />
             )}
-            
-            {/* Website screenshot */}
-            <img
-              className="flex-1 w-full h-[calc(100%-24px)] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
-              style={{
-                opacity: current === index ? 1 : 0.5,
-              }}
-              alt={title}
-              src={src}
-              onLoad={imageLoaded}
-              loading="eager"
-              decoding="sync"
-            />
           </div>
           
           {current === index && (
@@ -134,11 +194,6 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             current === index ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         >
-          {client && (
-            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-black mb-4">
-              {client}
-            </div>
-          )}
           <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-black">
             {category}
           </div>
@@ -152,12 +207,6 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
               {description}
             </p>
           )}
-          
-          <div className="flex justify-center">
-            <button className="mt-6 px-4 py-2 w-fit mx-auto text-black bg-white h-12 border border-transparent text-sm flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
-              {button} <ArrowRight className="ml-2 h-4 w-4" />
-            </button>
-          </div>
         </article>
       </li>
     </div>
