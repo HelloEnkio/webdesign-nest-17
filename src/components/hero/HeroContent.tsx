@@ -92,14 +92,17 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
             <span className="particle-3 absolute w-1 h-1 rounded-full bg-purple-300/80 opacity-0 group-hover:opacity-80"></span>
           </span>
           
+          {/* White background for non-hover state */}
+          <span className="absolute inset-0 bg-white/80 transition-opacity duration-300 group-hover:opacity-0"></span>
+          
           {/* Subtle shimmer effect */}
           <span className="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           
           {/* Border glow effect */}
           <span className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 blur-md bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 group-hover:blur transition-all duration-500"></span>
           
-          {/* Content - text changes color on hover */}
-          <span className="relative z-10 font-medium text-white/90 group-hover:text-white flex items-center justify-center transition-colors duration-300">
+          {/* Content - black text normally, white text on hover */}
+          <span className="relative z-10 font-medium text-black group-hover:text-white flex items-center justify-center transition-colors duration-300">
             Voir notre portfolio
           </span>
         </Button>
