@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import ContactHeader from './contact/ContactHeader';
 import ContactForm from './contact/ContactForm';
 import ContactStyles from './contact/ContactStyles';
@@ -48,11 +49,21 @@ const Contact: React.FC = () => {
           <ContactHeader />
         </div>
         
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ 
+            type: "spring",
+            stiffness: 100,
+            damping: 15,
+            delay: 0.2,
+            duration: 0.6 
+          }}
+        >
           <div ref={formRef} className="opacity-0 max-w-4xl mx-auto">
             <ContactForm />
           </div>
-        </div>
+        </motion.div>
       </div>
       
       <ContactStyles />

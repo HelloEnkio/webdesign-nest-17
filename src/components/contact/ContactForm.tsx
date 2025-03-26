@@ -32,20 +32,36 @@ const ContactForm = () => {
     resetForm
   } = useContactForm();
 
-  // Animation variants for step transitions
+  // Enhanced animation variants for step transitions
   const variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 50 : -50,
-      opacity: 0
+      x: direction > 0 ? 80 : -80,
+      opacity: 0,
+      scale: 0.9
     }),
     center: {
       x: 0,
-      opacity: 1
+      opacity: 1,
+      scale: 1
     },
     exit: (direction: number) => ({
-      x: direction < 0 ? 50 : -50,
-      opacity: 0
+      x: direction < 0 ? 80 : -80,
+      opacity: 0,
+      scale: 0.9,
+      transition: { duration: 0.3 }
     })
+  };
+  
+  // Animation for container
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        when: "beforeChildren",
+        staggerChildren: 0.2
+      }
+    }
   };
   
   const handleSubmit = (e: React.FormEvent) => {
@@ -96,19 +112,46 @@ const ContactForm = () => {
   };
   
   return (
-    <div ref={formContainerRef}>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 transition-all duration-300 hover:shadow-md">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Discutons de votre projet</h3>
-          <a 
+    <motion.div 
+      ref={formContainerRef}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.div 
+        className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 transition-all duration-300 hover:shadow-md"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div 
+          className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1 }
+          }}
+        >
+          <motion.h3 
+            className="text-lg font-semibold text-gray-900"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            Discutons de votre projet
+          </motion.h3>
+          <motion.a 
             href="mailto:contact@studio-web.fr" 
             className="flex items-center text-indigo-600 hover:text-indigo-700 transition-colors mt-2 md:mt-0"
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            whileHover={{ scale: 1.03 }}
           >
             <Mail className="w-4 h-4 mr-2" />
             contact@studio-web.fr
             <ExternalLink className="w-3 h-3 ml-1" />
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
         
         {/* Progress Bar */}
         <ProgressBar 
@@ -127,7 +170,12 @@ const ContactForm = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.4 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 300, 
+                    damping: 30,
+                    duration: 0.4 
+                  }}
                   className="w-full"
                 >
                   <NameStep 
@@ -145,7 +193,12 @@ const ContactForm = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.4 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 300, 
+                    damping: 30,
+                    duration: 0.4 
+                  }}
                   className="w-full"
                 >
                   <ProjectTypeStep 
@@ -163,7 +216,12 @@ const ContactForm = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.4 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 300, 
+                    damping: 30,
+                    duration: 0.4 
+                  }}
                   className="w-full"
                 >
                   <ProjectDescriptionStep 
@@ -181,7 +239,12 @@ const ContactForm = () => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.4 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 300, 
+                    damping: 30, 
+                    duration: 0.4 
+                  }}
                   className="w-full"
                 >
                   <ContactStep 
@@ -194,7 +257,7 @@ const ContactForm = () => {
             </AnimatePresence>
           </div>
           
-          {/* Form Navigation (Next/Previous/Submit buttons) */}
+          {/* Form Navigation */}
           <FormNavigation
             currentStep={currentStep}
             isSubmitting={isSubmitting}
@@ -204,11 +267,16 @@ const ContactForm = () => {
           />
         </form>
         
-        <div className="mt-6 text-center text-xs text-gray-500">
+        <motion.div 
+          className="mt-6 text-center text-xs text-gray-500"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 0.8, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+        >
           En soumettant ce formulaire, vous acceptez d'être contacté par notre équipe.
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 

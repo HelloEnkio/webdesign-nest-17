@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface ProgressBarProps {
@@ -11,16 +12,29 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, progressWidth })
   return (
     <div className="mb-8">
       <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full transition-all duration-500 ease-out"
-          style={{ width: `${progressWidth}%` }}
-        ></div>
+        <motion.div 
+          className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full"
+          initial={{ width: '0%' }}
+          animate={{ width: `${progressWidth}%` }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+        ></motion.div>
       </div>
       <div className="flex justify-between mt-2 text-xs text-gray-500">
-        <span className={cn(currentStep >= 0 ? "text-indigo-600 font-medium" : "")}>Identité</span>
-        <span className={cn(currentStep >= 1 ? "text-indigo-600 font-medium" : "")}>Projet</span>
-        <span className={cn(currentStep >= 2 ? "text-indigo-600 font-medium" : "")}>Description</span>
-        <span className={cn(currentStep >= 3 ? "text-indigo-600 font-medium" : "")}>Contact</span>
+        {["Identité", "Projet", "Description", "Contact"].map((label, index) => (
+          <motion.span
+            key={index}
+            className={cn(currentStep >= index ? "text-indigo-600 font-medium" : "")}
+            initial={{ opacity: 0.6, y: 5 }}
+            animate={{ 
+              opacity: currentStep >= index ? 1 : 0.6,
+              y: 0,
+              scale: currentStep === index ? 1.05 : 1
+            }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            {label}
+          </motion.span>
+        ))}
       </div>
     </div>
   );
