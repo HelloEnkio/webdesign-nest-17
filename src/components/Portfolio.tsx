@@ -11,6 +11,7 @@ interface SlideData {
   src: string;
   category: string;
   client?: string;
+  description?: string;
 }
 
 const Portfolio: React.FC = () => {
@@ -18,6 +19,14 @@ const Portfolio: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   
   const portfolioItems: SlideData[] = [
+    {
+      title: "Landing Page Biotech Startup",
+      category: "Landing Pages",
+      client: "GeneticaLabs",
+      button: "Voir le projet",
+      description: "Page d'accueil moderne pour une startup de biotechnologie",
+      src: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+    },
     {
       title: "Plateforme Immobilière Moderne",
       category: "Web Design",
@@ -104,7 +113,7 @@ const Portfolio: React.FC = () => {
       <div className="section-container relative z-10">
         <motion.div 
           ref={headerRef} 
-          className="text-center mb-10"
+          className="text-center mb-8"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -119,17 +128,14 @@ const Portfolio: React.FC = () => {
             Découvrez nos <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">réalisations</span>
           </h2>
           
-          <p className="text-neutral-600 max-w-2xl mx-auto mb-8 text-lg">
+          <p className="text-neutral-600 max-w-2xl mx-auto mb-6 text-lg">
             Explorez notre sélection de projets qui illustrent notre capacité à créer des solutions 
             web uniques alliant esthétique et performance technique.
           </p>
           
-          {/* Category Selector - now as position selector */}
-          <div className="flex flex-wrap justify-center gap-2 mb-6 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
+          {/* Category Selector - now as position selector - moved closer to carousel */}
+          <div className="flex flex-wrap justify-center gap-2 mb-2 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
             {uniqueCategories.map((category, index) => {
-              // Find the index of the first item with this category
-              const categoryIndex = portfolioItems.findIndex(item => item.category === category);
-              
               return (
                 <motion.button
                   key={category}

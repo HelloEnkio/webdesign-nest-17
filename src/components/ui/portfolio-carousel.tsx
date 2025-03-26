@@ -9,6 +9,7 @@ interface SlideData {
   src: string;
   category: string;
   client?: string;
+  description?: string;
 }
 
 interface SlideProps {
@@ -65,7 +66,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     event.currentTarget.style.opacity = "1";
   };
 
-  const { src, button, title, category, client } = slide;
+  const { src, button, title, category, client, description } = slide;
 
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
@@ -93,17 +94,36 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                 : "none",
           }}
         >
-          <img
-            className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
-            style={{
-              opacity: current === index ? 1 : 0.5,
-            }}
-            alt={title}
-            src={src}
-            onLoad={imageLoaded}
-            loading="eager"
-            decoding="sync"
-          />
+          {/* Website mockup frame */}
+          <div className="absolute inset-0 flex flex-col rounded-[1%] overflow-hidden">
+            {/* Browser top bar - only shown when current */}
+            {current === index && (
+              <div className="h-6 bg-gray-800 flex items-center px-2 z-10">
+                <div className="flex space-x-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                </div>
+                <div className="mx-auto bg-gray-700 rounded-sm px-2 py-0.5 text-[10px] text-gray-300">
+                  {client}.com
+                </div>
+              </div>
+            )}
+            
+            {/* Website screenshot */}
+            <img
+              className="flex-1 w-full h-[calc(100%-24px)] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+              style={{
+                opacity: current === index ? 1 : 0.5,
+              }}
+              alt={title}
+              src={src}
+              onLoad={imageLoaded}
+              loading="eager"
+              decoding="sync"
+            />
+          </div>
+          
           {current === index && (
             <div className="absolute inset-0 bg-black/30 transition-all duration-1000" />
           )}
@@ -126,6 +146,13 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold relative">
             {title}
           </h2>
+          
+          {description && (
+            <p className="text-white/90 mt-2 text-sm md:text-base max-w-md mx-auto">
+              {description}
+            </p>
+          )}
+          
           <div className="flex justify-center">
             <button className="mt-6 px-4 py-2 w-fit mx-auto text-black bg-white h-12 border border-transparent text-sm flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
               {button} <ArrowRight className="ml-2 h-4 w-4" />
