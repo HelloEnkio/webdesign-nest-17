@@ -117,39 +117,46 @@ const ContactForm = () => {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    // Simuler l'envoi du formulaire avec un délai
-    setTimeout(() => {
-      console.log('Form submitted:', formState);
+    // Only proceed to submission if we're on the last step
+    if (currentStep === 3) {
+      setIsSubmitting(true);
       
-      // Réinitialiser le formulaire et l'état
-      setFormState({
-        name: '',
-        projectType: '',
-        projectDescription: '',
-        contact: ''
-      });
-      setCurrentStep(0);
-      setIsSubmitting(false);
-      
-      // Afficher toast de succès
-      toast({
-        title: "Message envoyé !",
-        description: "Nous vous contacterons bientôt via " + (contactType === 'email' ? 'email' : 'téléphone') + ".",
-        variant: "default",
-      });
+      // Simuler l'envoi du formulaire avec un délai
+      setTimeout(() => {
+        console.log('Form submitted:', formState);
+        
+        // Réinitialiser le formulaire et l'état
+        setFormState({
+          name: '',
+          projectType: '',
+          projectDescription: '',
+          contact: ''
+        });
+        setCurrentStep(0);
+        setIsSubmitting(false);
+        
+        // Afficher toast de succès
+        toast({
+          title: "Message envoyé !",
+          description: "Nous vous contacterons bientôt via " + (contactType === 'email' ? 'email' : 'téléphone') + ".",
+          variant: "default",
+        });
 
-      // Déclencher l'animation de succès
-      if (formContainerRef.current) {
-        formContainerRef.current.classList.add('success-animation');
-        setTimeout(() => {
-          if (formContainerRef.current) {
-            formContainerRef.current.classList.remove('success-animation');
-          }
-        }, 2000);
-      }
-    }, 1500);
+        // Déclencher l'animation de succès
+        if (formContainerRef.current) {
+          formContainerRef.current.classList.add('success-animation');
+          setTimeout(() => {
+            if (formContainerRef.current) {
+              formContainerRef.current.classList.remove('success-animation');
+            }
+          }, 2000);
+        }
+      }, 1500);
+    } else {
+      // If not on the last step, just move to the next step
+      handleNextStep();
+    }
   };
   
   // Animation des variants pour les transitions entre étapes
