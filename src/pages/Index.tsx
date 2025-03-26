@@ -24,7 +24,6 @@ const Index: React.FC = () => {
     const preloadCriticalResources = async () => {
       // Preload video using a low priority fetch to avoid blocking other resources
       const videoPreload = new Request('https://cdn.pixabay.com/video/2022/06/21/121470-724697516_large.mp4', {
-        importance: 'low',
         priority: 'low'
       });
       
@@ -49,7 +48,8 @@ const Index: React.FC = () => {
       preloadImages.forEach(src => {
         setTimeout(() => {
           const img = new Image();
-          img.fetchPriority = 'low';
+          // Use the 'loading' attribute instead of 'fetchPriority'
+          img.setAttribute('loading', 'lazy');
           img.src = src;
         }, 3000); // Delay even more for non-critical images
       });
