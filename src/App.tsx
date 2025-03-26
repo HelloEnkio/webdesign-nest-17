@@ -5,7 +5,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoadingScreen from "./components/LoadingScreen";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -21,7 +20,6 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <LoadingScreen />
       <BrowserRouter>
         <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-black via-blue-950 to-teal-950"></div>}>
           <Routes>

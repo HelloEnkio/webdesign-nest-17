@@ -35,89 +35,35 @@ const siteExamples = [
 
 const HeroBackground: React.FC<HeroBackgroundProps> = ({ videoRef, videoLoaded = false }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [carouselLoaded, setCarouselLoaded] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % siteExamples.length);
-    }, 5000);
-    
-    // Delay loading the carousel until after initial render
-    setTimeout(() => {
-      setCarouselLoaded(true);
-    }, 2500);
+    // Start carousel rotation with a delay to prioritize core content
+    const interval = setTimeout(() => {
+      setInterval(() => {
+        setActiveIndex((prev) => (prev + 1) % siteExamples.length);
+      }, 5000);
+    }, 2000);
     
     return () => clearInterval(interval);
   }, []);
 
   return (
     <>
-      {/* Video background - only shown once loaded */}
+      {/* Static background gradient - shown immediately */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-blue-950 to-teal-950"></div>
+      
+      {/* Video background - only requested after critical content is loaded */}
       <video
         ref={videoRef}
         muted
         loop
         playsInline
-        className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute w-full h-full object-cover transition-opacity duration-500 ${videoLoaded ? 'opacity-20' : 'opacity-0'}`}
         style={{ filter: 'brightness(0.3) saturate(1.2)' }}
       />
       
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-blue-950/85 to-teal-950/80"></div>
-      
       {/* Subtle patterns - loaded with CSS to improve performance */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPC9zdmc+')] opacity-20"></div>
-      
-      {/* Floating carousel - only shown once the main content is visible */}
-      {carouselLoaded && (
-        <div className="absolute bottom-10 right-10 w-64 h-36 rounded-xl overflow-hidden shadow-2xl opacity-0 animate-fade-in" style={{animationDelay: "1s", animationFillMode: "forwards"}}>
-          <Carousel className="w-full h-full" setApi={() => {}}>
-            <CarouselContent className="h-full">
-              {siteExamples.map((example, index) => (
-                <CarouselItem key={example.id} className="h-full">
-                  <div className={`relative w-full h-full transition-opacity duration-500 ${index === activeIndex ? 'opacity-100' : 'opacity-0'}`}>
-                    <img 
-                      src={example.image} 
-                      alt={example.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-2 flex items-center space-x-2">
-                      <div className="bg-black/30 backdrop-blur-sm rounded-md p-1">
-                        {example.icon}
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium text-white truncate">{example.title}</p>
-                        <p className="text-xs text-white/70 truncate">{example.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            
-            <div className="absolute top-2 right-2 flex space-x-1">
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="h-6 w-6 p-0 bg-black/20 border-white/10 hover:bg-black/40 backdrop-blur-sm"
-                onClick={() => setActiveIndex((prev) => (prev - 1 + siteExamples.length) % siteExamples.length)}
-              >
-                <ChevronLeft className="h-3 w-3 text-white" />
-              </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="h-6 w-6 p-0 bg-black/20 border-white/10 hover:bg-black/40 backdrop-blur-sm"
-                onClick={() => setActiveIndex((prev) => (prev + 1) % siteExamples.length)}
-              >
-                <ChevronRight className="h-3 w-3 text-white" />
-              </Button>
-            </div>
-          </Carousel>
-        </div>
-      )}
     </>
   );
 };
