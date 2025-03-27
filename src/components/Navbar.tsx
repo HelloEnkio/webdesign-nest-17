@@ -33,11 +33,24 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     }
   };
 
-  const scrollToTop = () => {
+  const scrollToTop = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+    
+    // Ajouter temporairement la classe smooth-scroll pour ce clic utilisateur uniquement
+    document.documentElement.classList.add('smooth-scroll');
+    
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+    
+    // Enlever la classe après l'animation
+    setTimeout(() => {
+      document.documentElement.classList.remove('smooth-scroll');
+    }, 1000);
+    
     handleMobileItemClick();
   };
 

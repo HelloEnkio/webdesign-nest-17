@@ -16,12 +16,19 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Let browser handle scroll restoration naturally
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'auto';
+    // Remove hash from URL without affecting scroll position
+    if (window.location.hash) {
+      // Use setTimeout to ensure this happens after any browser's attempt to scroll
+      setTimeout(() => {
+        window.history.replaceState(
+          '', 
+          document.title, 
+          window.location.pathname + window.location.search
+        );
+      }, 0);
     }
     
-    // Handle anchor links for smooth scrolling
+    // Handle anchor links for smooth scrolling (only for user-initiated clicks)
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a');
@@ -37,6 +44,7 @@ const Index: React.FC = () => {
         const targetElement = document.getElementById(targetId);
         
         if (targetElement) {
+          // For user clicks, we still want smooth scrolling
           targetElement.scrollIntoView({
             behavior: 'smooth',
             block: 'start'

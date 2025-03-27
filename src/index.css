@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -46,7 +47,13 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  /* Désactiver le scroll-behavior global pour éviter les scrolls automatiques */
   html {
+    scroll-behavior: auto;
+  }
+  
+  /* Nous allons appliquer smooth uniquement aux événements déclenchés par l'utilisateur */
+  .smooth-scroll {
     scroll-behavior: smooth;
   }
 }
