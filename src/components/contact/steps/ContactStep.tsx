@@ -44,7 +44,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ formState, contactType, handl
                   ? "border-yellow-400 focus:ring-yellow-400"
                   : "border-gray-200 focus:border-indigo-400 focus:ring-indigo-400"
           )}
-          autoFocus
+          // Removed autofocus attribute here
         />
         
         {(contactType === 'email' || contactType === 'phone' || contactType === 'uncertain') && formState.contact.trim().length > 3 && (

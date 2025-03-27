@@ -21,7 +21,7 @@ const NameStep: React.FC<NameStepProps> = ({ formState, handleInputChange }) => 
           onChange={handleInputChange}
           placeholder="Votre nom complet"
           className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-all"
-          autoFocus
+          // Removed autofocus attribute here
         />
         {formState.name && (
           <motion.div 
