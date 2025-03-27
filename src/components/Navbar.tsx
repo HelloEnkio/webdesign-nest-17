@@ -51,6 +51,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
       document.documentElement.classList.remove('smooth-scroll');
     }, 1000);
     
+    // Important: mettre à jour l'URL pour enlever tout fragment
+    window.history.pushState(null, document.title, window.location.pathname);
+    
     handleMobileItemClick();
   };
 
@@ -90,22 +93,42 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             >
               Accueil
             </a>
-            <a href="#services-section" className={cn(
-              "navbar-item",
-              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
-            )}>Services</a>
-            <a href="#portfolio-section" className={cn(
-              "navbar-item",
-              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
-            )}>Portfolio</a>
-            <a href="#process-section" className={cn(
-              "navbar-item",
-              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
-            )}>Processus</a>
-            <a href="#contact-section" className={cn(
-              "navbar-item",
-              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
-            )}>Contact</a>
+            <a 
+              href="#services-section" 
+              className={cn(
+                "navbar-item",
+                !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+              )}
+            >
+              Services
+            </a>
+            <a 
+              href="#portfolio-section" 
+              className={cn(
+                "navbar-item",
+                !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+              )}
+            >
+              Portfolio
+            </a>
+            <a 
+              href="#process-section" 
+              className={cn(
+                "navbar-item",
+                !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+              )}
+            >
+              Processus
+            </a>
+            <a 
+              href="#contact-section" 
+              className={cn(
+                "navbar-item",
+                !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+              )}
+            >
+              Contact
+            </a>
             
             <Button size="sm" className="ml-4 rounded-full px-5 bg-gradient-to-r from-indigo-600 to-blue-600 border-0">
               Démarrer un projet

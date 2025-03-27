@@ -16,17 +16,9 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Remove hash from URL without affecting scroll position
-    if (window.location.hash) {
-      // Use setTimeout to ensure this happens after any browser's attempt to scroll
-      setTimeout(() => {
-        window.history.replaceState(
-          '', 
-          document.title, 
-          window.location.pathname + window.location.search
-        );
-      }, 0);
-    }
+    // Solution 1: Force le navigateur à ne pas scroller vers une ancre au chargement
+    // en supprimant complètement le fragment d'URL au montage du composant
+    window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
     
     // Handle anchor links for smooth scrolling (only for user-initiated clicks)
     const handleAnchorClick = (e: MouseEvent) => {
@@ -45,10 +37,20 @@ const Index: React.FC = () => {
         
         if (targetElement) {
           // For user clicks, we still want smooth scrolling
+          document.documentElement.classList.add('smooth-scroll');
+          
           targetElement.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
+          
+          // Remove smooth-scroll class after animation completes
+          setTimeout(() => {
+            document.documentElement.classList.remove('smooth-scroll');
+          }, 1000);
+          
+          // Update URL without causing browser to scroll
+          window.history.pushState(null, document.title, href);
         }
       }
     };
