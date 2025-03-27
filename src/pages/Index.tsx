@@ -16,16 +16,12 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Fix scroll restoration on page refresh
+    // Let browser handle scroll restoration naturally
     if ('scrollRestoration' in history) {
-      // Use 'manual' to prevent auto-scrolling to previous position
-      history.scrollRestoration = 'manual';
+      history.scrollRestoration = 'auto';
     }
     
-    // Scroll to top on initial page load
-    window.scrollTo(0, 0);
-    
-    // Simple anchor link handler for smooth scrolling within the page
+    // Handle anchor links for smooth scrolling
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a');
@@ -34,7 +30,7 @@ const Index: React.FC = () => {
       
       const href = anchor.getAttribute('href');
       
-      if (href && href.startsWith('#')) {
+      if (href && href.startsWith('#') && href !== '#') {
         e.preventDefault();
         
         const targetId = href.substring(1);

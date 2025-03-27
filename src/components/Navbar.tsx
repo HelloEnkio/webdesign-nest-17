@@ -33,6 +33,14 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    handleMobileItemClick();
+  };
+
   return (
     <nav
       className={cn(
@@ -44,7 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <div onClick={scrollToTop} className="flex items-center cursor-pointer">
             <div className="h-9 w-9 mr-3 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">S</div>
             <span className={cn(
               "text-xl font-bold tracking-tight bg-gradient-to-r bg-clip-text text-transparent",
@@ -52,14 +60,23 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             )}>
               Studio<span className="font-light">.Web</span>
             </span>
-          </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <a href="#" className={cn(
-              "navbar-item",
-              !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
-            )}>Accueil</a>
+            <a 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToTop();
+              }}
+              className={cn(
+                "navbar-item",
+                !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
+              )}
+            >
+              Accueil
+            </a>
             <a href="#services-section" className={cn(
               "navbar-item",
               !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
@@ -103,7 +120,16 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
         )}
       >
         <div className="px-4 py-4 space-y-4">
-          <a href="#" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Accueil</a>
+          <a 
+            href="#" 
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToTop();
+            }}
+            className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100"
+          >
+            Accueil
+          </a>
           <a href="#services-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Services</a>
           <a href="#portfolio-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Portfolio</a>
           <a href="#process-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Processus</a>
