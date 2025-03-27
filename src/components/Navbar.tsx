@@ -26,6 +26,13 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Close mobile menu when an item is clicked
+  const handleMobileItemClick = () => {
+    if (isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <nav
       className={cn(
@@ -96,11 +103,11 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
         )}
       >
         <div className="px-4 py-4 space-y-4">
-          <a href="#" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Accueil</a>
-          <a href="#services-section" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Services</a>
-          <a href="#portfolio-section" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Portfolio</a>
-          <a href="#process-section" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Processus</a>
-          <a href="#contact-section" className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Contact</a>
+          <a href="#" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Accueil</a>
+          <a href="#services-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Services</a>
+          <a href="#portfolio-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Portfolio</a>
+          <a href="#process-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Processus</a>
+          <a href="#contact-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Contact</a>
           
           <div className="pt-2">
             <Button size="sm" className="w-full rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 border-0">

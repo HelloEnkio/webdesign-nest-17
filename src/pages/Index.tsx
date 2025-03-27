@@ -16,12 +16,16 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Configuration de base du comportement de défilement
+    // Fix scroll restoration on page refresh
     if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'auto'; // Laisse le navigateur gérer la restauration
+      // Use 'manual' to prevent auto-scrolling to previous position
+      history.scrollRestoration = 'manual';
     }
-
-    // Gestionnaire simple pour les liens d'ancrage internes
+    
+    // Scroll to top on initial page load
+    window.scrollTo(0, 0);
+    
+    // Simple anchor link handler for smooth scrolling within the page
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a');
