@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
@@ -31,6 +32,28 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     }
   };
 
+  const scrollToSection = (sectionId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    document.documentElement.classList.add('smooth-scroll');
+    
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      
+      window.history.pushState(null, document.title, `#${sectionId}`);
+    }
+    
+    setTimeout(() => {
+      document.documentElement.classList.remove('smooth-scroll');
+    }, 1000);
+    
+    handleMobileItemClick();
+  };
+
   const scrollToTop = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
@@ -48,28 +71,6 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     }, 1000);
     
     window.history.pushState(null, document.title, window.location.pathname);
-    
-    handleMobileItemClick();
-  };
-
-  const scrollToContact = (e: React.MouseEvent) => {
-    e.preventDefault();
-    
-    document.documentElement.classList.add('smooth-scroll');
-    
-    const contactSection = document.getElementById('contact-section');
-    if (contactSection) {
-      contactSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-      
-      window.history.pushState(null, document.title, '#contact-section');
-    }
-    
-    setTimeout(() => {
-      document.documentElement.classList.remove('smooth-scroll');
-    }, 1000);
     
     handleMobileItemClick();
   };
@@ -97,10 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
           <div className="hidden md:flex items-center space-x-1">
             <a 
               href="#" 
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToTop();
-              }}
+              onClick={scrollToTop}
               className={cn(
                 "navbar-item",
                 !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
@@ -110,6 +108,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             </a>
             <a 
               href="#services-section" 
+              onClick={(e) => scrollToSection('services-section', e)}
               className={cn(
                 "navbar-item",
                 !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
@@ -119,6 +118,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             </a>
             <a 
               href="#solutions-section" 
+              onClick={(e) => scrollToSection('solutions-section', e)}
               className={cn(
                 "navbar-item",
                 !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
@@ -128,6 +128,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             </a>
             <a 
               href="#process-section" 
+              onClick={(e) => scrollToSection('process-section', e)}
               className={cn(
                 "navbar-item",
                 !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
@@ -139,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             <Button 
               size="sm" 
               className="ml-4 rounded-full px-5 bg-gradient-to-r from-indigo-600 to-blue-600 border-0"
-              onClick={scrollToContact}
+              onClick={(e) => scrollToSection('contact-section', e)}
             >
               Démarrer un projet
             </Button>
@@ -166,23 +167,38 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
         <div className="px-4 py-4 space-y-4">
           <a 
             href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToTop();
-            }}
+            onClick={scrollToTop}
             className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100"
           >
             Accueil
           </a>
-          <a href="#services-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Services</a>
-          <a href="#solutions-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Solutions</a>
-          <a href="#process-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Processus</a>
+          <a 
+            href="#services-section" 
+            onClick={(e) => scrollToSection('services-section', e)} 
+            className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100"
+          >
+            Services
+          </a>
+          <a 
+            href="#solutions-section" 
+            onClick={(e) => scrollToSection('solutions-section', e)} 
+            className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100"
+          >
+            Solutions
+          </a>
+          <a 
+            href="#process-section" 
+            onClick={(e) => scrollToSection('process-section', e)} 
+            className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100"
+          >
+            Processus
+          </a>
           
           <div className="pt-2">
             <Button 
               size="sm" 
               className="w-full rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 border-0"
-              onClick={scrollToContact}
+              onClick={(e) => scrollToSection('contact-section', e)}
             >
               Démarrer un projet
             </Button>
