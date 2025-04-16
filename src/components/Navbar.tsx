@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
@@ -26,7 +25,6 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Close mobile menu when an item is clicked
   const handleMobileItemClick = () => {
     if (isMobileMenuOpen) {
       setIsMobileMenuOpen(false);
@@ -38,7 +36,6 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
       e.preventDefault();
     }
     
-    // Ajouter temporairement la classe smooth-scroll pour ce clic utilisateur uniquement
     document.documentElement.classList.add('smooth-scroll');
     
     window.scrollTo({
@@ -46,22 +43,18 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
       behavior: 'smooth'
     });
     
-    // Enlever la classe après l'animation
     setTimeout(() => {
       document.documentElement.classList.remove('smooth-scroll');
     }, 1000);
     
-    // Important: mettre à jour l'URL pour enlever tout fragment
     window.history.pushState(null, document.title, window.location.pathname);
     
     handleMobileItemClick();
   };
 
-  // Function to scroll to contact section
   const scrollToContact = (e: React.MouseEvent) => {
     e.preventDefault();
     
-    // Add smooth-scroll temporarily
     document.documentElement.classList.add('smooth-scroll');
     
     const contactSection = document.getElementById('contact-section');
@@ -71,11 +64,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
         block: 'start'
       });
       
-      // Update URL
       window.history.pushState(null, document.title, '#contact-section');
     }
     
-    // Remove smooth-scroll after animation
     setTimeout(() => {
       document.documentElement.classList.remove('smooth-scroll');
     }, 1000);
@@ -93,7 +84,6 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <div onClick={scrollToTop} className="flex items-center cursor-pointer">
             <div className="h-9 w-9 mr-3 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">S</div>
             <span className={cn(
@@ -104,7 +94,6 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             </span>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             <a 
               href="#" 
@@ -129,13 +118,13 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
               Services
             </a>
             <a 
-              href="#portfolio-section" 
+              href="#solutions-section" 
               className={cn(
                 "navbar-item",
                 !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
               )}
             >
-              Réalisations
+              Solutions
             </a>
             <a 
               href="#process-section" 
@@ -156,7 +145,6 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className={cn(
               "md:hidden p-2 rounded-md transition-colors",
@@ -169,7 +157,6 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={cn(
           'md:hidden absolute left-0 right-0 top-full bg-white shadow-md transition-all duration-300 overflow-hidden',
@@ -188,7 +175,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             Accueil
           </a>
           <a href="#services-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Services</a>
-          <a href="#portfolio-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Réalisations</a>
+          <a href="#solutions-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Solutions</a>
           <a href="#process-section" onClick={handleMobileItemClick} className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100">Processus</a>
           
           <div className="pt-2">
