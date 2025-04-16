@@ -112,17 +112,8 @@ export const ModernCarousel: React.FC<PortfolioCarouselProps> = ({
                 </div>
               </motion.div>
 
-              {/* Optional Landing Page Content */}
-              {slides[currentIndex].landingPageContent && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  className="absolute inset-0 bg-white overflow-auto"
-                >
-                  {slides[currentIndex].landingPageContent}
-                </motion.div>
-              )}
+              {/* Optional Landing Page Content - Removed to fix the overlay issue */}
+              {/* Nous avons supprimé la condition landingPageContent pour que l'image soit toujours visible */}
             </div>
           </motion.div>
         </AnimatePresence>
