@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -26,11 +25,11 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
     "perfection"
   ];
 
-  const scrollToPortfolio = (e: React.MouseEvent) => {
+  const scrollToServices = (e: React.MouseEvent) => {
     e.preventDefault();
-    const portfolioSection = document.getElementById('portfolio');
-    if (portfolioSection) {
-      portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const servicesSection = document.getElementById('services-section');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -71,14 +70,9 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
           size="lg" 
           className="group relative overflow-hidden rounded-full shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all duration-500"
         >
-          {/* Gradient background with animation */}
           <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-500 opacity-100"></span>
           <span className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-          
-          {/* Subtle light effect */}
           <span className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.4)_0%,transparent_70%)]"></span>
-          
-          {/* Content */}
           <span className="relative z-10 flex items-center font-medium py-4 px-8 text-white">
             <Sparkles className="w-5 h-5 mr-3 animate-pulse" />
             <span>Discuter de votre projet</span>
@@ -90,30 +84,19 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
           variant="outline" 
           size="lg" 
           className="portfolio-button group relative overflow-hidden rounded-full transition-all duration-300 border-2 border-white/70 hover:border-white/90 backdrop-blur-sm py-4 px-6"
-          onClick={scrollToPortfolio}
+          onClick={scrollToServices}
         >
-          {/* Animated gradient background */}
           <span className="absolute inset-0 bg-gradient-to-r from-purple-500/80 via-indigo-500/80 to-cyan-500/80 opacity-0 group-hover:opacity-90 transition-opacity duration-500"></span>
-          
-          {/* Animated particles effect */}
           <span className="absolute inset-0 overflow-hidden">
             <span className="particle-1 absolute w-2 h-2 rounded-full bg-white/80 opacity-0 group-hover:opacity-80"></span>
             <span className="particle-2 absolute w-1.5 h-1.5 rounded-full bg-cyan-300/90 opacity-0 group-hover:opacity-90"></span>
             <span className="particle-3 absolute w-1 h-1 rounded-full bg-purple-300/80 opacity-0 group-hover:opacity-80"></span>
           </span>
-          
-          {/* White background for non-hover state */}
           <span className="absolute inset-0 bg-white/80 transition-opacity duration-300 group-hover:opacity-0"></span>
-          
-          {/* Subtle shimmer effect */}
           <span className="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          
-          {/* Border glow effect */}
           <span className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 blur-md bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 group-hover:blur transition-all duration-500"></span>
-          
-          {/* Content - black text normally, white text on hover */}
           <span className="relative z-10 font-medium text-black group-hover:text-white flex items-center justify-center transition-colors duration-300">
-            Voir notre portfolio
+            Voir nos services
           </span>
         </Button>
       </div>
