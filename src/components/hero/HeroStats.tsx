@@ -20,7 +20,7 @@ const StatItem: React.FC<StatItemProps> = ({ value, label, delay }) => {
 const HeroStats: React.FC = () => {
   return (
     <div className="grid grid-cols-3 gap-4 pt-6 opacity-100 fade-in stagger-4">
-      <StatItem value="150+" label="Projets livrés" delay={0.1} />
+      <StatItem value="200+" label="Solutions développées" delay={0.1} />
       <StatItem value="98%" label="Clients satisfaits" delay={0.2} />
       <StatItem value="10+" label="Ans d'expérience" delay={0.3} />
     </div>
