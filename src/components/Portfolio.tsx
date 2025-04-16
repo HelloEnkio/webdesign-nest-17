@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { PortfolioCarousel } from './ui/portfolio-carousel';
+import { ModernCarousel } from './ui/modern-portfolio-carousel';
 import { DemoLandingPage } from './ui/demo-landing-page';
 
 interface SlideData {
@@ -138,7 +138,7 @@ const Portfolio: React.FC = () => {
       </motion.div>
       
       <div className="mb-16">
-        <PortfolioCarousel slides={portfolioItems} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+        <ModernCarousel slides={portfolioItems} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
       </div>
       
       <div className="text-center mt-10">
