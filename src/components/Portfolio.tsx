@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { PortfolioCarousel } from './ui/portfolio-carousel';
 import { DemoLandingPage } from './ui/demo-landing-page';
+
 interface SlideData {
   title: string;
   src: string;
@@ -12,9 +13,11 @@ interface SlideData {
   landingPageContent?: React.ReactNode;
   autoScroll?: boolean;
 }
+
 const Portfolio: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const portfolioItems: SlideData[] = [{
     title: "Landing Pages",
     category: "Landing Pages",
@@ -53,8 +56,10 @@ const Portfolio: React.FC = () => {
     description: "Solution e-learning innovante",
     src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
   }];
+
   const categories = portfolioItems.map(item => item.category);
   const uniqueCategories = Array.from(new Set(categories));
+
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -72,18 +77,20 @@ const Portfolio: React.FC = () => {
       }
     };
   }, []);
+
   const handleCategorySelect = (category: string) => {
     const index = portfolioItems.findIndex(item => item.category === category);
     if (index !== -1) {
       setCurrentIndex(index);
     }
   };
+
   return <section id="portfolio" className="py-20 relative">
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-l from-blue-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-r from-indigo-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
-      
-      <div className="section-container relative z-10">
-        <motion.div ref={headerRef} className="text-center mb-8" initial={{
+    <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-l from-blue-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
+    <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-r from-indigo-50 to-transparent opacity-50 rounded-full blur-3xl"></div>
+    
+    <div className="section-container relative z-10">
+      <motion.div ref={headerRef} className="text-center mb-8" initial={{
         opacity: 0,
         y: 30
       }} whileInView={{
@@ -94,22 +101,22 @@ const Portfolio: React.FC = () => {
       }} transition={{
         duration: 0.8
       }}>
-          <div className="inline-flex items-center rounded-full mb-4 bg-black/5 px-3 py-1">
-            <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
-            <span className="text-xs font-medium">NOS RÉALISATIONS</span>
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold mb-5 tracking-tight">
-            Découvrez nos <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">réalisations</span>
-          </h2>
-          
-          <p className="text-neutral-600 max-w-2xl mx-auto mb-6 text-lg">
-            Explorez notre sélection de projets qui illustrent notre capacité à créer des solutions 
-            web uniques alliant esthétique et performance technique.
-          </p>
-          
-          <div className="flex flex-wrap justify-center gap-2 mb-8 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
-            {uniqueCategories.map((category, index) => {
+        <div className="inline-flex items-center rounded-full mb-4 bg-black/5 px-3 py-1">
+          <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
+          <span className="text-xs font-medium">NOS SOLUTIONS</span>
+        </div>
+        
+        <h2 className="text-4xl md:text-5xl font-bold mb-5 tracking-tight">
+          Découvrez nos <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">solutions</span>
+        </h2>
+        
+        <p className="text-neutral-600 max-w-2xl mx-auto mb-6 text-lg">
+          Explorez notre sélection de solutions web uniques alliant esthétique,
+          performance technique et chargement ultra-rapide.
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-2 mb-8 glass-morphism inline-flex py-2 px-3 rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-white/20">
+          {uniqueCategories.map((category, index) => {
             return <motion.button key={category} onClick={() => handleCategorySelect(category)} className={`px-4 py-2 text-sm rounded-full transition-all duration-300 ${portfolioItems[currentIndex].category === category ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md' : 'bg-white/70 text-neutral-600 hover:bg-white'}`} initial={{
               opacity: 0,
               y: 10
@@ -124,18 +131,18 @@ const Portfolio: React.FC = () => {
             }} whileTap={{
               scale: 0.95
             }}>
-                  {category}
-                </motion.button>;
+                {category}
+              </motion.button>;
           })}
-          </div>
-        </motion.div>
-        
-        <div className="mb-16">
-          <PortfolioCarousel slides={portfolioItems} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
         </div>
-        
-        <div className="text-center mt-10">
-          <motion.div initial={{
+      </motion.div>
+      
+      <div className="mb-16">
+        <PortfolioCarousel slides={portfolioItems} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+      </div>
+      
+      <div className="text-center mt-10">
+        <motion.div initial={{
           opacity: 0,
           y: 20
         }} whileInView={{
@@ -147,10 +154,11 @@ const Portfolio: React.FC = () => {
           duration: 0.6,
           delay: 0.3
         }}>
-            
-          </motion.div>
-        </div>
+          
+        </motion.div>
       </div>
-    </section>;
+    </div>
+  </section>;
 };
+
 export default Portfolio;

@@ -15,14 +15,16 @@ interface HeroContentProps {
 
 const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, buttonsRef, statsRef }) => {
   const rotatingWords = [
+    "originalité",
+    "professionnalisme",
     "élégance",
     "créativité",
-    "professionnalisme",
-    "efficacité",
     "innovation",
     "expertise",
-    "originalité",
-    "perfection"
+    "des outils IA",
+    "efficacité",
+    "style",
+    "sérénité"
   ];
 
   const scrollToServices = (e: React.MouseEvent) => {
