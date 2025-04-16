@@ -1,9 +1,10 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Code, Layout, Palette, Smartphone, Globe, ArrowRight, Box, Zap, Database, X, ChevronRight, Brain } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ServiceCardProps {
@@ -103,6 +104,14 @@ const Services: React.FC = () => {
   const handleCloseDetails = () => {
     setActiveService(null);
   };
+
+  const scrollToContact = () => {
+    handleCloseDetails();
+    const contactSection = document.getElementById('contact-section');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -195,10 +204,12 @@ const Services: React.FC = () => {
           </div>
         </div>
         
-        <Button className="mt-8 bg-gradient-to-r from-indigo-600 to-indigo-500">
-          Demander un devis
-          <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
+        <DialogClose asChild>
+          <Button className="mt-8 bg-gradient-to-r from-indigo-600 to-indigo-500" onClick={scrollToContact}>
+            Demander un devis
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </DialogClose>
       </ServiceDetails>
     ),
     
@@ -274,10 +285,12 @@ const Services: React.FC = () => {
           </div>
         </div>
         
-        <Button className="mt-8 bg-gradient-to-r from-purple-600 to-purple-500">
-          Discuter de votre projet
-          <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
+        <DialogClose asChild>
+          <Button className="mt-8 bg-gradient-to-r from-purple-600 to-purple-500" onClick={scrollToContact}>
+            Discuter de votre projet
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </DialogClose>
       </ServiceDetails>
     ),
     
@@ -363,10 +376,12 @@ const Services: React.FC = () => {
           </div>
         </div>
         
-        <Button className="mt-8 bg-gradient-to-r from-blue-600 to-blue-500">
-          Évaluer mon site actuel
-          <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
+        <DialogClose asChild>
+          <Button className="mt-8 bg-gradient-to-r from-blue-600 to-blue-500" onClick={scrollToContact}>
+            Évaluer mon site actuel
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </DialogClose>
       </ServiceDetails>
     ),
     
@@ -427,10 +442,12 @@ const Services: React.FC = () => {
           </div>
         </div>
         
-        <Button className="mt-8 bg-gradient-to-r from-pink-600 to-pink-500">
-          Créer mon identité de marque
-          <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
+        <DialogClose asChild>
+          <Button className="mt-8 bg-gradient-to-r from-pink-600 to-pink-500" onClick={scrollToContact}>
+            Créer mon identité de marque
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </DialogClose>
       </ServiceDetails>
     ),
     
@@ -514,10 +531,12 @@ const Services: React.FC = () => {
           </div>
         </div>
         
-        <Button className="mt-8 bg-gradient-to-r from-amber-600 to-amber-500">
-          Audit SEO gratuit
-          <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
+        <DialogClose asChild>
+          <Button className="mt-8 bg-gradient-to-r from-amber-600 to-amber-500" onClick={scrollToContact}>
+            Audit SEO gratuit
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </DialogClose>
       </ServiceDetails>
     ),
     
@@ -593,10 +612,12 @@ const Services: React.FC = () => {
           </div>
         </div>
         
-        <Button className="mt-8 bg-gradient-to-r from-green-600 to-emerald-500">
-          Discuter de votre projet IA
-          <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
+        <DialogClose asChild>
+          <Button className="mt-8 bg-gradient-to-r from-green-600 to-emerald-500" onClick={scrollToContact}>
+            Discuter de votre projet IA
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </DialogClose>
       </ServiceDetails>
     )
   };
@@ -615,7 +636,7 @@ const Services: React.FC = () => {
           <ServiceCard 
             icon={<Layout className="text-indigo-600" size={28} />}
             title="Design UI/UX"
-            description="Création d'interfaces utilisateurs élégantes et intuitives qui offrent une expérience utilisateur exceptionnelle."
+            description="Création d'interfaces utilisateurs élégantes, intuitives et ultra-fluides qui offrent une expérience utilisateur exceptionnelle."
             bgColor="bg-gradient-to-r from-indigo-500 to-indigo-600"
             delay={100}
             onShowDetails={() => handleShowDetails("Design UI/UX")}
