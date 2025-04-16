@@ -112,7 +112,7 @@ const Portfolio: React.FC = () => {
         >
           <div className="inline-flex items-center rounded-full mb-4 bg-black/5 px-3 py-1">
             <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
-            <span className="text-xs font-medium">NOTRE PORTFOLIO</span>
+            <span className="text-xs font-medium">NOS RÉALISATIONS</span>
           </div>
           
           <h2 className="text-4xl md:text-5xl font-bold mb-5 tracking-tight">

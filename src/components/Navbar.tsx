@@ -109,7 +109,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"
               )}
             >
-              Portfolio
+              Réalisations
             </a>
             <a 
               href="#process-section" 
