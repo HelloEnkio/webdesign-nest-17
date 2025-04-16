@@ -1,4 +1,6 @@
+
 import React from 'react';
+
 const HeroClientLogos: React.FC = () => {
   // Array of client logos
   const clients = [{
@@ -17,6 +19,21 @@ const HeroClientLogos: React.FC = () => {
     name: 'Client 5',
     logo: '/placeholder.svg'
   }];
-  return;
+  
+  // Return the JSX for client logos
+  return (
+    <div className="flex flex-wrap justify-center gap-8 items-center mt-12">
+      {clients.map((client, index) => (
+        <div key={index} className="flex items-center justify-center">
+          <img 
+            src={client.logo} 
+            alt={client.name} 
+            className="h-12 w-auto opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+          />
+        </div>
+      ))}
+    </div>
+  );
 };
+
 export default HeroClientLogos;
