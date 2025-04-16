@@ -219,7 +219,7 @@ const Services: React.FC = () => {
         icon={<Code className="text-white" size={32} />}
         bgColor="bg-gradient-to-r from-purple-500 to-purple-600"
       >
-        <p className="text-gray-600">Notre équipe de développement crée des applications web performantes et évolutives en utilisant les technologies les plus récentes et les meilleures pratiques du secteur.</p>
+        <p className="text-gray-600">Nous créons des applications web performantes et évolutives en utilisant les technologies les plus récentes et les meilleures pratiques du secteur.</p>
         
         <div className="mt-6 space-y-4">
           <div className="flex items-center gap-3">
@@ -378,7 +378,7 @@ const Services: React.FC = () => {
         
         <DialogClose asChild>
           <Button className="mt-8 bg-gradient-to-r from-blue-600 to-blue-500" onClick={scrollToContact}>
-            Évaluer mon site actuel
+            Discuter de mon projet
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         </DialogClose>
@@ -533,7 +533,7 @@ const Services: React.FC = () => {
         
         <DialogClose asChild>
           <Button className="mt-8 bg-gradient-to-r from-amber-600 to-amber-500" onClick={scrollToContact}>
-            Audit SEO gratuit
+            Discuter de mon projet
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         </DialogClose>
