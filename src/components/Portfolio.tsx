@@ -20,7 +20,7 @@ const Portfolio: React.FC = () => {
     title: "Site Vitrine",
     category: "Site Vitrine",
     description: "Présentez votre entreprise avec élégance",
-    src: "/lovable-uploads/6a3fed59-b220-44aa-a19d-54616c925a6f.png"
+    src: "https://images.pexels.com/photos/160107/pexels-photo-160107.jpeg"
   }, {
     title: "E-commerce",
     category: "E-commerce",
