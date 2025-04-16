@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Code, Layout, Palette, Smartphone, Globe, ArrowRight, Box, Zap, Database, X, ChevronRight } from 'lucide-react';
+import { Code, Layout, Palette, Smartphone, Globe, ArrowRight, Box, Zap, Database, X, ChevronRight, Brain } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,6 @@ interface ServiceDetailsProps {
   children: React.ReactNode;
 }
 
-// Composant de détails pour la modal
 const ServiceDetails: React.FC<ServiceDetailsProps> = ({ title, icon, bgColor, children }) => {
   return (
     <div className="space-y-6">
@@ -520,6 +519,85 @@ const Services: React.FC = () => {
           <ChevronRight className="ml-2 h-4 w-4" />
         </Button>
       </ServiceDetails>
+    ),
+    
+    "Agent & App IA": (
+      <ServiceDetails 
+        title="Agent & App IA"
+        icon={<Brain className="text-white" size={32} />}
+        bgColor="bg-gradient-to-r from-green-500 to-emerald-600"
+      >
+        <p className="text-gray-600">Développez des solutions intelligentes qui transforment vos processus grâce à l'intelligence artificielle adaptative et personnalisable.</p>
+        
+        <div className="mt-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+              <span className="text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a9 9 0 0 1 9 9v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 9-9z"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M8 18h.5"/><path d="M16 18h.5"/><path d="M16 10.5V11"/><path d="M16 8v.5"/></svg>
+              </span>
+            </div>
+            <div>
+              <h3 className="font-medium">Agents IA Personnalisés</h3>
+              <p className="text-sm text-gray-600">Création d'agents intelligents adaptés à vos besoins métiers spécifiques.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+              <span className="text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </span>
+            </div>
+            <div>
+              <h3 className="font-medium">Applications IA Intégrées</h3>
+              <p className="text-sm text-gray-600">Développement d'applications web avec des fonctionnalités IA avancées.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+              <span className="text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22v-7l-2-2v-4H2v4l-2 2v7h16Z"/><path d="M5 12V2l2-1 2 1v10"/><path d="M10 12V2l2-1 2 1v10"/></svg>
+              </span>
+            </div>
+            <div>
+              <h3 className="font-medium">Machine Learning sur Mesure</h3>
+              <p className="text-sm text-gray-600">Modèles de machine learning adaptés à vos données et objectifs.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+              <span className="text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </span>
+            </div>
+            <div>
+              <h3 className="font-medium">Solutions Conversationnelles</h3>
+              <p className="text-sm text-gray-600">Chatbots et assistants IA intelligents pour l'interaction client.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-lg">
+          <h3 className="text-lg font-medium mb-3">Technologies IA Utilisées</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="bg-white p-3 rounded shadow-sm text-center">GPT</div>
+            <div className="bg-white p-3 rounded shadow-sm text-center">TensorFlow</div>
+            <div className="bg-white p-3 rounded shadow-sm text-center">PyTorch</div>
+            <div className="bg-white p-3 rounded shadow-sm text-center">LangChain</div>
+            <div className="bg-white p-3 rounded shadow-sm text-center">Hugging Face</div>
+            <div className="bg-white p-3 rounded shadow-sm text-center">OpenAI</div>
+            <div className="bg-white p-3 rounded shadow-sm text-center">Scikit-learn</div>
+            <div className="bg-white p-3 rounded shadow-sm text-center">Keras</div>
+          </div>
+        </div>
+        
+        <Button className="mt-8 bg-gradient-to-r from-green-600 to-emerald-500">
+          Discuter de votre projet IA
+          <ChevronRight className="ml-2 h-4 w-4" />
+        </Button>
+      </ServiceDetails>
     )
   };
 
@@ -577,6 +655,15 @@ const Services: React.FC = () => {
             bgColor="bg-gradient-to-r from-amber-500 to-amber-600"
             delay={500}
             onShowDetails={() => handleShowDetails("Performance & SEO")}
+          />
+          
+          <ServiceCard 
+            icon={<Brain className="text-green-600" size={28} />}
+            title="Agent & App IA"
+            description="Solutions intelligentes d'IA personnalisées pour optimiser vos processus métiers et interactions."
+            bgColor="bg-gradient-to-r from-green-500 to-green-600"
+            delay={600}
+            onShowDetails={() => handleShowDetails("Agent & App IA")}
           />
         </div>
         
