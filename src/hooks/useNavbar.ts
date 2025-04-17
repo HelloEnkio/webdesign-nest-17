@@ -23,25 +23,7 @@ export const useNavbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle hash on page load - ensure we scroll to the right section
-  useEffect(() => {
-    console.log('Hash change effect running', { hash: location.hash, isHomePage });
-    
-    if (isHomePage && location.hash) {
-      // Small delay to ensure the DOM is fully loaded
-      setTimeout(() => {
-        const targetElement = document.getElementById(location.hash.substring(1));
-        console.log('Trying to scroll to element', { 
-          targetId: location.hash.substring(1), 
-          elementFound: !!targetElement 
-        });
-        
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 100);
-    }
-  }, [isHomePage, location.hash]);
+  // We're removing the conflicting hash change effect that was here
 
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

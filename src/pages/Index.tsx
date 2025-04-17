@@ -16,24 +16,45 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Handle page refresh with hash - scroll to the correct section on initial load
+    // Consolidated hash handling logic with polling for lazy-loaded sections
     if (window.location.hash) {
-      // Small delay to ensure the DOM is fully loaded
-      setTimeout(() => {
-        const targetId = window.location.hash.substring(1);
+      const targetId = window.location.hash.substring(1);
+      
+      // Always update URL hash first, without condition
+      window.history.replaceState(null, document.title, `#${targetId}`);
+      
+      // Function to attempt scrolling with retry logic
+      const attemptScroll = (attemptsLeft = 10, delay = 100) => {
         const targetElement = document.getElementById(targetId);
         
         if (targetElement) {
+          console.log(`Found target element #${targetId}, scrolling to it`);
+          
+          document.documentElement.classList.add('smooth-scroll');
           targetElement.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
+          
+          setTimeout(() => {
+            document.documentElement.classList.remove('smooth-scroll');
+          }, 1000);
+          
+          return; // Success, exit the retry loop
         }
-      }, 100);
+        
+        if (attemptsLeft > 0) {
+          console.log(`Target #${targetId} not found yet, retrying... (${attemptsLeft} attempts left)`);
+          // Schedule another attempt after delay
+          setTimeout(() => attemptScroll(attemptsLeft - 1, delay), delay);
+        } else {
+          console.log(`Failed to find #${targetId} after multiple attempts`);
+        }
+      };
+      
+      // Start the polling process to find and scroll to the target
+      attemptScroll();
     }
-    
-    // We're removing the additional anchor click handler here
-    // since we have a unified scrollToSection mechanism in the Navbar component
   }, []);
 
   return (
