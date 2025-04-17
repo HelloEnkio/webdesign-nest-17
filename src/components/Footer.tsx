@@ -1,85 +1,80 @@
 
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-neutral-900 text-white">
       <div className="section-container py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Company Info */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold mb-4">Studio.Web</h3>
-            <p className="text-neutral-400">
-              Agence de design web créative spécialisée dans la création de sites web
-              élégants et performants pour tous types d'entreprises.
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold">Studio.Web</h3>
+            <p className="text-neutral-400 max-w-lg">
+              Agence de design web créative spécialisée dans la création de sites web et d'applications élégants et performants pour tous types d'entreprises.
             </p>
+            <div className="flex space-x-4">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-neutral-800 p-2.5 rounded-full hover:bg-blue-600 transition-colors">
+                <Facebook size={18} />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-neutral-800 p-2.5 rounded-full hover:bg-pink-600 transition-colors">
+                <Instagram size={18} />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="bg-neutral-800 p-2.5 rounded-full hover:bg-blue-700 transition-colors">
+                <Linkedin size={18} />
+              </a>
+              <a href="mailto:contact@studio-web.fr" className="bg-neutral-800 p-2.5 rounded-full hover:bg-green-600 transition-colors">
+                <Mail size={18} />
+              </a>
+            </div>
           </div>
           
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-medium mb-4">Liens rapides</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#home" className="text-neutral-400 hover:text-white transition-colors">Accueil</a>
-              </li>
-              <li>
-                <a href="#services" className="text-neutral-400 hover:text-white transition-colors">Services</a>
-              </li>
-              <li>
-                <a href="#portfolio" className="text-neutral-400 hover:text-white transition-colors">Solutions</a>
-              </li>
-              <li>
-                <a href="#process" className="text-neutral-400 hover:text-white transition-colors">Processus</a>
-              </li>
-              <li>
-                <a href="#contact" className="text-neutral-400 hover:text-white transition-colors">Contact</a>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Services */}
-          <div>
-            <h4 className="text-lg font-medium mb-4">Services</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">Web Design</a>
-              </li>
-              <li>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">Développement Web</a>
-              </li>
-              <li>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">E-commerce</a>
-              </li>
-              <li>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">Identité Visuelle</a>
-              </li>
-              <li>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">SEO & Marketing</a>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Newsletter */}
-          <div>
-            <h4 className="text-lg font-medium mb-4">Newsletter</h4>
-            <p className="text-neutral-400 mb-4">
-              Inscrivez-vous pour recevoir nos actualités et conseils sur le design web.
-            </p>
-            <form className="flex">
-              <input
-                type="email"
-                placeholder="Votre email"
-                className="px-4 py-2 bg-neutral-800 text-white rounded-l-lg focus:outline-none focus:ring-1 focus:ring-white/30 w-full"
-              />
-              <button 
-                type="submit" 
-                className="bg-white text-black p-2 rounded-r-lg hover:bg-neutral-200 transition-colors"
-              >
-                <ArrowRight size={20} />
-              </button>
-            </form>
+            <h4 className="text-lg font-medium mb-6">Liens rapides</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <h5 className="text-sm font-medium text-neutral-300 mb-3">Navigation</h5>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/" className="text-neutral-400 hover:text-white transition-colors">Accueil</Link>
+                  </li>
+                  <li>
+                    <a href="/#services-section" className="text-neutral-400 hover:text-white transition-colors">Services</a>
+                  </li>
+                  <li>
+                    <a href="/#solutions-section" className="text-neutral-400 hover:text-white transition-colors">Solutions</a>
+                  </li>
+                  <li>
+                    <a href="/#process-section" className="text-neutral-400 hover:text-white transition-colors">Processus</a>
+                  </li>
+                  <li>
+                    <a href="/#contact-section" className="text-neutral-400 hover:text-white transition-colors">Contact</a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h5 className="text-sm font-medium text-neutral-300 mb-3">Légal</h5>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/mentions-legales" className="text-neutral-400 hover:text-white transition-colors">
+                      Mentions légales
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/politique-confidentialite" className="text-neutral-400 hover:text-white transition-colors">
+                      Politique de confidentialité
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/cgv" className="text-neutral-400 hover:text-white transition-colors">
+                      CGV
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -91,13 +86,13 @@ const Footer: React.FC = () => {
           </p>
           
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link to="/mentions-legales" className="text-neutral-400 hover:text-white transition-colors">
+            <Link to="/mentions-legales" className="text-neutral-400 hover:text-white transition-colors text-sm">
               Mentions légales
             </Link>
-            <Link to="/politique-confidentialite" className="text-neutral-400 hover:text-white transition-colors">
+            <Link to="/politique-confidentialite" className="text-neutral-400 hover:text-white transition-colors text-sm">
               Politique de confidentialité
             </Link>
-            <Link to="/cgv" className="text-neutral-400 hover:text-white transition-colors">
+            <Link to="/cgv" className="text-neutral-400 hover:text-white transition-colors text-sm">
               CGV
             </Link>
           </div>

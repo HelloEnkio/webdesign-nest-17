@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface NavbarProps {
   className?: string;
@@ -12,6 +12,8 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +37,12 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const scrollToSection = (sectionId: string, e: React.MouseEvent) => {
     e.preventDefault();
     
+    // If not on home page, redirect to home page with hash
+    if (!isHomePage) {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    
     document.documentElement.classList.add('smooth-scroll');
     
     const section = document.getElementById(sectionId);
@@ -57,6 +65,12 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const scrollToTop = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
+    }
+    
+    // If not on home page, redirect to home page
+    if (!isHomePage) {
+      window.location.href = '/';
+      return;
     }
     
     document.documentElement.classList.add('smooth-scroll');
