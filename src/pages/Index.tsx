@@ -16,9 +16,21 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Solution 1: Force le navigateur à ne pas scroller vers une ancre au chargement
-    // en supprimant complètement le fragment d'URL au montage du composant
-    window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    // Handle page refresh with hash - don't remove the hash anymore
+    if (window.location.hash) {
+      // Small delay to ensure the DOM is fully loaded
+      setTimeout(() => {
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    }
     
     // Handle anchor links for smooth scrolling (only for user-initiated clicks)
     const handleAnchorClick = (e: MouseEvent) => {

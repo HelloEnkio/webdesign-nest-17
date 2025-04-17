@@ -14,8 +14,25 @@ export const useNavbar = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
+    
+    // Check initial scroll position
+    handleScroll();
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Handle hash on page load - ensure we scroll to the right section
+  useEffect(() => {
+    if (isHomePage && location.hash) {
+      // Small delay to ensure the DOM is fully loaded
+      setTimeout(() => {
+        const targetElement = document.getElementById(location.hash.substring(1));
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [isHomePage, location.hash]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
