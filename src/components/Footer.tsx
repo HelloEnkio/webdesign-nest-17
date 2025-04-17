@@ -2,6 +2,7 @@
 import React, { useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
+import { scrollToSectionById, scrollToTop } from '@/utils/navigationUtils';
 
 const Footer: React.FC = () => {
   const location = useLocation();
@@ -10,29 +11,12 @@ const Footer: React.FC = () => {
 
   const handleSectionLink = useCallback((sectionId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    
-    // Si nous ne sommes pas sur la page d'accueil, rediriger vers la page d'accueil avec le hash
-    if (!isHomePage) {
-      navigate(`/#${sectionId}`);
-      return;
-    }
-    
-    // Si nous sommes sur la page d'accueil, faire défiler vers la section
-    const section = document.getElementById(sectionId);
-    if (section) {
-      document.documentElement.classList.add('smooth-scroll');
-      
-      section.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-      
-      window.history.pushState(null, document.title, `#${sectionId}`);
-      
-      setTimeout(() => {
-        document.documentElement.classList.remove('smooth-scroll');
-      }, 1000);
-    }
+    scrollToSectionById(sectionId, isHomePage, navigate);
+  }, [isHomePage, navigate]);
+
+  const handleScrollToTop = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    scrollToTop(isHomePage, navigate);
   }, [isHomePage, navigate]);
 
   return (
@@ -70,10 +54,7 @@ const Footer: React.FC = () => {
                 <ul className="space-y-3">
                   <li>
                     {isHomePage ? (
-                      <a href="#" onClick={(e) => {
-                        e.preventDefault();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }} className="text-neutral-400 hover:text-white transition-colors">
+                      <a href="#" onClick={handleScrollToTop} className="text-neutral-400 hover:text-white transition-colors">
                         Accueil
                       </a>
                     ) : (

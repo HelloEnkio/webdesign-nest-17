@@ -8,6 +8,8 @@ export const useNavbar = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
+  console.log('useNavbar hook initialized', { isHomePage, locationHash: location.hash });
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -23,10 +25,17 @@ export const useNavbar = () => {
 
   // Handle hash on page load - ensure we scroll to the right section
   useEffect(() => {
+    console.log('Hash change effect running', { hash: location.hash, isHomePage });
+    
     if (isHomePage && location.hash) {
       // Small delay to ensure the DOM is fully loaded
       setTimeout(() => {
         const targetElement = document.getElementById(location.hash.substring(1));
+        console.log('Trying to scroll to element', { 
+          targetId: location.hash.substring(1), 
+          elementFound: !!targetElement 
+        });
+        
         if (targetElement) {
           targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
