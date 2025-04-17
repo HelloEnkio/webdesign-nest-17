@@ -16,7 +16,7 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   useEffect(() => {
-    // Handle page refresh with hash - don't remove the hash anymore
+    // Handle page refresh with hash - scroll to the correct section on initial load
     if (window.location.hash) {
       // Small delay to ensure the DOM is fully loaded
       setTimeout(() => {
@@ -32,46 +32,8 @@ const Index: React.FC = () => {
       }, 100);
     }
     
-    // Handle anchor links for smooth scrolling (only for user-initiated clicks)
-    const handleAnchorClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const anchor = target.closest('a');
-      
-      if (!anchor) return;
-      
-      const href = anchor.getAttribute('href');
-      
-      if (href && href.startsWith('#') && href !== '#') {
-        e.preventDefault();
-        
-        const targetId = href.substring(1);
-        const targetElement = document.getElementById(targetId);
-        
-        if (targetElement) {
-          // For user clicks, we still want smooth scrolling
-          document.documentElement.classList.add('smooth-scroll');
-          
-          targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          
-          // Remove smooth-scroll class after animation completes
-          setTimeout(() => {
-            document.documentElement.classList.remove('smooth-scroll');
-          }, 1000);
-          
-          // Update URL without causing browser to scroll
-          window.history.pushState(null, document.title, href);
-        }
-      }
-    };
-    
-    document.addEventListener('click', handleAnchorClick);
-    
-    return () => {
-      document.removeEventListener('click', handleAnchorClick);
-    };
+    // We're removing the additional anchor click handler here
+    // since we have a unified scrollToSection mechanism in the Navbar component
   }, []);
 
   return (

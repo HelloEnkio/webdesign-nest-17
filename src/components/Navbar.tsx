@@ -16,8 +16,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const { scrollToSection, scrollToTop } = useNavigation();
 
   const handleScrollToSection = (sectionId: string, e: React.MouseEvent) => {
+    // Use the exact section ID that matches the DOM elements in Index.tsx
     scrollToSection({
-      sectionId,
+      sectionId, // Pass the exact section ID without modification
       e,
       isHomePage,
       handleMobileItemClick
