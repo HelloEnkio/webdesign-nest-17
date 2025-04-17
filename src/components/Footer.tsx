@@ -1,26 +1,20 @@
-
 import React, { useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
 import { scrollToSectionById, scrollToTop } from '@/utils/navigationUtils';
-
 const Footer: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
-
   const handleSectionLink = useCallback((sectionId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     scrollToSectionById(sectionId, isHomePage, navigate);
   }, [isHomePage, navigate]);
-
   const handleScrollToTop = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     scrollToTop(isHomePage, navigate);
   }, [isHomePage, navigate]);
-
-  return (
-    <footer className="bg-neutral-900 text-white">
+  return <footer className="bg-neutral-900 text-white">
       <div className="section-container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Company Info */}
@@ -30,15 +24,9 @@ const Footer: React.FC = () => {
               Agence de design web créative spécialisée dans la création de sites web et d'applications élégants et performants pour tous types d'entreprises.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-neutral-800 p-2.5 rounded-full hover:bg-blue-600 transition-colors">
-                <Facebook size={18} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-neutral-800 p-2.5 rounded-full hover:bg-pink-600 transition-colors">
-                <Instagram size={18} />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="bg-neutral-800 p-2.5 rounded-full hover:bg-blue-700 transition-colors">
-                <Linkedin size={18} />
-              </a>
+              
+              
+              
               <a href="mailto:contact@studio-web.fr" className="bg-neutral-800 p-2.5 rounded-full hover:bg-green-600 transition-colors">
                 <Mail size={18} />
               </a>
@@ -53,49 +41,29 @@ const Footer: React.FC = () => {
                 <h5 className="text-sm font-medium text-neutral-300 mb-3">Navigation</h5>
                 <ul className="space-y-3">
                   <li>
-                    {isHomePage ? (
-                      <a href="#" onClick={handleScrollToTop} className="text-neutral-400 hover:text-white transition-colors">
+                    {isHomePage ? <a href="#" onClick={handleScrollToTop} className="text-neutral-400 hover:text-white transition-colors">
                         Accueil
-                      </a>
-                    ) : (
-                      <Link to="/" className="text-neutral-400 hover:text-white transition-colors">
+                      </a> : <Link to="/" className="text-neutral-400 hover:text-white transition-colors">
                         Accueil
-                      </Link>
-                    )}
+                      </Link>}
                   </li>
                   <li>
-                    <a 
-                      href="#services-section" 
-                      onClick={(e) => handleSectionLink('services-section', e)}
-                      className="text-neutral-400 hover:text-white transition-colors"
-                    >
+                    <a href="#services-section" onClick={e => handleSectionLink('services-section', e)} className="text-neutral-400 hover:text-white transition-colors">
                       Services
                     </a>
                   </li>
                   <li>
-                    <a 
-                      href="#solutions-section" 
-                      onClick={(e) => handleSectionLink('solutions-section', e)}
-                      className="text-neutral-400 hover:text-white transition-colors"
-                    >
+                    <a href="#solutions-section" onClick={e => handleSectionLink('solutions-section', e)} className="text-neutral-400 hover:text-white transition-colors">
                       Solutions
                     </a>
                   </li>
                   <li>
-                    <a 
-                      href="#process-section" 
-                      onClick={(e) => handleSectionLink('process-section', e)}
-                      className="text-neutral-400 hover:text-white transition-colors"
-                    >
+                    <a href="#process-section" onClick={e => handleSectionLink('process-section', e)} className="text-neutral-400 hover:text-white transition-colors">
                       Processus
                     </a>
                   </li>
                   <li>
-                    <a 
-                      href="#contact-section" 
-                      onClick={(e) => handleSectionLink('contact-section', e)}
-                      className="text-neutral-400 hover:text-white transition-colors"
-                    >
+                    <a href="#contact-section" onClick={e => handleSectionLink('contact-section', e)} className="text-neutral-400 hover:text-white transition-colors">
                       Contact
                     </a>
                   </li>
@@ -133,20 +101,12 @@ const Footer: React.FC = () => {
           </p>
           
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link to="/mentions-legales" className="text-neutral-400 hover:text-white transition-colors text-sm">
-              Mentions légales
-            </Link>
-            <Link to="/politique-confidentialite" className="text-neutral-400 hover:text-white transition-colors text-sm">
-              Politique de confidentialité
-            </Link>
-            <Link to="/cgv" className="text-neutral-400 hover:text-white transition-colors text-sm">
-              CGV
-            </Link>
+            
+            
+            
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
