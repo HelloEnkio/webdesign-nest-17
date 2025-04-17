@@ -25,44 +25,48 @@ const Index: React.FC = () => {
   useEffect(() => {
     // Cette fonction gère uniquement le défilement initial après chargement
     const handleInitialScroll = () => {
-      if (window.location.hash) {
-        const targetId = window.location.hash.substring(1);
-        
-        // Toujours mettre à jour l'URL hash immédiatement
-        window.history.replaceState(null, document.title, `#${targetId}`);
-        
-        // Fonction pour tenter le défilement avec tentatives multiples
-        const attemptScroll = (attemptsLeft = 20, delay = 100) => {
-          const targetElement = document.getElementById(targetId);
-          
-          if (targetElement) {
-            console.log(`Found target element #${targetId}, scrolling to it`);
-            
-            document.documentElement.classList.add('smooth-scroll');
-            targetElement.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-            
-            setTimeout(() => {
-              document.documentElement.classList.remove('smooth-scroll');
-            }, 1000);
-            
-            return; // Succès, sortir de la boucle de tentatives
-          }
-          
-          if (attemptsLeft > 0) {
-            console.log(`Target #${targetId} not found yet, retrying... (${attemptsLeft} attempts left)`);
-            // Planifier une autre tentative après le délai
-            setTimeout(() => attemptScroll(attemptsLeft - 1, delay), delay);
-          } else {
-            console.log(`Failed to find #${targetId} after multiple attempts`);
-          }
-        };
-        
-        // Démarrer le processus de polling pour trouver et défiler vers la cible
-        attemptScroll();
+      // Si l'URL ne contient pas de hash, ne rien faire (rester en haut de page)
+      if (!window.location.hash) {
+        console.log("No hash in URL, staying at the top of the page");
+        return;
       }
+      
+      const targetId = window.location.hash.substring(1);
+      
+      // Toujours mettre à jour l'URL hash immédiatement
+      window.history.replaceState(null, document.title, `#${targetId}`);
+      
+      // Fonction pour tenter le défilement avec tentatives multiples
+      const attemptScroll = (attemptsLeft = 20, delay = 100) => {
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          console.log(`Found target element #${targetId}, scrolling to it`);
+          
+          document.documentElement.classList.add('smooth-scroll');
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          setTimeout(() => {
+            document.documentElement.classList.remove('smooth-scroll');
+          }, 1000);
+          
+          return; // Succès, sortir de la boucle de tentatives
+        }
+        
+        if (attemptsLeft > 0) {
+          console.log(`Target #${targetId} not found yet, retrying... (${attemptsLeft} attempts left)`);
+          // Planifier une autre tentative après le délai
+          setTimeout(() => attemptScroll(attemptsLeft - 1, delay), delay);
+        } else {
+          console.log(`Failed to find #${targetId} after multiple attempts`);
+        }
+      };
+      
+      // Démarrer le processus de polling pour trouver et défiler vers la cible
+      attemptScroll();
     };
     
     // Attendre un court instant pour que tout le DOM essentiel soit chargé
