@@ -12,7 +12,6 @@ export type ContactType = 'email' | 'phone' | 'uncertain' | null;
 
 export function useContactForm() {
   const [showDetails, setShowDetails] = useState(false);
-  const [progressWidth, setProgressWidth] = useState(25);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [contactType, setContactType] = useState<ContactType>(null);
   
@@ -23,30 +22,6 @@ export function useContactForm() {
     contact: ''
   });
 
-  // Update progress bar based on form completion
-  useEffect(() => {
-    // Calculate progress based on filled fields
-    let progress = 0;
-    
-    if (formState.contact.trim().length > 3) {
-      progress += 70; // Contact is 70% of the progress
-    }
-    
-    if (formState.name.trim().length > 0) {
-      progress += 10;
-    }
-    
-    if (formState.projectType.trim().length > 0) {
-      progress += 10;
-    }
-    
-    if (formState.projectDescription.trim().length > 0) {
-      progress += 10;
-    }
-    
-    setProgressWidth(progress);
-  }, [formState]);
-  
   // Detect contact type
   useEffect(() => {
     const value = formState.contact;
@@ -105,7 +80,6 @@ export function useContactForm() {
 
   return {
     showDetails,
-    progressWidth,
     formState,
     isSubmitting,
     contactType,
@@ -117,3 +91,4 @@ export function useContactForm() {
     resetForm
   };
 }
+

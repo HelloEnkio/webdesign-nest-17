@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { AnimatePresence, motion } from "framer-motion";
 import { Mail, Phone, ChevronDown, ChevronUp, Send, User, FileText, Package } from 'lucide-react';
@@ -7,7 +6,6 @@ import { useContactForm } from '@/hooks/use-contact-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import ProgressBar from './ProgressBar';
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -16,7 +14,6 @@ const ContactForm = () => {
   
   const {
     showDetails,
-    progressWidth,
     formState,
     isSubmitting,
     contactType,
@@ -58,7 +55,6 @@ const ContactForm = () => {
     e.preventDefault();
     
     if (!validateContact()) {
-      // Highlight the contact field if empty on submission attempt
       if (contactInputRef.current) {
         contactInputRef.current.focus();
       }
@@ -67,14 +63,11 @@ const ContactForm = () => {
     
     setIsSubmitting(true);
     
-    // Simulate form submission with a delay
     setTimeout(() => {
       console.log('Form submitted:', formState);
       
-      // Reset form and state
       resetForm();
       
-      // Success message adapted to the detected contact type
       let contactMessage = "";
       if (contactType === 'email') {
         contactMessage = "Nous vous recontacterons rapidement par e-mail.";
@@ -84,14 +77,12 @@ const ContactForm = () => {
         contactMessage = "Nous vous recontacterons très bientôt.";
       }
       
-      // Show success toast
       toast({
         title: "Message envoyé !",
         description: contactMessage,
         variant: "default",
       });
 
-      // Trigger success animation
       if (formContainerRef.current) {
         formContainerRef.current.classList.add('success-animation');
         setTimeout(() => {
@@ -156,14 +147,7 @@ const ContactForm = () => {
           </motion.a>
         </motion.div>
         
-        {/* Progress Bar */}
-        <ProgressBar 
-          currentStep={0} 
-          progressWidth={progressWidth} 
-        />
-        
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Contact Input - Main Focus */}
           <div className="mt-4">
             <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-2">
               Comment pouvons-nous vous contacter ?
@@ -217,7 +201,6 @@ const ContactForm = () => {
             </div>
           </div>
           
-          {/* Toggle for showing/hiding details */}
           <motion.div 
             className="flex justify-center"
             initial={{ opacity: 0 }}
@@ -244,7 +227,6 @@ const ContactForm = () => {
             </Button>
           </motion.div>
           
-          {/* Collapsible Details Section */}
           <AnimatePresence>
             {showDetails && (
               <motion.div
@@ -255,7 +237,6 @@ const ContactForm = () => {
                 className="overflow-hidden"
               >
                 <div className="space-y-4 pt-2">
-                  {/* Name */}
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                       <User className="inline-block w-4 h-4 mr-2" />
@@ -272,7 +253,6 @@ const ContactForm = () => {
                     />
                   </div>
                   
-                  {/* Project Type */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Package className="inline-block w-4 h-4 mr-2" />
@@ -297,7 +277,6 @@ const ContactForm = () => {
                     </div>
                   </div>
                   
-                  {/* Project Description */}
                   <div>
                     <label htmlFor="projectDescription" className="block text-sm font-medium text-gray-700 mb-2">
                       <FileText className="inline-block w-4 h-4 mr-2" />
@@ -318,7 +297,6 @@ const ContactForm = () => {
             )}
           </AnimatePresence>
           
-          {/* Submit Button */}
           <motion.div
             className="mt-6"
             initial={{ opacity: 0, y: 10 }}
@@ -327,7 +305,7 @@ const ContactForm = () => {
           >
             <Button
               type="submit"
-              disabled={isSubmitting || !validateContact()}
+              disabled={isSubmitting}
               className="w-full py-3 px-4 h-auto text-base font-medium"
             >
               {isSubmitting ? (
