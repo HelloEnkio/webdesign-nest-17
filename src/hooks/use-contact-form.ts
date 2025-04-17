@@ -11,7 +11,7 @@ export type FormState = {
 export type ContactType = 'email' | 'phone' | 'uncertain' | null;
 
 export function useContactForm() {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
   const [progressWidth, setProgressWidth] = useState(25);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [contactType, setContactType] = useState<ContactType>(null);
@@ -23,11 +23,29 @@ export function useContactForm() {
     contact: ''
   });
 
-  // Update progress bar when step changes
+  // Update progress bar based on form completion
   useEffect(() => {
-    const progress = ((currentStep + 1) / 4) * 100;
+    // Calculate progress based on filled fields
+    let progress = 0;
+    
+    if (formState.contact.trim().length > 3) {
+      progress += 70; // Contact is 70% of the progress
+    }
+    
+    if (formState.name.trim().length > 0) {
+      progress += 10;
+    }
+    
+    if (formState.projectType.trim().length > 0) {
+      progress += 10;
+    }
+    
+    if (formState.projectDescription.trim().length > 0) {
+      progress += 10;
+    }
+    
     setProgressWidth(progress);
-  }, [currentStep]);
+  }, [formState]);
   
   // Detect contact type
   useEffect(() => {
@@ -63,41 +81,15 @@ export function useContactForm() {
   
   const handleProjectTypeSelect = (type: string) => {
     setFormState(prev => ({ ...prev, projectType: type }));
-    // Automatically proceed to next step after selection
-    setTimeout(() => {
-      handleNextStep();
-    }, 300);
   };
   
-  const handleNextStep = () => {
-    if (currentStep < 3) {
-      setCurrentStep(prev => prev + 1);
-    }
+  const toggleShowDetails = () => {
+    setShowDetails(prev => !prev);
   };
   
-  const handlePrevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
-  
-  const validateCurrentStep = (): boolean => {
-    switch (currentStep) {
-      case 0:
-        // Name is now optional
-        return true;
-      case 1:
-        // Project type is now optional
-        return true;
-      case 2:
-        // Project description is now optional
-        return true;
-      case 3:
-        // Only the contact field is required
-        return contactType !== null && formState.contact.trim().length > 3;
-      default:
-        return true;
-    }
+  const validateContact = (): boolean => {
+    // Only validate that there's some kind of contact info
+    return contactType !== null && formState.contact.trim().length > 3;
   };
   
   const resetForm = () => {
@@ -107,12 +99,12 @@ export function useContactForm() {
       projectDescription: '',
       contact: ''
     });
-    setCurrentStep(0);
+    setShowDetails(false);
     setIsSubmitting(false);
   };
 
   return {
-    currentStep,
+    showDetails,
     progressWidth,
     formState,
     isSubmitting,
@@ -120,9 +112,8 @@ export function useContactForm() {
     setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
-    handleNextStep,
-    handlePrevStep,
-    validateCurrentStep,
+    toggleShowDetails,
+    validateContact,
     resetForm
   };
 }

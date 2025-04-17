@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import ContactHeader from './contact/ContactHeader';
 import ContactForm from './contact/ContactForm';
@@ -9,7 +9,7 @@ const Contact: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   
-  useEffect(() => {
+  React.useEffect(() => {
     const observerHeader = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
