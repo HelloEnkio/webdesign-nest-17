@@ -13,20 +13,29 @@ export const useScrollSpy = ({
   rootMargin = "0px" 
 }: UseScrollSpyOptions) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    // Flag to prevent hash updates until the user has scrolled
+    const handleFirstScroll = () => {
+      setHasScrolled(true);
+      window.removeEventListener('scroll', handleFirstScroll);
+    };
+    
+    window.addEventListener('scroll', handleFirstScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleFirstScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (!sectionIds.length || typeof window === 'undefined' || !('IntersectionObserver' in window)) {
       return;
     }
 
-    // Get initial active section from URL hash if present
-    const initialHash = window.location.hash;
-    if (initialHash) {
-      const sectionId = initialHash.substring(1);
-      if (sectionIds.includes(sectionId)) {
-        setActiveSection(sectionId);
-      }
-    }
+    // Don't set active section from URL hash on initial load
+    // (We let Index.tsx clear the hash instead)
 
     const elements = sectionIds
       .map(id => document.getElementById(id))
@@ -61,12 +70,14 @@ export const useScrollSpy = ({
         if (maxVisibleSection) {
           setActiveSection(maxVisibleSection.id);
           
-          // Update URL hash without triggering a scroll
-          window.history.replaceState(
-            null, 
-            document.title, 
-            maxVisibleSection.id ? `#${maxVisibleSection.id}` : window.location.pathname
-          );
+          // Only update URL hash after user has scrolled or clicked
+          if (hasScrolled) {
+            window.history.replaceState(
+              null, 
+              document.title, 
+              maxVisibleSection.id ? `#${maxVisibleSection.id}` : window.location.pathname
+            );
+          }
           
           // Reset for next observation
           maxVisibleSection = null;
@@ -87,7 +98,7 @@ export const useScrollSpy = ({
     return () => {
       observer.disconnect();
     };
-  }, [sectionIds, threshold, rootMargin]);
+  }, [sectionIds, threshold, rootMargin, hasScrolled]);
 
   return { activeSection };
 };

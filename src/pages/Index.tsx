@@ -23,6 +23,9 @@ const Index: React.FC = () => {
   });
 
   useEffect(() => {
+    // Nettoyer tout hash résiduel au premier chargement
+    window.history.replaceState(null, document.title, window.location.pathname);
+    
     // Cette fonction gère uniquement le défilement initial après chargement
     const handleInitialScroll = () => {
       // Si l'URL ne contient pas de hash, ne rien faire (rester en haut de page)
