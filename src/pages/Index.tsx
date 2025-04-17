@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { Toaster } from '@/components/ui/toaster';
 
-// Lazy-load non-critical components
+// Lazy-load non-critical components with lower priority
 const Services = lazy(() => import('@/components/Services'));
 const Portfolio = lazy(() => import('@/components/Portfolio'));
 const Process = lazy(() => import('@/components/Process'));

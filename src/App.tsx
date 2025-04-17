@@ -5,7 +5,13 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoadingScreen from "./components/LoadingScreen";
+
+// Load critical components eagerly
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+
+// Use a minimal loading indicator instead of full LoadingScreen
+const MinimalLoading = () => <div className="min-h-screen"></div>;
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -22,7 +28,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Suspense fallback={<LoadingScreen />}>
+        <Suspense fallback={<MinimalLoading />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
