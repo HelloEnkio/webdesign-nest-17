@@ -23,7 +23,8 @@ export const useNavbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // We're removing the conflicting hash change effect that was here
+  // Nous supprimons tout effet qui traite du défilement basé sur le hash ici
+  // Cette logique doit être uniquement dans Index.tsx
 
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

@@ -19,10 +19,10 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     e.preventDefault();
     
     if (sectionId === "") {
-      // For home/accueil link, scroll to top
+      // Pour le lien d'accueil, défiler vers le haut
       scrollToTop(e, isHomePage, handleMobileItemClick);
     } else {
-      // For other links, scroll to the section
+      // Pour les autres liens, défiler vers la section
       scrollToSection({
         sectionId,
         e,

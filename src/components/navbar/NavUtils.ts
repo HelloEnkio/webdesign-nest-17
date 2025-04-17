@@ -17,7 +17,7 @@ export const useNavigation = () => {
       e.preventDefault();
     }
     
-    // If not on home page, navigate to home page with the section id
+    // Si pas sur la page d'accueil, naviguer vers la page d'accueil avec l'id de section
     if (!isHomePage) {
       navigate(`/#${sectionId}`);
       return;
@@ -25,15 +25,10 @@ export const useNavigation = () => {
     
     document.documentElement.classList.add('smooth-scroll');
     
-    // Always update URL hash, regardless of whether the section is found
-    // This ensures the hash is updated even when the target section is being lazy-loaded
-    if (sectionId) {
-      window.history.replaceState(null, document.title, `#${sectionId}`);
-    } else {
-      window.history.replaceState(null, document.title, window.location.pathname);
-    }
+    // Toujours mettre à jour l'URL hash, quel que soit le résultat de la recherche de la section
+    window.history.replaceState(null, document.title, `#${sectionId}`);
     
-    // After updating the URL, attempt to scroll to the section if it exists
+    // Après avoir mis à jour l'URL, tenter de défiler vers la section si elle existe
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({
@@ -56,7 +51,7 @@ export const useNavigation = () => {
       e.preventDefault();
     }
     
-    // If not on home page, navigate to home page
+    // Si pas sur la page d'accueil, naviguer vers la page d'accueil
     if (!isHomePage) {
       navigate('/');
       return;
@@ -64,7 +59,7 @@ export const useNavigation = () => {
     
     document.documentElement.classList.add('smooth-scroll');
     
-    // Always update the URL to remove the hash, regardless of scroll success
+    // Toujours mettre à jour l'URL pour supprimer le hash
     window.history.replaceState(null, document.title, window.location.pathname);
     
     window.scrollTo({
