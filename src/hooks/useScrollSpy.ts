@@ -5,12 +5,14 @@ interface UseScrollSpyOptions {
   sectionIds: string[];
   threshold?: number;
   rootMargin?: string;
+  observerDelay?: number;
 }
 
 export const useScrollSpy = ({ 
   sectionIds = [], 
-  threshold = 0.5, 
-  rootMargin = "0px" 
+  threshold = 0, 
+  rootMargin = "0px 0px -50% 0px",
+  observerDelay = 800
 }: UseScrollSpyOptions) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -46,59 +48,51 @@ export const useScrollSpy = ({
       return;
     }
 
-    let maxVisibleSection: { id: string; ratio: number } | null = null;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Find the section with the highest intersection ratio
-        entries.forEach(entry => {
-          const sectionId = entry.target.id;
-          const intersectionRatio = entry.intersectionRatio;
-
-          if (
-            entry.isIntersecting && 
-            (!maxVisibleSection || intersectionRatio > maxVisibleSection.ratio)
-          ) {
-            maxVisibleSection = {
-              id: sectionId,
-              ratio: intersectionRatio
-            };
-          }
-        });
-
-        // After processing all entries, update active section
-        if (maxVisibleSection) {
-          setActiveSection(maxVisibleSection.id);
+    // Simplified callback that only updates when a section is intersecting
+    const callback: IntersectionObserverCallback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
           
-          // Only update URL hash after user has scrolled or clicked
+          // Only update URL hash after user has scrolled
           if (hasScrolled) {
             window.history.replaceState(
               null, 
               document.title, 
-              maxVisibleSection.id ? `#${maxVisibleSection.id}` : window.location.pathname
+              `#${entry.target.id}`
             );
           }
-          
-          // Reset for next observation
-          maxVisibleSection = null;
         }
-      },
-      {
+      });
+    };
+
+    // Reference to the timeout for cleanup
+    let observerInitTimeout: ReturnType<typeof setTimeout>;
+    
+    // Reference to the observer for cleanup
+    let observer: IntersectionObserver;
+    
+    // Delay the creation of the observer
+    observerInitTimeout = setTimeout(() => {
+      observer = new IntersectionObserver(callback, {
         root: null, // viewport
         rootMargin,
-        threshold: [0, 0.25, 0.5, 0.75, 1]
-      }
-    );
+        threshold
+      });
 
-    // Start observing all section elements
-    elements.forEach(element => {
-      observer.observe(element);
-    });
+      // Start observing all section elements
+      elements.forEach(element => {
+        observer.observe(element);
+      });
+    }, observerDelay);
 
     return () => {
-      observer.disconnect();
+      clearTimeout(observerInitTimeout);
+      if (observer) {
+        observer.disconnect();
+      }
     };
-  }, [sectionIds, threshold, rootMargin, hasScrolled]);
+  }, [sectionIds, threshold, rootMargin, hasScrolled, observerDelay]);
 
   return { activeSection };
 };
