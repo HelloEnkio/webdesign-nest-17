@@ -3,6 +3,7 @@ import React, { useEffect, lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { Toaster } from '@/components/ui/toaster';
+import { useScrollSpy } from '@/hooks/useScrollSpy';
 
 // Lazy-load non-critical components with lower priority
 const Services = lazy(() => import('@/components/Services'));
@@ -15,6 +16,12 @@ const Footer = lazy(() => import('@/components/Footer'));
 const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
+  // Setup scrollspy to track visible sections
+  const { activeSection } = useScrollSpy({
+    sectionIds: ['hero-section', 'services-section', 'portfolio-section', 'process-section', 'contact-section'],
+    threshold: 0.5
+  });
+
   useEffect(() => {
     // Cette fonction gère uniquement le défilement initial après chargement
     const handleInitialScroll = () => {

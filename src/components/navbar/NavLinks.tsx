@@ -12,8 +12,8 @@ const NavLinks: React.FC<NavLinksProps> = ({ isScrolled, onScrollToSection }) =>
   return (
     <div className="hidden md:flex items-center space-x-1">
       <a 
-        href="#" 
-        onClick={(e) => onScrollToSection("", e)}
+        href="#hero-section" 
+        onClick={(e) => onScrollToSection("hero-section", e)}
         className={cn(
           "navbar-item",
           !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"

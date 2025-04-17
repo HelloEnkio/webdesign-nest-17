@@ -60,8 +60,8 @@ export const useNavigation = () => {
     
     document.documentElement.classList.add('smooth-scroll');
     
-    // Toujours mettre à jour l'URL pour supprimer le hash
-    window.history.replaceState(null, document.title, window.location.pathname);
+    // Mettre à jour l'URL pour utiliser le hash de la section hero
+    window.history.replaceState(null, document.title, '#hero-section');
     
     window.scrollTo({
       top: 0,
