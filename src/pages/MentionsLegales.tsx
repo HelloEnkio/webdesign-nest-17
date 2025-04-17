@@ -4,10 +4,15 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const MentionsLegales: React.FC = () => {
+  // Force le scroll en haut de la page lors du chargement
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow pt-24">
         <div className="max-w-4xl mx-auto px-4 py-16">
           <h1 className="text-3xl font-bold mb-8">Mentions Légales</h1>
           

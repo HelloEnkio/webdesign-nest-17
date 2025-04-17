@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
   className?: string;
@@ -13,6 +13,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
 
   useEffect(() => {
@@ -37,9 +38,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const scrollToSection = (sectionId: string, e: React.MouseEvent) => {
     e.preventDefault();
     
-    // If not on home page, redirect to home page with hash
+    // If not on home page, navigate to home page with the section id
     if (!isHomePage) {
-      window.location.href = `/#${sectionId}`;
+      navigate(`/#${sectionId}`);
       return;
     }
     
@@ -67,9 +68,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
       e.preventDefault();
     }
     
-    // If not on home page, redirect to home page
+    // If not on home page, navigate to home page
     if (!isHomePage) {
-      window.location.href = '/';
+      navigate('/');
       return;
     }
     
