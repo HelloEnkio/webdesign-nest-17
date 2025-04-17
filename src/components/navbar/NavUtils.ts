@@ -1,5 +1,6 @@
 
 import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 interface ScrollToSectionProps {
   sectionId: string;
@@ -11,7 +12,7 @@ interface ScrollToSectionProps {
 export const useNavigation = () => {
   const navigate = useNavigate();
 
-  const scrollToSection = ({ sectionId, e, isHomePage, handleMobileItemClick }: ScrollToSectionProps) => {
+  const scrollToSection = useCallback(({ sectionId, e, isHomePage, handleMobileItemClick }: ScrollToSectionProps) => {
     if (e) {
       e.preventDefault();
     }
@@ -39,9 +40,9 @@ export const useNavigation = () => {
     }, 1000);
     
     handleMobileItemClick();
-  };
+  }, [navigate]);
 
-  const scrollToTop = (e?: React.MouseEvent, isHomePage?: boolean, handleMobileItemClick?: () => void) => {
+  const scrollToTop = useCallback((e?: React.MouseEvent, isHomePage?: boolean, handleMobileItemClick?: () => void) => {
     if (e) {
       e.preventDefault();
     }
@@ -68,7 +69,7 @@ export const useNavigation = () => {
     if (handleMobileItemClick) {
       handleMobileItemClick();
     }
-  };
+  }, [navigate]);
 
   return {
     scrollToSection,

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export const useNavbar = () => {
@@ -34,15 +34,15 @@ export const useNavbar = () => {
     }
   }, [isHomePage, location.hash]);
 
-  const toggleMobileMenu = () => {
+  const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  }, [isMobileMenuOpen]);
 
-  const handleMobileItemClick = () => {
+  const handleMobileItemClick = useCallback(() => {
     if (isMobileMenuOpen) {
       setIsMobileMenuOpen(false);
     }
-  };
+  }, [isMobileMenuOpen]);
 
   return {
     isScrolled,

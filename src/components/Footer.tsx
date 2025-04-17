@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
 
@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
 
-  const handleSectionLink = (sectionId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleSectionLink = useCallback((sectionId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     
     // Si nous ne sommes pas sur la page d'accueil, rediriger vers la page d'accueil avec le hash
@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
         document.documentElement.classList.remove('smooth-scroll');
       }, 1000);
     }
-  };
+  }, [isHomePage, navigate]);
 
   return (
     <footer className="bg-neutral-900 text-white">

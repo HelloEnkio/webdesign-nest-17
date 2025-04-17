@@ -2,10 +2,10 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useNavbar } from '@/hooks/useNavbar';
-import { useNavigation } from './navbar/NavUtils';
 import NavbarLogo from './navbar/NavbarLogo';
 import NavLinks from './navbar/NavLinks';
 import MobileMenu from './navbar/MobileMenu';
+import { useNavigation } from './navbar/NavUtils';
 
 interface NavbarProps {
   className?: string;
