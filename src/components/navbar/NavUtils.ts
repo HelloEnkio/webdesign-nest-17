@@ -25,19 +25,23 @@ export const useNavigation = () => {
     
     document.documentElement.classList.add('smooth-scroll');
     
-    // Always update URL hash, even if section is not found
+    // Always update URL hash, regardless of whether the section is found
+    // This ensures the hash is updated even when the target section is being lazy-loaded
     if (sectionId) {
       window.history.replaceState(null, document.title, `#${sectionId}`);
     } else {
       window.history.replaceState(null, document.title, window.location.pathname);
     }
     
+    // After updating the URL, attempt to scroll to the section if it exists
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
+    } else {
+      console.log(`Section with id '${sectionId}' not found in DOM yet (possibly due to lazy loading)`);
     }
     
     setTimeout(() => {
@@ -60,6 +64,9 @@ export const useNavigation = () => {
     
     document.documentElement.classList.add('smooth-scroll');
     
+    // Always update the URL to remove the hash, regardless of scroll success
+    window.history.replaceState(null, document.title, window.location.pathname);
+    
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -68,9 +75,6 @@ export const useNavigation = () => {
     setTimeout(() => {
       document.documentElement.classList.remove('smooth-scroll');
     }, 1000);
-    
-    // Always update the URL to remove the hash
-    window.history.replaceState(null, document.title, window.location.pathname);
     
     if (handleMobileItemClick) {
       handleMobileItemClick();
