@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { Search, Layout, Code, Rocket } from 'lucide-react';
 interface ProcessStepProps {
@@ -86,14 +87,14 @@ const Process: React.FC = () => {
           </h2>
           
           <p className="text-neutral-600 max-w-2xl mx-auto text-lg">
-            Notre méthodologie de travail est conçue pour garantir des résultats exceptionnels,
+            Notre méthodologie de travail est conçue pour garantir des résultats parfaits,
             une communication transparente et une satisfaction client optimale.
           </p>
         </div>
         
         <div className="relative">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10">
-            <ProcessStep number="1" title="Découverte" icon={<Search size={28} />} color="bg-gradient-to-br from-indigo-500 to-indigo-700" description="Nous analysons vos besoins, objectifs et la concurrence pour définir la meilleure stratégie digitale." delay={100} />
+            <ProcessStep number="1" title="Découverte" icon={<Search size={28} />} color="bg-gradient-to-br from-indigo-500 to-indigo-700" description="Analyse de vos besoins, objectifs et la concurrence pour définir la meilleure stratégie digitale." delay={100} />
             
             <ProcessStep number="2" title="Conception" icon={<Layout size={28} />} color="bg-gradient-to-br from-blue-500 to-blue-700" description="Création de maquettes interactives et prototypes pour visualiser l'aspect final de votre site web." delay={200} />
             

@@ -84,13 +84,16 @@ export function useContactForm() {
   const validateCurrentStep = (): boolean => {
     switch (currentStep) {
       case 0:
-        return formState.name.trim().length > 0;
+        // Name is now optional
+        return true;
       case 1:
-        return formState.projectType.trim().length > 0;
+        // Project type is now optional
+        return true;
       case 2:
-        return formState.projectDescription.trim().length > 0;
+        // Project description is now optional
+        return true;
       case 3:
-        // More flexible - accepts even if uncertain as long as there's content
+        // Only the contact field is required
         return contactType !== null && formState.contact.trim().length > 3;
       default:
         return true;
