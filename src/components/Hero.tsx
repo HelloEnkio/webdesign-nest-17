@@ -63,7 +63,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section id="home" className="relative pt-24 pb-20 md:pt-28 md:pb-24 overflow-hidden">
+    <section id="hero-section" className="relative pt-24 pb-20 md:pt-28 md:pb-24 overflow-hidden">
       {/* Background with or without video */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0" aria-hidden="true">
         {/* Fallback gradient background (shows immediately) */}

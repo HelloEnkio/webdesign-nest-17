@@ -35,6 +35,7 @@ export const useNavigation = () => {
         behavior: 'smooth',
         block: 'start'
       });
+      console.log(`Scrolling to section '${sectionId}'`);
     } else {
       console.log(`Section with id '${sectionId}' not found in DOM yet (possibly due to lazy loading)`);
     }
