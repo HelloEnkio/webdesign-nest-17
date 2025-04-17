@@ -51,8 +51,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             Services
           </a>
           <a 
-            href="#solutions-section" 
-            onClick={(e) => onScrollToSection("solutions-section", e)} 
+            href="#portfolio-section" 
+            onClick={(e) => onScrollToSection("portfolio-section", e)} 
             className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100"
           >
             Solutions

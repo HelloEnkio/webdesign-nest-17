@@ -32,8 +32,8 @@ const NavLinks: React.FC<NavLinksProps> = ({ isScrolled, onScrollToSection }) =>
         Services
       </a>
       <a 
-        href="#solutions-section" 
-        onClick={(e) => onScrollToSection("solutions-section", e)}
+        href="#portfolio-section" 
+        onClick={(e) => onScrollToSection("portfolio-section", e)}
         className={cn(
           "navbar-item",
           !isScrolled ? "text-neutral-200 hover:text-white after:bg-white" : "text-neutral-600 hover:text-black after:bg-indigo-600"

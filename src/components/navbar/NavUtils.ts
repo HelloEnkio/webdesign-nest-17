@@ -25,14 +25,19 @@ export const useNavigation = () => {
     
     document.documentElement.classList.add('smooth-scroll');
     
+    // Always update URL hash, even if section is not found
+    if (sectionId) {
+      window.history.replaceState(null, document.title, `#${sectionId}`);
+    } else {
+      window.history.replaceState(null, document.title, window.location.pathname);
+    }
+    
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
-      
-      window.history.pushState(null, document.title, `#${sectionId}`);
     }
     
     setTimeout(() => {
@@ -64,7 +69,8 @@ export const useNavigation = () => {
       document.documentElement.classList.remove('smooth-scroll');
     }, 1000);
     
-    window.history.pushState(null, document.title, window.location.pathname);
+    // Always update the URL to remove the hash
+    window.history.replaceState(null, document.title, window.location.pathname);
     
     if (handleMobileItemClick) {
       handleMobileItemClick();
