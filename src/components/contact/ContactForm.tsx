@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -27,6 +28,7 @@ const ContactForm = () => {
     isSubmitting,
     contactType,
     formError,
+    recaptchaToken, // Added this to the destructured values
     setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,

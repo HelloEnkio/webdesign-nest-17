@@ -112,6 +112,7 @@ export function useContactForm() {
     isSubmitting,
     contactType,
     formError,
+    recaptchaToken, // Make sure to expose recaptchaToken
     setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
