@@ -1,98 +1,42 @@
 
 import { useEffect, useState } from 'react';
 
-interface UseScrollSpyOptions {
-  sectionIds: string[];
-  threshold?: number;
-  rootMargin?: string;
-  observerDelay?: number;
-}
-
-export const useScrollSpy = ({ 
-  sectionIds = [], 
-  threshold = 0, 
-  rootMargin = "0px 0px -50% 0px",
-  observerDelay = 800
-}: UseScrollSpyOptions) => {
+export const useScrollSpy = (sectionIds: string[]) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
-    // Flag to prevent hash updates until the user has scrolled
-    const handleFirstScroll = () => {
-      setHasScrolled(true);
-      window.removeEventListener('scroll', handleFirstScroll);
-    };
-    
-    window.addEventListener('scroll', handleFirstScroll);
-    
-    return () => {
-      window.removeEventListener('scroll', handleFirstScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!sectionIds.length || typeof window === 'undefined' || !('IntersectionObserver' in window)) {
-      return;
-    }
-
-    // Don't set active section from URL hash on initial load
-    // (We let Index.tsx clear the hash instead)
-
-    const elements = sectionIds
-      .map(id => document.getElementById(id))
-      .filter(element => element !== null) as HTMLElement[];
-
-    if (elements.length === 0) {
-      console.log('No section elements found to observe');
-      return;
-    }
-
-    // Simplified callback that only updates when a section is intersecting
-    const callback: IntersectionObserverCallback = (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-          
-          // Only update URL hash after user has scrolled
-          if (hasScrolled) {
-            window.history.replaceState(
-              null, 
-              document.title, 
-              `#${entry.target.id}`
-            );
-          }
+    const handleScroll = () => {
+      let newActive: string | null = null;
+      const offset = window.innerHeight * 0.1; // 10% from top
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (top <= offset) {
+          newActive = id;
+        } else {
+          break;
         }
-      });
-    };
-
-    // Reference to the timeout for cleanup
-    let observerInitTimeout: ReturnType<typeof setTimeout>;
-    
-    // Reference to the observer for cleanup
-    let observer: IntersectionObserver;
-    
-    // Delay the creation of the observer
-    observerInitTimeout = setTimeout(() => {
-      observer = new IntersectionObserver(callback, {
-        root: null, // viewport
-        rootMargin,
-        threshold
-      });
-
-      // Start observing all section elements
-      elements.forEach(element => {
-        observer.observe(element);
-      });
-    }, observerDelay);
-
-    return () => {
-      clearTimeout(observerInitTimeout);
-      if (observer) {
-        observer.disconnect();
+      }
+      if (newActive && newActive !== activeSection) {
+        setActiveSection(newActive);
+        window.history.replaceState(null, document.title, `#${newActive}`);
       }
     };
-  }, [sectionIds, threshold, rootMargin, hasScrolled, observerDelay]);
+
+    // Clear any hash on first paint
+    window.history.replaceState(null, document.title, window.location.pathname);
+    window.scrollTo(0, 0);
+
+    // Listen to scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Fire once to set initial section
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [sectionIds, activeSection]);
 
   return { activeSection };
 };

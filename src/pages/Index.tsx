@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { Toaster } from '@/components/ui/toaster';
@@ -15,27 +15,13 @@ const Footer = lazy(() => import('@/components/Footer'));
 const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
-  const { activeSection } = useScrollSpy({
-    sectionIds: ['hero-section', 'services-section', 'portfolio-section', 'process-section', 'contact-section'],
-    threshold: 0.5
-  });
-
-  // Nettoyer le hash et forcer le scroll en haut AVANT le paint du navigateur
-  useLayoutEffect(() => {
-    window.history.replaceState(null, document.title, window.location.pathname);
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
-    const handleFirstScroll = () => {
-      window.removeEventListener('scroll', handleFirstScroll);
-    };
-    
-    window.addEventListener('scroll', handleFirstScroll);
-    return () => {
-      window.removeEventListener('scroll', handleFirstScroll);
-    };
-  }, []);
+  const { activeSection } = useScrollSpy([
+    'hero-section',
+    'services-section', 
+    'portfolio-section',
+    'process-section',
+    'contact-section'
+  ]);
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
