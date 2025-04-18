@@ -15,7 +15,7 @@ const CGV: React.FC = () => {
             <h2 className="text-xl font-semibold mb-4">1. Préambule</h2>
             <p className="mb-4">
               Les présentes conditions générales de vente (CGV) s'appliquent à toutes les prestations de services conclues 
-              par Studio.Web auprès de ses clients professionnels ou particuliers.
+              par Enkio auprès de ses clients professionnels ou particuliers.
             </p>
             <p className="mb-4">
               Toute commande de prestation implique l'acceptation sans réserve par le client et son adhésion pleine et 

@@ -14,7 +14,7 @@ const PolitiqueConfidentialite: React.FC = () => {
           <section className="mb-8">
             <h2 className="text-xl font-semibold mb-4">1. Introduction</h2>
             <p className="mb-4">
-              Chez Studio.Web, nous accordons une grande importance à la protection de vos données personnelles. 
+              Chez Enkio, nous accordons une grande importance à la protection de vos données personnelles. 
               Cette politique de confidentialité vous informe sur la manière dont nous recueillons, utilisons et 
               protégeons vos informations lorsque vous utilisez notre site web.
             </p>

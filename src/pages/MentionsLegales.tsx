@@ -19,7 +19,7 @@ const MentionsLegales: React.FC = () => {
           <section className="mb-8">
             <h2 className="text-xl font-semibold mb-4">1. Informations légales</h2>
             <p className="mb-4">
-              Le site web Studio.Web est édité par la société Studio.Web, société à responsabilité limitée au capital de 10 000 euros, 
+              Le site web Enkio est édité par la société Studio.Web, société à responsabilité limitée au capital de 10 000 euros, 
               immatriculée au Registre du Commerce et des Sociétés de Paris sous le numéro 123 456 789, dont le siège social est situé au :
             </p>
             <p className="mb-4">

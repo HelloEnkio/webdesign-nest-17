@@ -13,7 +13,7 @@ const NavbarLogo: React.FC<NavbarLogoProps> = ({ isScrolled, onLogoClick }) => {
       <div className="h-9 w-9 mr-3">
         <img 
           src="/lovable-uploads/b656736f-7c66-494c-aaf5-83b0642b676a.png" 
-          alt="Studio.Web Logo" 
+          alt="Enkio Logo" 
           className="h-full w-full rounded-lg shadow-md"
         />
       </div>

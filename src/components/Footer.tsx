@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Company Info */}
           <div className="space-y-6">
-            <h3 className="text-xl font-semibold">Studio.Web</h3>
+            <h3 className="text-xl font-semibold">Enkio</h3>
             <p className="text-neutral-400 max-w-lg">
               Agence de design web créative spécialisée dans la création de sites web et d'applications élégants et performants pour tous types d'entreprises.
             </p>
