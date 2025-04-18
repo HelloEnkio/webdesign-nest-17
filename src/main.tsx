@@ -8,7 +8,10 @@ import { BrowserRouter } from 'react-router-dom'
 const AppWrapper = () => {
   useEffect(() => {
     // Force le défilement en haut de la page au chargement initial et lors des changements de route
-    window.scrollTo(0, 0);
+    // Set a slight delay to ensure it overrides any form focusing behavior
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 50);
   }, []);
 
   return (
@@ -23,4 +26,3 @@ const AppWrapper = () => {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <AppWrapper />
 )
-

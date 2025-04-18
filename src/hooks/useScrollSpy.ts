@@ -8,7 +8,7 @@ interface UseScrollSpyOptions {
 
 export const useScrollSpy = ({
   sectionIds = [],
-  updateUrlHash = true,
+  updateUrlHash = false, // Changed default to false to prevent hash updates
 }: UseScrollSpyOptions = {}) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [hasUserScrolled, setHasUserScrolled] = useState(false);
@@ -55,6 +55,7 @@ export const useScrollSpy = ({
           const current = visible[0].target.id;
           setActiveSection(current);
 
+          // Only update URL hash when explicitly requested AND after user has scrolled manually
           if (updateUrlHash && hasUserScrolled) {
             window.history.replaceState(
               null,
