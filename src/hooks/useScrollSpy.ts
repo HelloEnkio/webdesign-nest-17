@@ -3,6 +3,15 @@ import { useEffect, useState } from 'react';
 
 export const useScrollSpy = (sectionIds: string[]) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const onFirst = () => {
+      setHasScrolled(true);
+      window.removeEventListener('scroll', onFirst);
+    };
+    window.addEventListener('scroll', onFirst, { once: true });
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
@@ -18,7 +27,9 @@ export const useScrollSpy = (sectionIds: string[]) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
-          window.history.replaceState(null, document.title, `#${entry.target.id}`);
+          if (hasScrolled) {
+            window.history.replaceState(null, document.title, `#${entry.target.id}`);
+          }
         }
       });
     }, options);
@@ -29,7 +40,7 @@ export const useScrollSpy = (sectionIds: string[]) => {
     });
 
     return () => observer.disconnect();
-  }, [sectionIds]);
+  }, [sectionIds, hasScrolled]);
 
   return { activeSection };
 };
