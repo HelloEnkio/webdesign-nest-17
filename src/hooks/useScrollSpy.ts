@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 interface UseScrollSpyOptions { 
   sectionIds?: string[]; 
   updateHash?: boolean;
-  disableInitialDetection?: boolean; // Nouvelle option
+  disableInitialDetection?: boolean;
 }
 
 export const useScrollSpy = ({
   sectionIds = [],
   updateHash = false,
-  disableInitialDetection = false // Par défaut, active la détection immédiate
+  disableInitialDetection = false
 }: UseScrollSpyOptions = {}) => {
   const [activeSection, setActiveSection] = useState<string|null>(null);
   const [hasUserScrolled, setHasUserScrolled] = useState(false);
@@ -26,9 +26,9 @@ export const useScrollSpy = ({
     };
   }, []);
   
-  // observe after first scroll or immediately if not disabled
+  // observer setup - completely disabled initially if disableInitialDetection is true
   useEffect(() => {
-    // Ne pas observer si on a désactivé la détection initiale ET que l'utilisateur n'a pas encore défilé
+    // Ne pas observer du tout si on a désactivé la détection initiale ET que l'utilisateur n'a pas encore défilé
     if ((disableInitialDetection && !hasUserScrolled) || !sectionIds.length) return;
     
     const els = sectionIds
@@ -38,6 +38,9 @@ export const useScrollSpy = ({
     if (!els.length) return;
     
     const obs = new IntersectionObserver(entries => {
+      // Ne pas traiter les intersections lors du chargement initial si disableInitialDetection est true
+      if (disableInitialDetection && !hasUserScrolled) return;
+      
       const centerY = window.innerHeight/2;
       const visible = entries
         .filter(e => e.intersectionRatio >= 0.5)

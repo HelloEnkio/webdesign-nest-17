@@ -23,8 +23,12 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   React.useEffect(() => {
-    // Only scroll to top on actual page changes (not hash changes)
-    // Ignorer complètement les URL avec des hash pour éviter de perturber la navigation par ancre
+    // Désactiver totalement le scroll automatique sur l'URL racine pour éviter les conflits
+    if (pathname === '/') {
+      return;
+    }
+    
+    // Ne jamais scroller si l'URL contient un hash (laisser la gestion aux composants)
     if (!window.location.hash) {
       window.scrollTo(0, 0);
     }

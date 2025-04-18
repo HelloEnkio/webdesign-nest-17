@@ -27,35 +27,28 @@ const Index: React.FC = () => {
     'contact-section'
   ];
   
-  // Utiliser le hook avec options améliorées
+  // Utiliser le hook avec options améliorées - désactiver totalement la détection initiale
   const { activeSection } = useScrollSpy({ 
     sectionIds: sectionIds,
     updateHash: false,
-    disableInitialDetection: true // Désactiver la détection initiale pour éviter le défilement indésirable
+    disableInitialDetection: true // Désactiver complètement la détection initiale
   });
 
+  // Effet pour gérer le défilement au chargement initial
   useEffect(() => {
-    // Forcer le défilement vers le haut lors du chargement initial
     if (isInitialLoad) {
-      // Forcer le défilement vers le haut, quelle que soit la situation
+      // Forcer immédiatement le scroll tout en haut de la page
       window.scrollTo(0, 0);
       
-      // Si c'est le chargement initial et qu'il y a un hash, le traiter après avoir forcé le défilement vers le haut
+      // Vider tout hash dans l'URL pour éviter tout défilement automatique
       if (window.location.hash) {
-        setTimeout(() => {
-          const element = document.querySelector(window.location.hash);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 300); // Augmenter le délai pour s'assurer que le défilement vers le haut a eu lieu
-      } else {
-        // Si pas de hash, s'assurer que l'URL ne contient pas de fragment
-        if (window.location.href.includes('#')) {
-          window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
-        }
+        window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
       }
       
-      setIsInitialLoad(false);
+      // N'activer le traitement du hash qu'après avoir garantit que le défilement est en haut
+      setTimeout(() => {
+        setIsInitialLoad(false);
+      }, 500);
     }
   }, [isInitialLoad]);
   
