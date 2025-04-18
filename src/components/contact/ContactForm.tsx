@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 import { Mail } from 'lucide-react';
@@ -148,7 +147,6 @@ const ContactForm = () => {
                         ? "border-yellow-400 focus:ring-yellow-400"
                         : "border-gray-200 focus:border-indigo-400 focus:ring-indigo-400"
                 )}
-                autoFocus
               />
               
               <ContactFeedbackMessage 
