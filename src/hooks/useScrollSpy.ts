@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 interface UseScrollSpyOptions { 
   sectionIds?: string[]; 
   updateHash?: boolean;
+  disableInitialDetection?: boolean; // Nouvelle option
 }
 
 export const useScrollSpy = ({
   sectionIds = [],
-  updateHash = false // Par défaut, ne pas mettre à jour le hash
+  updateHash = false,
+  disableInitialDetection = false // Par défaut, active la détection immédiate
 }: UseScrollSpyOptions = {}) => {
   const [activeSection, setActiveSection] = useState<string|null>(null);
   const [hasUserScrolled, setHasUserScrolled] = useState(false);
@@ -24,9 +26,10 @@ export const useScrollSpy = ({
     };
   }, []);
   
-  // observe after first scroll
+  // observe after first scroll or immediately if not disabled
   useEffect(() => {
-    if (!hasUserScrolled || !sectionIds.length) return;
+    // Ne pas observer si on a désactivé la détection initiale ET que l'utilisateur n'a pas encore défilé
+    if ((disableInitialDetection && !hasUserScrolled) || !sectionIds.length) return;
     
     const els = sectionIds
       .map(id => document.getElementById(id))
@@ -62,7 +65,7 @@ export const useScrollSpy = ({
     
     els.forEach(el => obs.observe(el));
     return () => obs.disconnect();
-  }, [hasUserScrolled, sectionIds, updateHash]);
+  }, [hasUserScrolled, sectionIds, updateHash, disableInitialDetection]);
   
   return { activeSection };
 };

@@ -24,6 +24,7 @@ const ScrollToTop = () => {
   
   React.useEffect(() => {
     // Only scroll to top on actual page changes (not hash changes)
+    // Ignorer complètement les URL avec des hash pour éviter de perturber la navigation par ancre
     if (!window.location.hash) {
       window.scrollTo(0, 0);
     }

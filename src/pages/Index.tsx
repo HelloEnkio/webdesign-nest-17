@@ -27,28 +27,29 @@ const Index: React.FC = () => {
     'contact-section'
   ];
   
-  // Utiliser le hook avec updateHash=false pour éviter les changements de hash automatiques
+  // Utiliser le hook avec options améliorées
   const { activeSection } = useScrollSpy({ 
     sectionIds: sectionIds,
-    updateHash: false
+    updateHash: false,
+    disableInitialDetection: true // Désactiver la détection initiale pour éviter le défilement indésirable
   });
 
   useEffect(() => {
     // Forcer le défilement vers le haut lors du chargement initial
     if (isInitialLoad) {
-      // Si c'est le chargement initial et qu'il y a un hash, attendre un peu puis défiler
+      // Forcer le défilement vers le haut, quelle que soit la situation
+      window.scrollTo(0, 0);
+      
+      // Si c'est le chargement initial et qu'il y a un hash, le traiter après avoir forcé le défilement vers le haut
       if (window.location.hash) {
         setTimeout(() => {
           const element = document.querySelector(window.location.hash);
           if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
           }
-        }, 100);
+        }, 300); // Augmenter le délai pour s'assurer que le défilement vers le haut a eu lieu
       } else {
-        // Si pas de hash, forcer le défilement vers le haut
-        window.scrollTo(0, 0);
-        
-        // Assurons-nous que l'URL ne contient pas de fragment
+        // Si pas de hash, s'assurer que l'URL ne contient pas de fragment
         if (window.location.href.includes('#')) {
           window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
         }
