@@ -1,6 +1,7 @@
 
 import { FormState } from '@/hooks/use-contact-form';
 import { Resend } from 'resend';
+import { RESEND_API_KEY } from '@/config/apiKeys';
 
 export async function sendContactForm(formData: FormState, recaptchaToken: string): Promise<{ success: boolean; message: string }> {
   try {
@@ -10,12 +11,12 @@ export async function sendContactForm(formData: FormState, recaptchaToken: strin
       throw new Error('Échec de la vérification reCAPTCHA');
     }
 
-    const resendKey = localStorage.getItem('resend_api_key');
-    if (!resendKey) {
+    // Utiliser la clé API depuis la configuration
+    if (!RESEND_API_KEY || RESEND_API_KEY === "re_yourKeyHere") {
       throw new Error('Clé API Resend non configurée');
     }
 
-    const resend = new Resend(resendKey);
+    const resend = new Resend(RESEND_API_KEY);
     
     // Format du contenu de l'email
     const { name, projectType, projectDescription, contact } = formData;
@@ -71,4 +72,3 @@ async function verifyRecaptcha(token: string): Promise<{ success: boolean }> {
     return { success: false };
   }
 }
-

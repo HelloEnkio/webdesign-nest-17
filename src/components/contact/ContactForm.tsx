@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -11,7 +10,6 @@ import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
 import SubmitButton from './SubmitButton';
 import ToggleDetailsButton from './ToggleDetailsButton';
-import { ResendKeyManager } from './ResendKeyManager';
 
 // Replace with your actual reCAPTCHA site key
 const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"; // This is Google's test key
@@ -28,7 +26,7 @@ const ContactForm = () => {
     isSubmitting,
     contactType,
     formError,
-    recaptchaToken, // Added this to the destructured values
+    recaptchaToken,
     setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
@@ -151,8 +149,6 @@ const ContactForm = () => {
             hello@enkio.fr
           </motion.a>
         </motion.div>
-        
-        <ResendKeyManager />
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mt-4">
