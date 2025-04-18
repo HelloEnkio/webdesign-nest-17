@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 
@@ -60,8 +59,8 @@ export const useNavigation = () => {
     
     document.documentElement.classList.add('smooth-scroll');
     
-    // Mettre à jour l'URL pour utiliser le hash de la section hero
-    window.history.replaceState(null, document.title, '#hero-section');
+    // Mise à jour de l'URL pour supprimer tout hash
+    window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
     
     window.scrollTo({
       top: 0,
