@@ -17,6 +17,19 @@ export const useScrollSpy = ({
   updateUrlHash = true
 }: UseScrollSpyOptions = {}) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  // On n'active le hash qu'après un défilement manuel
+  useEffect(() => {
+    const onFirst = () => {
+      setHasScrolled(true);
+      window.removeEventListener('scroll', onFirst);
+    };
+
+    window.addEventListener('scroll', onFirst, { once: true, passive: true });
+    
+    return () => window.removeEventListener('scroll', onFirst);
+  }, []);
 
   useEffect(() => {
     const sections = sectionIds
@@ -31,7 +44,8 @@ export const useScrollSpy = ({
           const currentSection = entry.target.id;
           setActiveSection(currentSection);
           
-          if (updateUrlHash) {
+          // On ne change le hash que si l'utilisateur a déjà scrollé
+          if (updateUrlHash && hasScrolled) {
             window.history.replaceState(
               null,
               document.title,
@@ -51,14 +65,15 @@ export const useScrollSpy = ({
     });
 
     const initDelay = 1500; // 1.5s
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       sections.forEach(el => observer.observe(el));
     }, initDelay);
 
     return () => {
+      clearTimeout(timer);
       sections.forEach(el => observer.unobserve(el));
     };
-  }, [sectionIds, offset, updateUrlHash]);
+  }, [sectionIds, offset, updateUrlHash, hasScrolled]);
 
   return { activeSection };
 };
