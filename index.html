@@ -2,18 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script>
-      // Désactive la restauration de scroll native
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
-      // Supprime immédiatement tout hash pour éviter le jump automatique
-      if (location.hash) {
-        history.replaceState(null, document.title, location.pathname + location.search);
-      }
-      // Force la page en haut
-      window.scrollTo(0, 0);
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>webdesign-nest</title>
@@ -31,6 +19,18 @@
   </head>
 
   <body>
+    <script>
+      // Désactive la restauration de scroll native
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      // Supprime immédiatement tout hash pour éviter le jump automatique
+      if (location.hash) {
+        history.replaceState(null, document.title, location.pathname + location.search);
+      }
+      // Force la page en haut
+      window.scrollTo(0, 0);
+    </script>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
