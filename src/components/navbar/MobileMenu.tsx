@@ -37,8 +37,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
       >
         <div className="px-4 py-4 space-y-4">
           <a 
-            href="#" 
-            onClick={(e) => onScrollToSection("", e)}
+            href="#hero-section" 
+            onClick={(e) => onScrollToSection("hero-section", e)}
             className="block px-3 py-2 rounded-lg text-base font-medium text-neutral-700 hover:bg-neutral-100"
           >
             Accueil

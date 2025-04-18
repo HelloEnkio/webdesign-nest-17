@@ -18,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const handleScrollToSection = (sectionId: string, e: React.MouseEvent) => {
     e.preventDefault();
     
-    if (sectionId === "hero-section" || sectionId === "") {
+    if (sectionId === "hero-section") {
       // Pour le lien d'accueil ou hero section, défiler vers le haut
       scrollToTop(e, isHomePage, handleMobileItemClick);
     } else {
