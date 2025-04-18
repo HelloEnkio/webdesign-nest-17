@@ -18,14 +18,13 @@ export const useScrollSpy = (sectionIds: string[]) => {
 
     const options = {
       root: null,
-      // déclenchement quand la section entre au centre du viewport
-      rootMargin: '-50% 0px -50% 0px',
-      threshold: 0,
+      rootMargin: '0px',
+      threshold: 0.5,
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
+        if (entry.intersectionRatio >= 0.5) {
           setActiveSection(entry.target.id);
           if (hasScrolled) {
             window.history.replaceState(null, document.title, `#${entry.target.id}`);
@@ -44,3 +43,4 @@ export const useScrollSpy = (sectionIds: string[]) => {
 
   return { activeSection };
 };
+
