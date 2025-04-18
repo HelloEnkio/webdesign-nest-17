@@ -15,9 +15,16 @@ const Footer = lazy(() => import('@/components/Footer'));
 const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
-  // Force scroll to top on component mount
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Only scroll if there's a hash on mount
+    if (window.location.hash) {
+      setTimeout(() => {
+        const element = document.querySelector(window.location.hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
   }, []);
   
   return (
