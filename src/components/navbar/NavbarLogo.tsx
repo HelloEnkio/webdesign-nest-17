@@ -21,7 +21,7 @@ const NavbarLogo: React.FC<NavbarLogoProps> = ({ isScrolled, onLogoClick }) => {
         "text-xl font-bold tracking-tight bg-gradient-to-r bg-clip-text text-transparent",
         isScrolled ? "from-black to-neutral-500" : "from-white to-gray-300"
       )}>
-        Studio<span className="font-light">.Web</span>
+        Enkio
       </span>
     </div>
   );

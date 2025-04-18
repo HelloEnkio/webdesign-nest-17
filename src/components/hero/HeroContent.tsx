@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -32,6 +33,14 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
     const servicesSection = document.getElementById('services-section');
     if (servicesSection) {
       servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+  
+  const scrollToContact = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact-section');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -71,6 +80,7 @@ const HeroContent: React.FC<HeroContentProps> = ({ titleRef, subtitleRef, button
         <Button 
           size="lg" 
           className="group relative overflow-hidden rounded-full shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all duration-500"
+          onClick={scrollToContact}
         >
           <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-500 opacity-100"></span>
           <span className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>

@@ -12,9 +12,6 @@ const MinimalLoading = () => <div className="min-h-screen"></div>;
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const MentionsLegales = lazy(() => import("./pages/MentionsLegales"));
-const PolitiqueConfidentialite = lazy(() => import("./pages/PolitiqueConfidentialite"));
-const CGV = lazy(() => import("./pages/CGV"));
 
 const queryClient = new QueryClient();
 
@@ -44,9 +41,6 @@ const AppRoutes = () => {
       <Suspense fallback={<MinimalLoading />}>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/mentions-legales" element={<MentionsLegales />} />
-          <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
-          <Route path="/cgv" element={<CGV />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

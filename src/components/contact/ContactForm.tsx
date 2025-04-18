@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 import { Mail } from 'lucide-react';
@@ -111,7 +112,7 @@ const ContactForm = () => {
             Discutons de votre projet
           </motion.h3>
           <motion.a 
-            href="mailto:contact@studio-web.fr" 
+            href="mailto:hello@enkio.fr" 
             className="flex items-center text-indigo-600 hover:text-indigo-700 transition-colors mt-2 md:mt-0"
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -119,7 +120,7 @@ const ContactForm = () => {
             whileHover={{ scale: 1.03 }}
           >
             <Mail className="w-4 h-4 mr-2" />
-            contact@studio-web.fr
+            hello@enkio.fr
           </motion.a>
         </motion.div>
         

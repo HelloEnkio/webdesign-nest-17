@@ -1,7 +1,7 @@
 
 import React, { useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Mail } from 'lucide-react';
 import { scrollToSectionById, scrollToTop } from '@/utils/navigationUtils';
 
 const Footer: React.FC = () => {
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
               Agence de design web créative spécialisée dans la création de sites web et d'applications élégants et performants pour tous types d'entreprises.
             </p>
             <div className="flex space-x-4">
-              <a href="mailto:contact@studio-web.fr" className="bg-neutral-800 p-2.5 rounded-full hover:bg-green-600 transition-colors">
+              <a href="mailto:hello@enkio.fr" className="bg-neutral-800 p-2.5 rounded-full hover:bg-green-600 transition-colors">
                 <Mail size={18} />
               </a>
             </div>
@@ -52,9 +52,9 @@ const Footer: React.FC = () => {
                       <a href="#hero-section" onClick={handleScrollToTop} className="text-neutral-400 hover:text-white transition-colors">
                         Accueil
                       </a> : 
-                      <Link to="/" className="text-neutral-400 hover:text-white transition-colors">
+                      <a href="/" className="text-neutral-400 hover:text-white transition-colors">
                         Accueil
-                      </Link>}
+                      </a>}
                   </li>
                   <li>
                     <a href="#services-section" onClick={e => handleSectionLink('services-section', e)} className="text-neutral-400 hover:text-white transition-colors">
@@ -78,26 +78,6 @@ const Footer: React.FC = () => {
                   </li>
                 </ul>
               </div>
-              <div>
-                <h5 className="text-sm font-medium text-neutral-300 mb-3">Légal</h5>
-                <ul className="space-y-3">
-                  <li>
-                    <Link to="/mentions-legales" className="text-neutral-400 hover:text-white transition-colors">
-                      Mentions légales
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/politique-confidentialite" className="text-neutral-400 hover:text-white transition-colors">
-                      Politique de confidentialité
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/cgv" className="text-neutral-400 hover:text-white transition-colors">
-                      CGV
-                    </Link>
-                  </li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
@@ -106,12 +86,8 @@ const Footer: React.FC = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-neutral-500 text-sm">
-            © {new Date().getFullYear()} Studio.Web. Tous droits réservés.
+            © {new Date().getFullYear()} Enkio. Tous droits réservés.
           </p>
-          
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            
-          </div>
         </div>
       </div>
     </footer>
