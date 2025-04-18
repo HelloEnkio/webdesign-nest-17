@@ -7,8 +7,7 @@ if ('scrollRestoration' in window.history) {
 if (window.location.hash) {
   window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
 }
-// Force la page en haut avant React
-window.scrollTo(0, 0);
+// Removing the forced scrollTo(0, 0) that was causing issues
 
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'

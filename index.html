@@ -28,8 +28,7 @@
       if (location.hash) {
         history.replaceState(null, document.title, location.pathname + location.search);
       }
-      // Force la page en haut
-      window.scrollTo(0, 0);
+      // Removing the forced scrollTo(0, 0) that was causing issues
     </script>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->

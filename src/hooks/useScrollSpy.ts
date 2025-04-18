@@ -3,70 +3,77 @@ import { useEffect, useState } from "react";
 
 interface UseScrollSpyOptions {
   sectionIds?: string[];
-  offset?: number;
   updateUrlHash?: boolean;
 }
 
 export const useScrollSpy = ({
   sectionIds = [],
-  offset = 0,
-  updateUrlHash = true
+  updateUrlHash = true,
 }: UseScrollSpyOptions = {}) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [hasUserScrolled, setHasUserScrolled] = useState(false);
 
-  // On n'active le hash qu'après un défilement manuel
+  // Only mark as "scrolled" on real user input
   useEffect(() => {
-    const onFirst = () => {
-      setHasScrolled(true);
-      window.removeEventListener('scroll', onFirst);
+    const markScrolled = () => {
+      setHasUserScrolled(true);
+      window.removeEventListener("wheel", markScrolled);
+      window.removeEventListener("touchmove", markScrolled);
     };
 
-    window.addEventListener('scroll', onFirst, { once: true, passive: true });
-    
-    return () => window.removeEventListener('scroll', onFirst);
+    window.addEventListener("wheel", markScrolled as any, { once: true, passive: true });
+    window.addEventListener("touchmove", markScrolled as any, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", markScrolled as any);
+      window.removeEventListener("touchmove", markScrolled as any);
+    };
   }, []);
 
   useEffect(() => {
-    const sections = sectionIds
-      .map(id => document.getElementById(id))
-      .filter(el => el !== null) as HTMLElement[];
-    
-    if (sections.length === 0) return;
+    if (sectionIds.length === 0 || typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      return;
+    }
 
-    const callback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const currentSection = entry.target.id;
-          setActiveSection(currentSection);
-          
-          // On ne change le hash que si l'utilisateur a déjà scrollé
-          if (updateUrlHash && hasScrolled) {
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (!elements.length) return;
+
+    // Only update the hash when the section is at least 50% in view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.intersectionRatio >= 0.5)
+          .sort((a, b) =>
+            Math.abs(a.boundingClientRect.top + a.boundingClientRect.height / 2 - window.innerHeight / 2) -
+            Math.abs(b.boundingClientRect.top + b.boundingClientRect.height / 2 - window.innerHeight / 2)
+          );
+
+        if (visible.length > 0) {
+          const current = visible[0].target.id;
+          setActiveSection(current);
+
+          if (updateUrlHash && hasUserScrolled) {
             window.history.replaceState(
               null,
               document.title,
-              window.location.pathname + window.location.search + `#${currentSection}`
+              `${window.location.pathname}${window.location.search}#${current}`
             );
           }
         }
-      });
-    };
+      },
+      {
+        root: null,
+        threshold: [0.5],
+        rootMargin: "0px 0px -50% 0px",
+      }
+    );
 
-    const observer = new IntersectionObserver(callback, {
-      rootMargin: `${-offset}px 0px 0px 0px`
-    });
-
-    const initDelay = 1500; // 1.5s
-    const timer = setTimeout(() => {
-      sections.forEach(el => observer.observe(el));
-    }, initDelay);
-
-    return () => {
-      clearTimeout(timer);
-      sections.forEach(el => observer.unobserve(el));
-    };
-  }, [sectionIds, offset, updateUrlHash, hasScrolled]);
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [sectionIds, hasUserScrolled, updateUrlHash]);
 
   return { activeSection };
 };
-
