@@ -3,6 +3,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { Toaster } from '@/components/ui/toaster';
+import { useScrollSpy } from '@/hooks/useScrollSpy';
 
 // Lazy-load non-critical components with lower priority
 const Services = lazy(() => import('@/components/Services'));
@@ -16,12 +17,27 @@ const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  
+  // Définir les sections pour le scroll spy
+  const sectionIds = [
+    'hero-section',
+    'services-section',
+    'portfolio-section',
+    'process-section',
+    'contact-section'
+  ];
+  
+  // Utiliser le hook avec updateHash=false pour éviter les changements de hash automatiques
+  const { activeSection } = useScrollSpy({ 
+    sectionIds: sectionIds,
+    updateHash: false
+  });
 
   useEffect(() => {
-    // Handle hash navigation on initial load only
+    // Forcer le défilement vers le haut lors du chargement initial
     if (isInitialLoad) {
+      // Si c'est le chargement initial et qu'il y a un hash, attendre un peu puis défiler
       if (window.location.hash) {
-        // If there's a hash, scroll to that element after a short delay
         setTimeout(() => {
           const element = document.querySelector(window.location.hash);
           if (element) {
@@ -29,30 +45,18 @@ const Index: React.FC = () => {
           }
         }, 100);
       } else {
-        // If there's no hash and it's the initial load, scroll to top
+        // Si pas de hash, forcer le défilement vers le haut
         window.scrollTo(0, 0);
+        
+        // Assurons-nous que l'URL ne contient pas de fragment
+        if (window.location.href.includes('#')) {
+          window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+        }
       }
+      
       setIsInitialLoad(false);
     }
   }, [isInitialLoad]);
-
-  // Add section IDs for the useScrollSpy hook to track
-  useEffect(() => {
-    // Get all section IDs for scroll spy
-    const sectionIds = [
-      'hero-section',
-      'services-section',
-      'portfolio-section',
-      'process-section',
-      'contact-section'
-    ];
-
-    // This is just to ensure the component knows about the section IDs
-    // The actual scroll spy logic is in useScrollSpy.ts
-    return () => {
-      // Cleanup if needed
-    };
-  }, []);
   
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
