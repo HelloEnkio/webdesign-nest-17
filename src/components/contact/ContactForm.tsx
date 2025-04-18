@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -6,11 +5,12 @@ import { Mail, AlertCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
-import { simulateSendContactForm } from '@/utils/emailUtils';
+import { sendContactForm } from '@/utils/emailUtils';
 import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
 import SubmitButton from './SubmitButton';
 import ToggleDetailsButton from './ToggleDetailsButton';
+import { ResendKeyManager } from './ResendKeyManager';
 
 // Replace with your actual reCAPTCHA site key
 const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"; // This is Google's test key
@@ -36,7 +36,6 @@ const ContactForm = () => {
     resetForm
   } = useContactForm();
 
-  // Animation for container
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -61,8 +60,7 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // In a real application, you would call sendContactForm instead
-      const result = await simulateSendContactForm(formState);
+      const result = await sendContactForm(formState, recaptchaToken || '');
       
       if (result.success) {
         resetForm();
@@ -105,7 +103,6 @@ const ContactForm = () => {
       });
     } finally {
       setIsSubmitting(false);
-      // Reset reCAPTCHA
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
       }
@@ -152,6 +149,8 @@ const ContactForm = () => {
             hello@enkio.fr
           </motion.a>
         </motion.div>
+        
+        <ResendKeyManager />
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mt-4">
