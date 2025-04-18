@@ -1,8 +1,8 @@
+
 import React, { lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { Toaster } from '@/components/ui/toaster';
-import { useScrollSpy } from '@/hooks/useScrollSpy';
 
 // Lazy-load non-critical components with lower priority
 const Services = lazy(() => import('@/components/Services'));
@@ -15,14 +15,6 @@ const Footer = lazy(() => import('@/components/Footer'));
 const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
-  const { activeSection } = useScrollSpy([
-    'hero-section',
-    'services-section', 
-    'portfolio-section',
-    'process-section',
-    'contact-section'
-  ]);
-
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       <Navbar />
