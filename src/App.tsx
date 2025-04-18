@@ -1,14 +1,10 @@
 
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, useLocation } from "react-router-dom";
-
-// Load critical components eagerly
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
 
 // Use a minimal loading indicator instead of full LoadingScreen
 const MinimalLoading = () => <div className="min-h-screen"></div>;
@@ -22,12 +18,15 @@ const CGV = lazy(() => import("./pages/CGV"));
 
 const queryClient = new QueryClient();
 
-// ScrollToTop component to handle scroll restoration
+// ScrollToTop component handles scroll restoration for page navigation only
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  React.useEffect(() => {
+    // Only scroll to top on actual page changes (not hash changes)
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
   
   return null;

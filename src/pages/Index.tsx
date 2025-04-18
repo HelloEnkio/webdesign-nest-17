@@ -1,5 +1,5 @@
 
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { Toaster } from '@/components/ui/toaster';
@@ -15,22 +15,51 @@ const Footer = lazy(() => import('@/components/Footer'));
 const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
   useEffect(() => {
-    // Only scroll if there's a hash on mount
-    if (window.location.hash) {
-      setTimeout(() => {
-        const element = document.querySelector(window.location.hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+    // Handle hash navigation on initial load only
+    if (isInitialLoad) {
+      if (window.location.hash) {
+        // If there's a hash, scroll to that element after a short delay
+        setTimeout(() => {
+          const element = document.querySelector(window.location.hash);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else {
+        // If there's no hash and it's the initial load, scroll to top
+        window.scrollTo(0, 0);
+      }
+      setIsInitialLoad(false);
     }
+  }, [isInitialLoad]);
+
+  // Add section IDs for the useScrollSpy hook to track
+  useEffect(() => {
+    // Get all section IDs for scroll spy
+    const sectionIds = [
+      'hero-section',
+      'services-section',
+      'portfolio-section',
+      'process-section',
+      'contact-section'
+    ];
+
+    // This is just to ensure the component knows about the section IDs
+    // The actual scroll spy logic is in useScrollSpy.ts
+    return () => {
+      // Cleanup if needed
+    };
   }, []);
   
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       <Navbar />
-      <Hero />
+      <div id="hero-section">
+        <Hero />
+      </div>
       
       <div id="services-section">
         <Suspense fallback={<SectionLoader />}>
