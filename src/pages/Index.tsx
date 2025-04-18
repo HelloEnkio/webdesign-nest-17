@@ -1,5 +1,4 @@
-
-import React, { useEffect, lazy, Suspense } from 'react';
+import React, { useLayoutEffect, useEffect, lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { Toaster } from '@/components/ui/toaster';
@@ -16,66 +15,26 @@ const Footer = lazy(() => import('@/components/Footer'));
 const SectionLoader = () => <div className="w-full py-20"></div>;
 
 const Index: React.FC = () => {
-  // Setup scrollspy to track visible sections
   const { activeSection } = useScrollSpy({
     sectionIds: ['hero-section', 'services-section', 'portfolio-section', 'process-section', 'contact-section'],
     threshold: 0.5
   });
 
-  useEffect(() => {
-    // Nettoyer tout hash résiduel au premier chargement
+  // Nettoyer le hash et forcer le scroll en haut AVANT le paint du navigateur
+  useLayoutEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
-    
-    // Cette fonction gère uniquement le défilement initial après chargement
-    const handleInitialScroll = () => {
-      // Si l'URL ne contient pas de hash, ne rien faire (rester en haut de page)
-      if (!window.location.hash) {
-        console.log("No hash in URL, staying at the top of the page");
-        return;
-      }
-      
-      const targetId = window.location.hash.substring(1);
-      
-      // Toujours mettre à jour l'URL hash immédiatement
-      window.history.replaceState(null, document.title, `#${targetId}`);
-      
-      // Fonction pour tenter le défilement avec tentatives multiples
-      const attemptScroll = (attemptsLeft = 20, delay = 100) => {
-        const targetElement = document.getElementById(targetId);
-        
-        if (targetElement) {
-          console.log(`Found target element #${targetId}, scrolling to it`);
-          
-          document.documentElement.classList.add('smooth-scroll');
-          targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          
-          setTimeout(() => {
-            document.documentElement.classList.remove('smooth-scroll');
-          }, 1000);
-          
-          return; // Succès, sortir de la boucle de tentatives
-        }
-        
-        if (attemptsLeft > 0) {
-          console.log(`Target #${targetId} not found yet, retrying... (${attemptsLeft} attempts left)`);
-          // Planifier une autre tentative après le délai
-          setTimeout(() => attemptScroll(attemptsLeft - 1, delay), delay);
-        } else {
-          console.log(`Failed to find #${targetId} after multiple attempts`);
-        }
-      };
-      
-      // Démarrer le processus de polling pour trouver et défiler vers la cible
-      attemptScroll();
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const handleFirstScroll = () => {
+      window.removeEventListener('scroll', handleFirstScroll);
     };
     
-    // Attendre un court instant pour que tout le DOM essentiel soit chargé
-    setTimeout(handleInitialScroll, 100);
-    
-    // Pas de dépendances dans useEffect pour garantir qu'il ne s'exécute qu'une fois
+    window.addEventListener('scroll', handleFirstScroll);
+    return () => {
+      window.removeEventListener('scroll', handleFirstScroll);
+    };
   }, []);
 
   return (
