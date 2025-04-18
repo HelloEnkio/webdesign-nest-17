@@ -14,6 +14,8 @@ export function useContactForm() {
   const [showDetails, setShowDetails] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [contactType, setContactType] = useState<ContactType>(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   
   const [formState, setFormState] = useState<FormState>({
     name: '',
@@ -67,6 +69,30 @@ export function useContactForm() {
     return contactType !== null && formState.contact.trim().length > 3;
   };
   
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
+    if (!token) {
+      setFormError("Veuillez valider le captcha");
+    } else {
+      setFormError(null);
+    }
+  };
+  
+  const validateForm = (): boolean => {
+    if (!validateContact()) {
+      setFormError("Veuillez fournir un moyen de contact valide");
+      return false;
+    }
+    
+    if (!recaptchaToken) {
+      setFormError("Veuillez valider le captcha");
+      return false;
+    }
+    
+    setFormError(null);
+    return true;
+  };
+  
   const resetForm = () => {
     setFormState({
       name: '',
@@ -76,6 +102,8 @@ export function useContactForm() {
     });
     setShowDetails(false);
     setIsSubmitting(false);
+    setRecaptchaToken(null);
+    setFormError(null);
   };
 
   return {
@@ -83,12 +111,14 @@ export function useContactForm() {
     formState,
     isSubmitting,
     contactType,
+    formError,
     setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
     validateContact,
+    validateForm,
+    handleRecaptchaChange,
     resetForm
   };
 }
-

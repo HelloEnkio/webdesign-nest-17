@@ -1,30 +1,38 @@
 
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
-import { Mail } from 'lucide-react';
+import ReCAPTCHA from "react-google-recaptcha";
+import { Mail, AlertCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
+import { simulateSendContactForm } from '@/utils/emailUtils';
 import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
 import SubmitButton from './SubmitButton';
 import ToggleDetailsButton from './ToggleDetailsButton';
 
+// Replace with your actual reCAPTCHA site key
+const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"; // This is Google's test key
+
 const ContactForm = () => {
   const { toast } = useToast();
   const formContainerRef = useRef<HTMLDivElement>(null);
   const contactInputRef = useRef<HTMLInputElement>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   
   const {
     showDetails,
     formState,
     isSubmitting,
     contactType,
+    formError,
     setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    validateContact,
+    validateForm,
+    handleRecaptchaChange,
     resetForm
   } = useContactForm();
 
@@ -40,10 +48,10 @@ const ContactForm = () => {
     }
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateContact()) {
+    if (!validateForm()) {
       if (contactInputRef.current) {
         contactInputRef.current.focus();
       }
@@ -52,35 +60,56 @@ const ContactForm = () => {
     
     setIsSubmitting(true);
     
-    setTimeout(() => {
-      console.log('Form submitted:', formState);
+    try {
+      // In a real application, you would call sendContactForm instead
+      const result = await simulateSendContactForm(formState);
       
-      resetForm();
-      
-      let contactMessage = "";
-      if (contactType === 'email') {
-        contactMessage = "Nous vous recontacterons rapidement par e-mail.";
-      } else if (contactType === 'phone') {
-        contactMessage = "Nous vous rappellerons dans les plus brefs délais.";
-      } else {
-        contactMessage = "Nous vous recontacterons très bientôt.";
-      }
-      
-      toast({
-        title: "Message envoyé !",
-        description: contactMessage,
-        variant: "default",
-      });
+      if (result.success) {
+        resetForm();
+        
+        let contactMessage = "";
+        if (contactType === 'email') {
+          contactMessage = "Nous vous recontacterons rapidement par e-mail.";
+        } else if (contactType === 'phone') {
+          contactMessage = "Nous vous rappellerons dans les plus brefs délais.";
+        } else {
+          contactMessage = "Nous vous recontacterons très bientôt.";
+        }
+        
+        toast({
+          title: "Message envoyé !",
+          description: contactMessage,
+          variant: "default",
+        });
 
-      if (formContainerRef.current) {
-        formContainerRef.current.classList.add('success-animation');
-        setTimeout(() => {
-          if (formContainerRef.current) {
-            formContainerRef.current.classList.remove('success-animation');
-          }
-        }, 2000);
+        if (formContainerRef.current) {
+          formContainerRef.current.classList.add('success-animation');
+          setTimeout(() => {
+            if (formContainerRef.current) {
+              formContainerRef.current.classList.remove('success-animation');
+            }
+          }, 2000);
+        }
+      } else {
+        toast({
+          title: "Erreur",
+          description: result.message,
+          variant: "destructive",
+        });
       }
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Un problème est survenu lors de l'envoi de votre message.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+      // Reset reCAPTCHA
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+    }
   };
   
   return (
@@ -168,6 +197,21 @@ const ContactForm = () => {
             handleInputChange={handleInputChange}
             handleProjectTypeSelect={handleProjectTypeSelect}
           />
+          
+          <div className="mt-6">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={RECAPTCHA_SITE_KEY}
+              onChange={handleRecaptchaChange}
+            />
+            
+            {formError && (
+              <div className="mt-2 flex items-center text-red-500 text-sm">
+                <AlertCircle className="w-4 h-4 mr-1" />
+                {formError}
+              </div>
+            )}
+          </div>
           
           <SubmitButton isSubmitting={isSubmitting} />
         </form>
