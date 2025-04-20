@@ -18,9 +18,9 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.HOSTINGER_HOST }}
-          username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          host: ${{ secrets.HOST_SSH_HOST }}
+          username: ${{ secrets.HOST_SSH_USER }}
+          key: ${{ secrets.HOST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
             cd /path/to/remote/folder
