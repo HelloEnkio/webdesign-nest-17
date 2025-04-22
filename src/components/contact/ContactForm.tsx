@@ -12,7 +12,7 @@ import SubmitButton from './SubmitButton';
 import ToggleDetailsButton from './ToggleDetailsButton';
 
 // Replace with your actual reCAPTCHA site key
-const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"; // This is Google's test key
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 
 const ContactForm = () => {
   const { toast } = useToast();
