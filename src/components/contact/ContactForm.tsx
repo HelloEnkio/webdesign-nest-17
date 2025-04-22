@@ -61,6 +61,13 @@ const ContactForm = () => {
     
     try {
       const result = await sendContactForm(formState, recaptchaToken || '');
+      const result = await sendContactForm({
+        name:          formState.name        || '—',           
+        email:         contactType === 'email' ? formState.contact : '',
+        phone:         contactType === 'phone' ? formState.contact : '',
+        message:       `${formState.projectType}\n${formState.details}`,
+        captchaToken:  recaptchaToken || '',
+      });
       
       if (result.success) {
         resetForm();
