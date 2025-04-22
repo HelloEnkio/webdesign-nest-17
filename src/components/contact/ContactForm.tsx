@@ -60,7 +60,6 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      const result = await sendContactForm(formState, recaptchaToken || '');
       const result = await sendContactForm({
         name:          formState.name        || '—',           
         email:         contactType === 'email' ? formState.contact : '',
