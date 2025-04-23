@@ -5,14 +5,17 @@ import { Mail, AlertCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
+// Assurez-vous que le chemin d'importation est correct
 import { sendContactForm } from '@/utils/emailUtils';
 import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
 import SubmitButton from './SubmitButton';
 import ToggleDetailsButton from './ToggleDetailsButton';
 
+// Log pour vérifier si la clé de site reCAPTCHA est chargée correctement par Vite
+console.log('[FRONTEND ContactForm] Clé reCAPTCHA reçue via import.meta.env:', import.meta.env.VITE_RECAPTCHA_SITE_KEY);
 
-// Replace with your actual reCAPTCHA site key
+// Récupération de la clé de site reCAPTCHA via les variables d'environnement Vite
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 
 const ContactForm = () => {
@@ -20,7 +23,7 @@ const ContactForm = () => {
   const formContainerRef = useRef<HTMLDivElement>(null);
   const contactInputRef = useRef<HTMLInputElement>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-  
+
   const {
     showDetails,
     formState,
@@ -39,39 +42,45 @@ const ContactForm = () => {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { 
+      transition: {
         when: "beforeChildren",
         staggerChildren: 0.2
       }
     }
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // <-- LOG : État avant validation et envoi
+    console.log('[FRONTEND ContactForm] handleSubmit déclenché. État actuel:', { formState, recaptchaToken });
+
     if (!validateForm()) {
       if (contactInputRef.current) {
         contactInputRef.current.focus();
       }
+      // <-- LOG : Validation échouée
+      console.warn('[FRONTEND ContactForm] Validation échouée avant envoi.');
       return;
     }
-    
+
+    // <-- LOG : Juste avant d'appeler sendContactForm
+    console.log('[FRONTEND ContactForm] Validation réussie, appel de sendContactForm...');
     setIsSubmitting(true);
-    
+
     try {
-      const result = await sendContactForm({
-        name:          formState.name        || '—',           
-        email:         contactType === 'email' ? formState.contact : '',
-        phone:         contactType === 'phone' ? formState.contact : '',
-        message:       `${formState.projectType}\n${formState.details}`,
-        captchaToken:  recaptchaToken || '',
-      });
-      
+      // Assurez-vous que les arguments passés correspondent à la signature de sendContactForm
+      // D'après votre emailUtils.ts, il attend (formData, captchaToken)
+      const result = await sendContactForm(formState, recaptchaToken || '');
+
+      // <-- LOG : Résultat de sendContactForm
+      console.log('[FRONTEND ContactForm] Résultat de sendContactForm:', result);
+
       if (result.success) {
         resetForm();
-        
+
         let contactMessage = "";
         if (contactType === 'email') {
           contactMessage = "Nous vous recontacterons rapidement par e-mail.";
@@ -80,7 +89,7 @@ const ContactForm = () => {
         } else {
           contactMessage = "Nous vous recontacterons très bientôt.";
         }
-        
+
         toast({
           title: "Message envoyé !",
           description: contactMessage,
@@ -103,6 +112,8 @@ const ContactForm = () => {
         });
       }
     } catch (error) {
+       // <-- LOG : Erreur inattendue
+      console.error('[FRONTEND ContactForm] Erreur inattendue dans handleSubmit après sendContactForm:', error);
       toast({
         title: "Erreur",
         description: "Un problème est survenu lors de l'envoi de votre message.",
@@ -115,28 +126,28 @@ const ContactForm = () => {
       }
     }
   };
-  
+
   return (
-    <motion.div 
+    <motion.div
       ref={formContainerRef}
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
-      <motion.div 
+      <motion.div
         className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 transition-all duration-300 hover:shadow-md"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <motion.div 
+        <motion.div
           className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
           variants={{
             hidden: { opacity: 0 },
             visible: { opacity: 1 }
           }}
         >
-          <motion.h3 
+          <motion.h3
             className="text-lg font-semibold text-gray-900"
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -144,8 +155,8 @@ const ContactForm = () => {
           >
             Discutons de votre projet
           </motion.h3>
-          <motion.a 
-            href="mailto:hello@enkio.fr" 
+          <motion.a
+            href="mailto:hello@enkio.fr"
             className="flex items-center text-indigo-600 hover:text-indigo-700 transition-colors mt-2 md:mt-0"
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -156,7 +167,7 @@ const ContactForm = () => {
             hello@enkio.fr
           </motion.a>
         </motion.div>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mt-4">
             <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-2">
@@ -166,49 +177,49 @@ const ContactForm = () => {
               <input
                 type="text"
                 id="contact"
-                name="contact"
+                name="contact" // Assurez-vous que ce nom correspond à ce que useContactForm attend
                 ref={contactInputRef}
                 value={formState.contact}
                 onChange={handleInputChange}
                 placeholder="Votre email ou numéro de téléphone"
                 className={cn(
                   "w-full px-4 py-3 rounded-lg border focus:ring-1 transition-all",
-                  contactType === 'email' 
-                    ? "border-indigo-400 focus:ring-indigo-400" 
-                    : contactType === 'phone' 
-                      ? "border-green-400 focus:ring-green-400" 
+                  contactType === 'email'
+                    ? "border-indigo-400 focus:ring-indigo-400"
+                    : contactType === 'phone'
+                      ? "border-green-400 focus:ring-green-400"
                       : contactType === 'uncertain'
                         ? "border-yellow-400 focus:ring-yellow-400"
                         : "border-gray-200 focus:border-indigo-400 focus:ring-indigo-400"
                 )}
               />
-              
-              <ContactFeedbackMessage 
-                contactType={contactType} 
-                contactValue={formState.contact} 
+
+              <ContactFeedbackMessage
+                contactType={contactType}
+                contactValue={formState.contact}
               />
             </div>
           </div>
-          
-          <ToggleDetailsButton 
-            showDetails={showDetails} 
-            toggleShowDetails={toggleShowDetails} 
+
+          <ToggleDetailsButton
+            showDetails={showDetails}
+            toggleShowDetails={toggleShowDetails}
           />
-          
-          <FormDetailsSection 
+
+          <FormDetailsSection
             showDetails={showDetails}
             formState={formState}
             handleInputChange={handleInputChange}
             handleProjectTypeSelect={handleProjectTypeSelect}
           />
-          
+
           <div className="mt-6">
             <ReCAPTCHA
               ref={recaptchaRef}
-              sitekey={RECAPTCHA_SITE_KEY}
+              sitekey={RECAPTCHA_SITE_KEY} // Utilise la constante définie en haut
               onChange={handleRecaptchaChange}
             />
-            
+
             {formError && (
               <div className="mt-2 flex items-center text-red-500 text-sm">
                 <AlertCircle className="w-4 h-4 mr-1" />
@@ -216,11 +227,11 @@ const ContactForm = () => {
               </div>
             )}
           </div>
-          
+
           <SubmitButton isSubmitting={isSubmitting} />
         </form>
-        
-        <motion.div 
+
+        <motion.div
           className="mt-6 text-center text-xs text-gray-500"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 0.8, y: 0 }}
