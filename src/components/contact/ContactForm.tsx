@@ -2,44 +2,37 @@ import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Mail, AlertCircle } from 'lucide-react';
-// Importez useToast si vous l'utilisez toujours pour d'autres retours (ex: validation)
-// import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast"; // Supprimé car non utilisé pour la soumission
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
 // Supprimé: import { sendContactForm } from '@/utils/emailUtils';
 import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
-import SubmitButton from './SubmitButton'; // Assurez-vous que ce bouton fonctionne maintenant comme un simple bouton de soumission
+import SubmitButton from './SubmitButton'; // Assurez-vous que ce composant rend <button type="submit">
 import ToggleDetailsButton from './ToggleDetailsButton';
 
-// Log initial (peut être supprimé une fois que tout fonctionne)
-console.log('[FRONTEND ContactForm] Clé reCAPTCHA reçue via import.meta.env:', import.meta.env.VITE_RECAPTCHA_SITE_KEY);
-
-// Récupération de la clé de site reCAPTCHA via les variables d'environnement Vite
+// Récupération de la clé de site reCAPTCHA (toujours nécessaire pour le composant frontend)
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 
 const ContactForm = () => {
-  // const { toast } = useToast(); // Supprimé si plus utilisé pour la soumission
+  // const { toast } = useToast(); // Toast n'est plus utilisé ici pour la soumission
   const formContainerRef = useRef<HTMLDivElement>(null);
   const contactInputRef = useRef<HTMLInputElement>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  // Simplification potentielle du hook - gardez ce qui est nécessaire pour les inputs contrôlés
+  // Garde les états et handlers nécessaires pour contrôler les champs
   const {
     showDetails,
     formState,
-    // isSubmitting, // Supprimé
     contactType,
-    formError, // Peut-être encore utile pour la validation locale ? Sinon à supprimer.
-    // recaptchaToken, // Probablement plus nécessaire directement ici
-    // setIsSubmitting, // Supprimé
+    formError, // Peut encore servir pour une validation locale si vous en faites une
+    // recaptchaToken, // Plus directement nécessaire pour une soumission HTML standard
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    validateForm, // Peut-être utile pour désactiver le bouton submit ? Sinon à supprimer.
-    handleRecaptchaChange, // Gardé pour le composant ReCAPTCHA
-    // resetForm // La soumission standard navigue ou Formspree redirige
-  } = useContactForm();
+    // validateForm, // La validation se fera via les attributs 'required' ou par Formspree
+    handleRecaptchaChange, // Gardé car lié au composant ReCAPTCHA
+  } = useContactForm(); // Vous pouvez nettoyer ce hook plus tard pour enlever les états inutilisés
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -52,7 +45,7 @@ const ContactForm = () => {
     }
   };
 
-  // Plus de fonction handleSubmit asynchrone ici
+  // La fonction handleSubmit a été supprimée
 
   return (
     <motion.div
@@ -95,12 +88,13 @@ const ContactForm = () => {
           </motion.a>
         </motion.div>
 
-        {/* Modification de la balise form */}
+        {/* Formulaire pointant vers Formspree */}
         <form
           action="https://formspree.io/f/xgvkenaq"
           method="POST"
           className="space-y-6"
         >
+          {/* Champ Contact Principal */}
           <div className="mt-4">
             <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-2">
               Comment pouvons-nous vous contacter ?
@@ -114,7 +108,7 @@ const ContactForm = () => {
                 value={formState.contact}
                 onChange={handleInputChange}
                 placeholder="Votre email ou numéro de téléphone"
-                required // Ajout de la validation HTML simple
+                required // Validation HTML simple
                 className={cn(
                   "w-full px-4 py-3 rounded-lg border focus:ring-1 transition-all",
                   contactType === 'email'
@@ -133,35 +127,38 @@ const ContactForm = () => {
             </div>
           </div>
 
+          {/* Bouton pour afficher/masquer détails */}
           <ToggleDetailsButton
             showDetails={showDetails}
             toggleShowDetails={toggleShowDetails}
           />
 
-          {/* Assurez-vous que les inputs à l'intérieur ont des attributs 'name' si nécessaire */}
+          {/* Section des détails (assurez-vous que les inputs ici ont les bons 'name') */}
           <FormDetailsSection
             showDetails={showDetails}
             formState={formState}
-            handleInputChange={handleInputChange}
-            handleProjectTypeSelect={handleProjectTypeSelect}
+            handleInputChange={handleInputChange} // S'assurer que handleInputChange met à jour formState.name, formState.details etc.
+            handleProjectTypeSelect={handleProjectTypeSelect} // S'assurer que ceci met à jour formState.projectType
+            // IMPORTANT: Les <input> ou <textarea> pour Nom, Type de Projet, Détails dans ce composant
+            // doivent avoir les attributs name="name", name="projectType", name="details"
+            // pour que Formspree les reçoive. Sinon, utilisez les champs cachés ci-dessous.
           />
 
-          {/* Ajout de champs cachés pour les données non directement entrées */}
-          {/* Assurez-vous que formState contient bien 'name', 'projectType', 'details' */}
-          <input type="hidden" name="name" value={formState.name || ''} />
-          <input type="hidden" name="projectType" value={formState.projectType || ''} />
-          {/* Si details est dans FormDetailsSection, assurez-vous qu'il a un name="details" */}
-          {/* Ou envoyez-le via un champ caché si géré dans formState */}
-          <input type="hidden" name="details" value={formState.details || ''} />
+          {/* Optionnel: Champs cachés si les données ne sont pas dans des inputs visibles avec un 'name' */}
+          {/* Si FormDetailsSection n'a pas d'inputs avec name="name" etc, décommentez/ajoutez ici */}
+          {/* <input type="hidden" name="name" value={formState.name || ''} /> */}
+          {/* <input type="hidden" name="projectType" value={formState.projectType || ''} /> */}
+          {/* <input type="hidden" name="details" value={formState.details || ''} /> */}
 
-          {/* Champ reCAPTCHA (Formspree le détectera) */}
+
+          {/* Composant reCAPTCHA */}
           <div className="mt-6">
             <ReCAPTCHA
               ref={recaptchaRef}
-              sitekey={RECAPTCHA_SITE_KEY}
-              onChange={handleRecaptchaChange} // Gardé au cas où validateForm l'utilise
+              sitekey={RECAPTCHA_SITE_KEY} // Clé publique pour le widget
+              onChange={handleRecaptchaChange} // Peut être utile si validateForm vérifie que le captcha est coché
             />
-            {/* Affichage d'erreur locale (validation ou recaptcha non coché) */}
+            {/* Affichage d'erreur locale (si formError est toujours utilisé) */}
             {formError && (
               <div className="mt-2 flex items-center text-red-500 text-sm">
                 <AlertCircle className="w-4 h-4 mr-1" />
@@ -170,14 +167,20 @@ const ContactForm = () => {
             )}
           </div>
 
-          {/* Bouton de soumission standard */}
-          {/* Adaptez SubmitButton pour qu'il soit un <button type="submit"> */}
-          {/* S'il a besoin d'être désactivé, basez-le sur !validateForm() ou l'état du recaptcha */}
-          <SubmitButton /* isSubmitting={...} n'est plus pertinent ici */ />
-          {/* Alternative simple : <button type="submit" className="...">Envoyer</button> */}
-
+          {/* Bouton de soumission */}
+          {/* Assurez-vous que le composant SubmitButton rend bien <button type="submit"> */}
+          <SubmitButton />
+          {/* Si SubmitButton n'est pas adapté, remplacez par :
+          <button
+            type="submit"
+            className="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+          >
+            Envoyer le message
+          </button>
+          */}
         </form>
 
+        {/* Texte légal */}
         <motion.div
           className="mt-6 text-center text-xs text-gray-500"
           initial={{ opacity: 0, y: 10 }}
