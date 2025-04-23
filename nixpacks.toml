@@ -1,15 +1,11 @@
-# nixpacks.toml
+# nixpacks.toml - Attempt 2
 
-# Phase d'installation (déjà présente)
 [phases.install]
 cmds = ["npm install"]
 
-# Phase de build (ajoutez ceci !)
-# Exécute la commande pour construire le frontend dans le dossier ./dist
 [phases.build]
 cmds = ["bun run build"]
 
-# Phase de démarrage (ajoutez ceci !)
-# Définit comment lancer le serveur Node.js
+# Use 'cmds' (list) for consistency, even with one command
 [phases.start]
-cmd = "node server.js"
+cmds = ["node server.js"]
