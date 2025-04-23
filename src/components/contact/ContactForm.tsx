@@ -11,6 +11,8 @@ import FormDetailsSection from './FormDetailsSection';
 import SubmitButton from './SubmitButton';
 import ToggleDetailsButton from './ToggleDetailsButton';
 
+console.log('Clé reCAPTCHA reçue:', import.meta.env.VITE_RECAPTCHA_SITE_KEY); // <--- AJOUTEZ CECI
+
 // Replace with your actual reCAPTCHA site key
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 
