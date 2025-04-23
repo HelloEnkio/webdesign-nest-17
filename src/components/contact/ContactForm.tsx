@@ -2,42 +2,43 @@ import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Mail, AlertCircle } from 'lucide-react';
-import { useToast } from "@/hooks/use-toast";
+// Importez useToast si vous l'utilisez toujours pour d'autres retours (ex: validation)
+// import { useToast } from "@/hooks/use-toast";
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
-// Assurez-vous que le chemin d'importation est correct
-import { sendContactForm } from '@/utils/emailUtils';
+// Supprimé: import { sendContactForm } from '@/utils/emailUtils';
 import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
-import SubmitButton from './SubmitButton';
+import SubmitButton from './SubmitButton'; // Assurez-vous que ce bouton fonctionne maintenant comme un simple bouton de soumission
 import ToggleDetailsButton from './ToggleDetailsButton';
 
-// Log pour vérifier si la clé de site reCAPTCHA est chargée correctement par Vite
+// Log initial (peut être supprimé une fois que tout fonctionne)
 console.log('[FRONTEND ContactForm] Clé reCAPTCHA reçue via import.meta.env:', import.meta.env.VITE_RECAPTCHA_SITE_KEY);
 
 // Récupération de la clé de site reCAPTCHA via les variables d'environnement Vite
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 
 const ContactForm = () => {
-  const { toast } = useToast();
+  // const { toast } = useToast(); // Supprimé si plus utilisé pour la soumission
   const formContainerRef = useRef<HTMLDivElement>(null);
   const contactInputRef = useRef<HTMLInputElement>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
+  // Simplification potentielle du hook - gardez ce qui est nécessaire pour les inputs contrôlés
   const {
     showDetails,
     formState,
-    isSubmitting,
+    // isSubmitting, // Supprimé
     contactType,
-    formError,
-    recaptchaToken,
-    setIsSubmitting,
+    formError, // Peut-être encore utile pour la validation locale ? Sinon à supprimer.
+    // recaptchaToken, // Probablement plus nécessaire directement ici
+    // setIsSubmitting, // Supprimé
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    validateForm,
-    handleRecaptchaChange,
-    resetForm
+    validateForm, // Peut-être utile pour désactiver le bouton submit ? Sinon à supprimer.
+    handleRecaptchaChange, // Gardé pour le composant ReCAPTCHA
+    // resetForm // La soumission standard navigue ou Formspree redirige
   } = useContactForm();
 
   const containerVariants = {
@@ -51,81 +52,7 @@ const ContactForm = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // <-- LOG : État avant validation et envoi
-    console.log('[FRONTEND ContactForm] handleSubmit déclenché. État actuel:', { formState, recaptchaToken });
-
-    if (!validateForm()) {
-      if (contactInputRef.current) {
-        contactInputRef.current.focus();
-      }
-      // <-- LOG : Validation échouée
-      console.warn('[FRONTEND ContactForm] Validation échouée avant envoi.');
-      return;
-    }
-
-    // <-- LOG : Juste avant d'appeler sendContactForm
-    console.log('[FRONTEND ContactForm] Validation réussie, appel de sendContactForm...');
-    setIsSubmitting(true);
-
-    try {
-      // Assurez-vous que les arguments passés correspondent à la signature de sendContactForm
-      // D'après votre emailUtils.ts, il attend (formData, captchaToken)
-      const result = await sendContactForm(formState, recaptchaToken || '');
-
-      // <-- LOG : Résultat de sendContactForm
-      console.log('[FRONTEND ContactForm] Résultat de sendContactForm:', result);
-
-      if (result.success) {
-        resetForm();
-
-        let contactMessage = "";
-        if (contactType === 'email') {
-          contactMessage = "Nous vous recontacterons rapidement par e-mail.";
-        } else if (contactType === 'phone') {
-          contactMessage = "Nous vous rappellerons dans les plus brefs délais.";
-        } else {
-          contactMessage = "Nous vous recontacterons très bientôt.";
-        }
-
-        toast({
-          title: "Message envoyé !",
-          description: contactMessage,
-          variant: "default",
-        });
-
-        if (formContainerRef.current) {
-          formContainerRef.current.classList.add('success-animation');
-          setTimeout(() => {
-            if (formContainerRef.current) {
-              formContainerRef.current.classList.remove('success-animation');
-            }
-          }, 2000);
-        }
-      } else {
-        toast({
-          title: "Erreur",
-          description: result.message,
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-       // <-- LOG : Erreur inattendue
-      console.error('[FRONTEND ContactForm] Erreur inattendue dans handleSubmit après sendContactForm:', error);
-      toast({
-        title: "Erreur",
-        description: "Un problème est survenu lors de l'envoi de votre message.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-      if (recaptchaRef.current) {
-        recaptchaRef.current.reset();
-      }
-    }
-  };
+  // Plus de fonction handleSubmit asynchrone ici
 
   return (
     <motion.div
@@ -168,7 +95,12 @@ const ContactForm = () => {
           </motion.a>
         </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Modification de la balise form */}
+        <form
+          action="https://formspree.io/f/xgvkenaq"
+          method="POST"
+          className="space-y-6"
+        >
           <div className="mt-4">
             <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-2">
               Comment pouvons-nous vous contacter ?
@@ -177,11 +109,12 @@ const ContactForm = () => {
               <input
                 type="text"
                 id="contact"
-                name="contact" // Assurez-vous que ce nom correspond à ce que useContactForm attend
+                name="contact" // Attribut name pour Formspree
                 ref={contactInputRef}
                 value={formState.contact}
                 onChange={handleInputChange}
                 placeholder="Votre email ou numéro de téléphone"
+                required // Ajout de la validation HTML simple
                 className={cn(
                   "w-full px-4 py-3 rounded-lg border focus:ring-1 transition-all",
                   contactType === 'email'
@@ -193,7 +126,6 @@ const ContactForm = () => {
                         : "border-gray-200 focus:border-indigo-400 focus:ring-indigo-400"
                 )}
               />
-
               <ContactFeedbackMessage
                 contactType={contactType}
                 contactValue={formState.contact}
@@ -206,6 +138,7 @@ const ContactForm = () => {
             toggleShowDetails={toggleShowDetails}
           />
 
+          {/* Assurez-vous que les inputs à l'intérieur ont des attributs 'name' si nécessaire */}
           <FormDetailsSection
             showDetails={showDetails}
             formState={formState}
@@ -213,13 +146,22 @@ const ContactForm = () => {
             handleProjectTypeSelect={handleProjectTypeSelect}
           />
 
+          {/* Ajout de champs cachés pour les données non directement entrées */}
+          {/* Assurez-vous que formState contient bien 'name', 'projectType', 'details' */}
+          <input type="hidden" name="name" value={formState.name || ''} />
+          <input type="hidden" name="projectType" value={formState.projectType || ''} />
+          {/* Si details est dans FormDetailsSection, assurez-vous qu'il a un name="details" */}
+          {/* Ou envoyez-le via un champ caché si géré dans formState */}
+          <input type="hidden" name="details" value={formState.details || ''} />
+
+          {/* Champ reCAPTCHA (Formspree le détectera) */}
           <div className="mt-6">
             <ReCAPTCHA
               ref={recaptchaRef}
-              sitekey={RECAPTCHA_SITE_KEY} // Utilise la constante définie en haut
-              onChange={handleRecaptchaChange}
+              sitekey={RECAPTCHA_SITE_KEY}
+              onChange={handleRecaptchaChange} // Gardé au cas où validateForm l'utilise
             />
-
+            {/* Affichage d'erreur locale (validation ou recaptcha non coché) */}
             {formError && (
               <div className="mt-2 flex items-center text-red-500 text-sm">
                 <AlertCircle className="w-4 h-4 mr-1" />
@@ -228,7 +170,12 @@ const ContactForm = () => {
             )}
           </div>
 
-          <SubmitButton isSubmitting={isSubmitting} />
+          {/* Bouton de soumission standard */}
+          {/* Adaptez SubmitButton pour qu'il soit un <button type="submit"> */}
+          {/* S'il a besoin d'être désactivé, basez-le sur !validateForm() ou l'état du recaptcha */}
+          <SubmitButton /* isSubmitting={...} n'est plus pertinent ici */ />
+          {/* Alternative simple : <button type="submit" className="...">Envoyer</button> */}
+
         </form>
 
         <motion.div
