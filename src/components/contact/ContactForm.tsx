@@ -1,14 +1,14 @@
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 // Supprimé: import ReCAPTCHA from "react-google-recaptcha";
-import { Mail, AlertCircle } from 'lucide-react';
+import { Mail, AlertCircle } from 'lucide-react'; // AlertCircle réintroduit pour formError
 import { useToast } from "@/hooks/use-toast"; // <-- Réintroduit
-import { useContactForm } from '@/hooks/use-contact-form'; // Utilise la version révisée
+import { useContactForm } from '@/hooks/use-contact-form'; // Utilise la version restaurée du hook
 import { cn } from '@/lib/utils';
 // Supprimé: import { sendContactForm } from '@/utils/emailUtils';
 import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
-import SubmitButton from './SubmitButton'; // Doit de nouveau accepter isSubmitting
+import SubmitButton from './SubmitButton'; // Utilise la version restaurée avec isSubmitting
 import ToggleDetailsButton from './ToggleDetailsButton';
 
 // Supprimé: const RECAPTCHA_SITE_KEY = ...
@@ -19,19 +19,20 @@ const ContactForm = () => {
   const contactInputRef = useRef<HTMLInputElement>(null);
   // Supprimé: const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  // Utilise le hook mis à jour
+  // Déstructure les éléments nécessaires depuis le hook restauré
   const {
     showDetails,
     formState,
-    isSubmitting, // <-- Réintroduit
+    isSubmitting,     // <-- Nécessaire
     contactType,
-    formError, // <-- Réintroduit
-    setIsSubmitting, // <-- Réintroduit
+    formError,        // <-- Nécessaire
+    setIsSubmitting,  // <-- Nécessaire
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    validateForm, // <-- Réintroduit
-    resetForm // <-- Réintroduit
+    validateForm,     // <-- Nécessaire
+    resetForm,        // <-- Nécessaire
+    setFormError      // <-- Nécessaire
   } = useContactForm();
 
   const containerVariants = {
@@ -45,19 +46,17 @@ const ContactForm = () => {
     }
   };
 
-  // Fonction handleSubmit réintroduite et adaptée pour Formspree AJAX
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Type l'événement correctement
-    e.preventDefault(); // Empêche la soumission HTML standard
-
+  // Fonction handleSubmit pour soumission AJAX vers Formspree
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     console.log('[FRONTEND ContactForm] handleSubmit (AJAX) déclenché. État actuel:', { formState });
 
-    // Validation locale simple avant d'envoyer
     if (!validateForm()) {
-       console.warn('[FRONTEND ContactForm] Validation locale échouée avant envoi.');
-       if (contactInputRef.current && !formState.contact) {
-            contactInputRef.current.focus();
-       }
-       // Le message d'erreur est déjà défini par validateForm via setFormError
+      console.warn('[FRONTEND ContactForm] Validation locale échouée avant envoi.');
+      if (contactInputRef.current && !formState.contact) {
+           contactInputRef.current.focus();
+      }
+      // L'erreur est définie dans validateForm via setFormError
       return;
     }
 
@@ -65,17 +64,16 @@ const ContactForm = () => {
     setFormError(null); // Efface les erreurs précédentes
     console.log('[FRONTEND ContactForm] Validation réussie, envoi vers Formspree...');
 
-    // Préparation des données pour Formspree (FormData est souvent bien géré)
     const formData = new FormData(e.currentTarget);
-    // Vous pouvez ajouter des champs supplémentaires si nécessaire
-    // formData.append('champSupplementaire', 'valeur');
+    // Ajoutez ici d'autres champs si nécessaire avant l'envoi
+    // formData.append('projectType', formState.projectType || ''); // Exemple si pas dans FormDetailsSection
 
     try {
       const response = await fetch("https://formspree.io/f/xgvkenaq", {
         method: 'POST',
-        body: formData, // Envoi en tant que FormData
+        body: formData,
         headers: {
-          'Accept': 'application/json' // Très important pour obtenir une réponse JSON
+          'Accept': 'application/json' // Important pour la réponse AJAX
         }
       });
 
@@ -83,17 +81,15 @@ const ContactForm = () => {
       console.log(`[FRONTEND ContactForm] Statut réponse Formspree: ${response.status} ${response.statusText}`);
 
       if (response.ok) {
-        // const result = await response.json(); // Formspree renvoie {ok: true} ou similaire
         console.log('[FRONTEND ContactForm] Soumission Formspree réussie.');
-        resetForm(); // Réinitialise le formulaire React
+        resetForm();
 
-        // Affichage du toast de succès
         toast({
           title: "Message envoyé !",
           description: "Nous avons bien reçu votre demande et vous recontacterons bientôt.",
           variant: "default",
         });
-         // Animation succès (facultatif)
+
          if (formContainerRef.current) {
              formContainerRef.current.classList.add('success-animation');
              setTimeout(() => {
@@ -104,17 +100,15 @@ const ContactForm = () => {
          }
 
       } else {
-        // Essaye de lire l'erreur JSON de Formspree
-        let errorData = { error: "Une erreur s'est produite lors de la soumission." };
+        let errorData = { error: `Erreur ${response.status} lors de la soumission.` }; // Message par défaut
         try {
           errorData = await response.json();
           console.error('[FRONTEND ContactForm] Erreur JSON reçue de Formspree:', errorData);
         } catch (e) {
           console.error('[FRONTEND ContactForm] Impossible de parser la réponse d\'erreur JSON de Formspree.');
         }
-        // Affiche l'erreur via formError ou toast
-        setFormError(errorData.error); // Affiche sous le formulaire
-        // Ou utilisez un toast:
+        setFormError(errorData.error); // Affiche l'erreur Formspree sous le formulaire
+        // Optionnel: afficher aussi un toast d'erreur
         // toast({
         //   title: "Erreur de soumission",
         //   description: errorData.error,
@@ -123,8 +117,9 @@ const ContactForm = () => {
       }
     } catch (error) {
       console.error('[FRONTEND ContactForm] Erreur réseau ou autre lors du fetch vers Formspree:', error);
-      setFormError("Erreur réseau. Veuillez réessayer.");
-      // Ou utilisez un toast:
+      const message = error instanceof Error ? error.message : "Erreur inconnue";
+      setFormError(`Erreur réseau: ${message}. Veuillez réessayer.`);
+      // Optionnel: afficher aussi un toast d'erreur réseau
       // toast({
       //   title: "Erreur réseau",
       //   description: "Impossible de contacter le serveur de formulaire.",
@@ -158,9 +153,9 @@ const ContactForm = () => {
            </motion.a>
         </motion.div>
 
-        {/* Le formulaire utilise maintenant onSubmit */}
+        {/* Le formulaire utilise onSubmit pour la soumission AJAX */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Champ Contact Principal (pas de changement ici) */}
+          {/* Champ Contact Principal */}
           <div className="mt-4">
              <label htmlFor="contact" /* ... */>Comment pouvons-nous vous contacter ?</label>
              <div className="relative">
@@ -169,34 +164,36 @@ const ContactForm = () => {
              </div>
           </div>
 
-          {/* Bouton pour afficher/masquer détails (pas de changement ici) */}
+          {/* Bouton pour afficher/masquer détails */}
           <ToggleDetailsButton /* ... */ />
 
-          {/* Section des détails (pas de changement ici, assurez-vous que les inputs ont les bons 'name') */}
+          {/* Section des détails (vérifiez les 'name' à l'intérieur) */}
           <FormDetailsSection /* ... */ />
 
-          {/* Plus besoin des champs cachés si FormDetailsSection a les bons 'name' */}
-          {/* Sinon, gardez/ajoutez les ici : */}
-          {/* <input type="hidden" name="projectType" value={formState.projectType || ''} /> */}
+          {/* Champ caché pour projectType si pas dans FormDetailsSection */}
+          <input type="hidden" name="projectType" value={formState.projectType || ''} />
 
-
-          {/* Affichage de formError (réintroduit pour validation locale/serveur) */}
-          <div className="mt-6 min-h-[20px]"> {/* Espace pour l'erreur */}
+          {/* Zone pour afficher les erreurs */}
+          <div className="mt-6 min-h-[20px]">
             {formError && (
-              <div className="flex items-center text-red-500 text-sm">
-                <AlertCircle className="w-4 h-4 mr-1" />
+              <motion.div
+                 className="flex items-center text-red-500 text-sm"
+                 initial={{ opacity: 0}}
+                 animate={{ opacity: 1}}
+                 exit={{ opacity: 0}}
+              >
+                <AlertCircle className="w-4 h-4 mr-1 flex-shrink-0" />
                 {formError}
-              </div>
+              </motion.div>
             )}
           </div>
 
-          {/* Bouton de soumission qui utilise maintenant isSubmitting */}
-          {/* !!! Rappel: restaurer SubmitButton.tsx pour qu'il accepte et utilise 'isSubmitting' !!! */}
+          {/* Bouton de soumission (qui utilise isSubmitting) */}
           <SubmitButton isSubmitting={isSubmitting} />
 
         </form>
 
-        {/* Texte légal (pas de changement ici) */}
+        {/* Texte légal */}
         <motion.div /* ... */ >
            En soumettant ce formulaire, vous acceptez d'être contacté par notre équipe.
         </motion.div>
