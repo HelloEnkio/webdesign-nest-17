@@ -1,4 +1,4 @@
-// src/hooks/use-contact-form.ts - Version pour AJAX Formspree (sans reCAPTCHA)
+// src/hooks/use-contact-form.ts - Corrigé pour l'erreur .trim()
 import { useState, useEffect } from 'react';
 
 export type FormState = {
@@ -13,66 +13,73 @@ export type ContactType = 'email' | 'phone' | 'uncertain' | null;
 export function useContactForm() {
   const [showDetails, setShowDetails] = useState(false);
   const [contactType, setContactType] = useState<ContactType>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false); // <-- Restauré
-  const [formError, setFormError] = useState<string | null>(null); // <-- Restauré
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const [formState, setFormState] = useState<FormState>({
     name: '',
     projectType: '',
     projectDescription: '',
-    contact: ''
+    contact: '' // Initialisé comme chaîne vide
   });
 
-  // Détection du type de contact (conservée)
+  // Détection du type de contact
   useEffect(() => {
     const value = formState.contact;
+
+    // ---- AJOUT DE LA SÉCURITÉ ----
+    // Assure que nous travaillons toujours avec une chaîne, même si value est null/undefined
+    const stringValue = typeof value === 'string' ? value : '';
+    // -----------------------------
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const strongPhoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
     const loosePhoneRegex = /\d{6,}/;
 
-    if (emailRegex.test(value)) {
+    // Utilise stringValue maintenant pour les tests
+    if (emailRegex.test(stringValue)) {
       setContactType('email');
-    } else if (strongPhoneRegex.test(value) || loosePhoneRegex.test(value)) {
+    } else if (strongPhoneRegex.test(stringValue) || loosePhoneRegex.test(stringValue)) {
       setContactType('phone');
-    } else if (value.includes('@')) {
+    } else if (stringValue.includes('@')) { // .includes est sûr sur une chaîne vide
       setContactType('email');
-    } else if (value.trim().length > 5) {
+    // Utilise .trim() sur stringValue (qui est garanti d'être une chaîne)
+    } else if (stringValue.trim().length > 5) {
       setContactType('uncertain');
     } else {
       setContactType(null);
     }
-  }, [formState.contact]);
+  }, [formState.contact]); // Se déclenche quand formState.contact change
 
-  // Gestion des changements d'input (conservée)
+  // Gestion des changements d'input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
-    if (formError) setFormError(null); // Efface l'erreur si l'utilisateur corrige
+    if (formError) setFormError(null);
   };
 
-  // Gestion de la sélection du type de projet (conservée)
+  // Gestion de la sélection du type de projet
   const handleProjectTypeSelect = (type: string) => {
     setFormState(prev => ({ ...prev, projectType: type }));
   };
 
-  // Gestion de l'affichage des détails (conservée)
+  // Gestion de l'affichage des détails
   const toggleShowDetails = () => {
     setShowDetails(prev => !prev);
   };
 
-  // Validation locale avant envoi JS (restaurée, sans reCAPTCHA)
+  // Validation locale avant envoi JS
   const validateForm = (): boolean => {
+    // Vérifie que contact n'est pas null/undefined ET n'est pas vide après trim
     if (!formState.contact || formState.contact.trim().length < 6) {
       setFormError("Veuillez fournir un contact valide (email ou téléphone).");
       return false;
     }
-    // Supprimé: Validation du token reCAPTCHA
-
     setFormError(null);
     return true;
   };
 
-  // Reset du formulaire (restauré)
+  // Reset du formulaire
   const resetForm = () => {
     setFormState({
       name: '',
@@ -83,24 +90,21 @@ export function useContactForm() {
     setShowDetails(false);
     setIsSubmitting(false);
     setFormError(null);
-    // Supprimé: reset du recaptchaRef
   };
 
-  // HandleRecaptchaChange est supprimé car reCAPTCHA est enlevé
-
-  // Retourne les éléments nécessaires, y compris ceux restaurés
+  // Retourne les éléments nécessaires
   return {
     showDetails,
     formState,
     isSubmitting,
     contactType,
     formError,
-    setIsSubmitting, // Important de retourner le setter
+    setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    validateForm, // Important de retourner la validation
-    resetForm, // Important de retourner le reset
-    setFormError // Retourne le setter d'erreur si besoin externe
+    validateForm,
+    resetForm,
+    setFormError
   };
 }
