@@ -1,38 +1,38 @@
+// src/components/contact/ContactForm.tsx - Avec log avant return
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
 // Supprimé: import ReCAPTCHA from "react-google-recaptcha";
-import { Mail, AlertCircle } from 'lucide-react'; // AlertCircle réintroduit pour formError
-import { useToast } from "@/hooks/use-toast"; // <-- Réintroduit
-import { useContactForm } from '@/hooks/use-contact-form'; // Utilise la version restaurée du hook
+import { Mail, AlertCircle } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+import { useContactForm } from '@/hooks/use-contact-form'; // Utilise la version avec log
 import { cn } from '@/lib/utils';
 // Supprimé: import { sendContactForm } from '@/utils/emailUtils';
-import ContactFeedbackMessage from './ContactFeedbackMessage';
+import ContactFeedbackMessage from './ContactFeedbackMessage'; // Assurez-vous que ce fichier est corrigé aussi
 import FormDetailsSection from './FormDetailsSection';
-import SubmitButton from './SubmitButton'; // Utilise la version restaurée avec isSubmitting
-import ToggleDetailsButton from './ToggleDetailsButton';
+import SubmitButton from './SubmitButton'; // Version restaurée avec isSubmitting
+import ToggleDetailsButton from './ToggleDetailsButton'; // Version correcte qui appelle toggleShowDetails
 
 // Supprimé: const RECAPTCHA_SITE_KEY = ...
 
 const ContactForm = () => {
-  const { toast } = useToast(); // <-- Réintroduit
+  const { toast } = useToast();
   const formContainerRef = useRef<HTMLDivElement>(null);
   const contactInputRef = useRef<HTMLInputElement>(null);
   // Supprimé: const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  // Déstructure les éléments nécessaires depuis le hook restauré
   const {
     showDetails,
     formState,
-    isSubmitting,     // <-- Nécessaire
+    isSubmitting,
     contactType,
-    formError,        // <-- Nécessaire
-    setIsSubmitting,  // <-- Nécessaire
+    formError,
+    setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
-    toggleShowDetails,
-    validateForm,     // <-- Nécessaire
-    resetForm,        // <-- Nécessaire
-    setFormError      // <-- Nécessaire
+    toggleShowDetails, // Reçoit la fonction avec le log
+    validateForm,
+    resetForm,
+    setFormError
   } = useContactForm();
 
   const containerVariants = {
@@ -46,50 +46,47 @@ const ContactForm = () => {
     }
   };
 
-  // Fonction handleSubmit pour soumission AJAX vers Formspree
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('[FRONTEND ContactForm] handleSubmit (AJAX) déclenché. État actuel:', { formState });
+    console.log('[ContactForm] handleSubmit (AJAX) déclenché. État actuel:', { formState });
 
     if (!validateForm()) {
-      console.warn('[FRONTEND ContactForm] Validation locale échouée avant envoi.');
-      if (contactInputRef.current && !formState.contact) {
-           contactInputRef.current.focus();
-      }
-      // L'erreur est définie dans validateForm via setFormError
+       console.warn('[ContactForm] Validation locale échouée avant envoi.');
+       if (contactInputRef.current && !formState.contact) {
+            contactInputRef.current.focus();
+       }
       return;
     }
 
     setIsSubmitting(true);
-    setFormError(null); // Efface les erreurs précédentes
-    console.log('[FRONTEND ContactForm] Validation réussie, envoi vers Formspree...');
+    setFormError(null);
+    console.log('[ContactForm] Validation réussie, envoi vers Formspree...');
 
     const formData = new FormData(e.currentTarget);
-    // Ajoutez ici d'autres champs si nécessaire avant l'envoi
-    // formData.append('projectType', formState.projectType || ''); // Exemple si pas dans FormDetailsSection
+    // Assurez-vous que les champs cachés sont bien ajoutés si nécessaire
+    // formData.append('projectType', formState.projectType || '');
 
     try {
+      console.log(`[ContactForm] Appel fetch POST vers Formspree à ${new Date().toISOString()}`);
       const response = await fetch("https://formspree.io/f/xgvkenaq", {
         method: 'POST',
         body: formData,
         headers: {
-          'Accept': 'application/json' // Important pour la réponse AJAX
+          'Accept': 'application/json'
         }
       });
 
-      console.log('[FRONTEND ContactForm] Réponse brute Formspree:', response);
-      console.log(`[FRONTEND ContactForm] Statut réponse Formspree: ${response.status} ${response.statusText}`);
+      console.log('[ContactForm] Réponse brute Formspree:', response);
+      console.log(`[ContactForm] Statut réponse Formspree: ${response.status} ${response.statusText}`);
 
       if (response.ok) {
-        console.log('[FRONTEND ContactForm] Soumission Formspree réussie.');
+        console.log('[ContactForm] Soumission Formspree réussie.');
         resetForm();
-
         toast({
           title: "Message envoyé !",
           description: "Nous avons bien reçu votre demande et vous recontacterons bientôt.",
           variant: "default",
         });
-
          if (formContainerRef.current) {
              formContainerRef.current.classList.add('success-animation');
              setTimeout(() => {
@@ -98,37 +95,28 @@ const ContactForm = () => {
                  }
              }, 2000);
          }
-
       } else {
-        let errorData = { error: `Erreur ${response.status} lors de la soumission.` }; // Message par défaut
+        let errorData = { error: `Erreur ${response.status} lors de la soumission.` };
         try {
           errorData = await response.json();
-          console.error('[FRONTEND ContactForm] Erreur JSON reçue de Formspree:', errorData);
+          console.error('[ContactForm] Erreur JSON reçue de Formspree:', errorData);
         } catch (e) {
-          console.error('[FRONTEND ContactForm] Impossible de parser la réponse d\'erreur JSON de Formspree.');
+          console.error('[ContactForm] Impossible de parser la réponse d\'erreur JSON de Formspree.');
         }
-        setFormError(errorData.error); // Affiche l'erreur Formspree sous le formulaire
-        // Optionnel: afficher aussi un toast d'erreur
-        // toast({
-        //   title: "Erreur de soumission",
-        //   description: errorData.error,
-        //   variant: "destructive",
-        // });
+        setFormError(errorData.error);
       }
     } catch (error) {
-      console.error('[FRONTEND ContactForm] Erreur réseau ou autre lors du fetch vers Formspree:', error);
+      console.error('[ContactForm] Erreur réseau ou autre lors du fetch vers Formspree:', error);
       const message = error instanceof Error ? error.message : "Erreur inconnue";
       setFormError(`Erreur réseau: ${message}. Veuillez réessayer.`);
-      // Optionnel: afficher aussi un toast d'erreur réseau
-      // toast({
-      //   title: "Erreur réseau",
-      //   description: "Impossible de contacter le serveur de formulaire.",
-      //   variant: "destructive",
-      // });
     } finally {
-      setIsSubmitting(false); // Réactive le bouton
+      setIsSubmitting(false);
     }
   };
+
+  // --- AJOUT DU LOG ICI ---
+  console.log('[ContactForm] Rendu du composant. Valeur de showDetails:', showDetails);
+  // ------------------------
 
   return (
     <motion.div
@@ -145,7 +133,7 @@ const ContactForm = () => {
       >
         <motion.div
           className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
-          // ... (pas de changement ici) ...
+          // ...
         >
            <motion.h3 /* ... */ >Discutons de votre projet</motion.h3>
            <motion.a href="mailto:hello@enkio.fr" /* ... */>
@@ -153,27 +141,32 @@ const ContactForm = () => {
            </motion.a>
         </motion.div>
 
-        {/* Le formulaire utilise onSubmit pour la soumission AJAX */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Champ Contact Principal */}
           <div className="mt-4">
              <label htmlFor="contact" /* ... */>Comment pouvons-nous vous contacter ?</label>
              <div className="relative">
-                <input name="contact" /* ... */ required />
-                <ContactFeedbackMessage /* ... */ />
+                {/* Assurez-vous que cet input a name="contact" */}
+                <input id="contact" name="contact" /* ... autres props ... */ required />
+                <ContactFeedbackMessage contactType={contactType} contactValue={formState.contact} />
              </div>
           </div>
 
-          {/* Bouton pour afficher/masquer détails */}
-          <ToggleDetailsButton /* ... */ />
+          {/* Ce bouton appelle maintenant toggleShowDetails avec le log */}
+          <ToggleDetailsButton showDetails={showDetails} toggleShowDetails={toggleShowDetails} />
 
-          {/* Section des détails (vérifiez les 'name' à l'intérieur) */}
-          <FormDetailsSection /* ... */ />
+          {/* Cette section dépend de showDetails */}
+          {/* Assurez-vous que les inputs ici ont les bons 'name' */}
+          <FormDetailsSection
+              showDetails={showDetails}
+              formState={formState}
+              handleInputChange={handleInputChange}
+              handleProjectTypeSelect={handleProjectTypeSelect}
+          />
 
-          {/* Champ caché pour projectType si pas dans FormDetailsSection */}
+          {/* Champ caché nécessaire car ProjectTypeSelector n'est pas un input standard */}
           <input type="hidden" name="projectType" value={formState.projectType || ''} />
 
-          {/* Zone pour afficher les erreurs */}
+          {/* Affichage de l'erreur */}
           <div className="mt-6 min-h-[20px]">
             {formError && (
               <motion.div
@@ -188,13 +181,12 @@ const ContactForm = () => {
             )}
           </div>
 
-          {/* Bouton de soumission (qui utilise isSubmitting) */}
+          {/* Bouton de soumission qui utilise isSubmitting */}
           <SubmitButton isSubmitting={isSubmitting} />
 
         </form>
 
-        {/* Texte légal */}
-        <motion.div /* ... */ >
+        <motion.div /* ... texte légal ... */ >
            En soumettant ce formulaire, vous acceptez d'être contacté par notre équipe.
         </motion.div>
       </motion.div>
