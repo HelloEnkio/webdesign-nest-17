@@ -117,7 +117,21 @@ const ContactForm = () => {
   // --- AJOUT DU LOG ICI ---
   console.log('[ContactForm] Rendu du composant. Valeur de showDetails:', showDetails);
   // ------------------------
+  // --- LOGS POUR DEBUGGER LES CLASSES DE L'INPUT ---
+  const baseClasses = "w-full px-4 py-3 rounded-lg border focus:ring-1 transition-all";
+  const conditionalClasses =
+      contactType === 'email' ? "border-indigo-400 focus:ring-indigo-400"
+      : contactType === 'phone' ? "border-green-400 focus:ring-green-400"
+      : contactType === 'uncertain' ? "border-yellow-400 focus:ring-yellow-400"
+      : "border-gray-200 focus:border-indigo-400 focus:ring-indigo-400";
 
+  const finalClasses = cn(baseClasses, conditionalClasses);
+
+  console.log('[ContactForm] Avant rendu - Valeur de contactType:', contactType);
+  console.log('[ContactForm] Avant rendu - Classes de base:', baseClasses);
+  console.log('[ContactForm] Avant rendu - Classes conditionnelles:', conditionalClasses);
+  console.log('[ContactForm] Avant rendu - Résultat final de cn():', finalClasses);
+  // ------------------------------------------------
   return (
     <motion.div
       ref={formContainerRef}
