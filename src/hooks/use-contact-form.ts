@@ -1,4 +1,4 @@
-// src/hooks/use-contact-form.ts - Corrigé pour l'erreur .trim()
+// src/hooks/use-contact-form.ts - Corrigé pour l'erreur .trim() DANS LES DEUX ENDROITS
 import { useState, useEffect } from 'react';
 
 export type FormState = {
@@ -26,11 +26,8 @@ export function useContactForm() {
   // Détection du type de contact
   useEffect(() => {
     const value = formState.contact;
-
-    // ---- AJOUT DE LA SÉCURITÉ ----
-    // Assure que nous travaillons toujours avec une chaîne, même si value est null/undefined
-    const stringValue = typeof value === 'string' ? value : '';
-    // -----------------------------
+    // Sécurité pour .trim() et .includes()
+    const stringValue = typeof value === 'string' ? value : ''; // Assure que c'est une chaîne
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const strongPhoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
@@ -43,13 +40,12 @@ export function useContactForm() {
       setContactType('phone');
     } else if (stringValue.includes('@')) { // .includes est sûr sur une chaîne vide
       setContactType('email');
-    // Utilise .trim() sur stringValue (qui est garanti d'être une chaîne)
-    } else if (stringValue.trim().length > 5) {
+    } else if (stringValue.trim().length > 5) { // Utilise trim() sur stringValue (sûr)
       setContactType('uncertain');
     } else {
       setContactType(null);
     }
-  }, [formState.contact]); // Se déclenche quand formState.contact change
+  }, [formState.contact]);
 
   // Gestion des changements d'input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -70,8 +66,14 @@ export function useContactForm() {
 
   // Validation locale avant envoi JS
   const validateForm = (): boolean => {
-    // Vérifie que contact n'est pas null/undefined ET n'est pas vide après trim
-    if (!formState.contact || formState.contact.trim().length < 6) {
+    // ---- AJOUT DE LA SÉCURITÉ ICI AUSSI ----
+    const contactValue = formState.contact;
+    // Assure que nous travaillons toujours avec une chaîne, même si null/undefined
+    const contactStringValue = typeof contactValue === 'string' ? contactValue : '';
+    // ----------------------------------------
+
+    // Vérifie que contactStringValue n'est pas vide après trim
+    if (contactStringValue.trim().length < 6) { // Utilise trim() sur contactStringValue (sûr)
       setFormError("Veuillez fournir un contact valide (email ou téléphone).");
       return false;
     }
