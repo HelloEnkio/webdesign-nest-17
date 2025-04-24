@@ -1,4 +1,4 @@
-// src/hooks/use-contact-form.ts - Révisé pour AJAX Formspree
+// src/hooks/use-contact-form.ts - Version pour AJAX Formspree (sans reCAPTCHA)
 import { useState, useEffect } from 'react';
 
 export type FormState = {
@@ -13,9 +13,8 @@ export type ContactType = 'email' | 'phone' | 'uncertain' | null;
 export function useContactForm() {
   const [showDetails, setShowDetails] = useState(false);
   const [contactType, setContactType] = useState<ContactType>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false); // <-- Réintroduit
-  const [formError, setFormError] = useState<string | null>(null); // <-- Réintroduit (pour les erreurs locales ou serveur)
-  // const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null); // Supprimé car recaptcha enlevé
+  const [isSubmitting, setIsSubmitting] = useState(false); // <-- Restauré
+  const [formError, setFormError] = useState<string | null>(null); // <-- Restauré
 
   const [formState, setFormState] = useState<FormState>({
     name: '',
@@ -48,8 +47,7 @@ export function useContactForm() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
-    // Efface l'erreur si l'utilisateur commence à corriger
-    if (formError) setFormError(null);
+    if (formError) setFormError(null); // Efface l'erreur si l'utilisateur corrige
   };
 
   // Gestion de la sélection du type de projet (conservée)
@@ -62,19 +60,19 @@ export function useContactForm() {
     setShowDetails(prev => !prev);
   };
 
-  // Validation simple avant envoi JS (exemple)
+  // Validation locale avant envoi JS (restaurée, sans reCAPTCHA)
   const validateForm = (): boolean => {
-    if (!formState.contact || formState.contact.trim().length < 6) { // Validation simple
+    if (!formState.contact || formState.contact.trim().length < 6) {
       setFormError("Veuillez fournir un contact valide (email ou téléphone).");
       return false;
     }
-    // Ajoutez d'autres validations si nécessaire (ex: projet sélectionné?)
+    // Supprimé: Validation du token reCAPTCHA
 
     setFormError(null);
     return true;
   };
 
-  // Reset du formulaire (réintroduit)
+  // Reset du formulaire (restauré)
   const resetForm = () => {
     setFormState({
       name: '',
@@ -83,23 +81,26 @@ export function useContactForm() {
       contact: ''
     });
     setShowDetails(false);
-    setIsSubmitting(false); // Assurez-vous de le remettre à false
+    setIsSubmitting(false);
     setFormError(null);
-    // Plus besoin de reset le recaptchaRef
+    // Supprimé: reset du recaptchaRef
   };
 
-  // Retourne les éléments nécessaires
+  // HandleRecaptchaChange est supprimé car reCAPTCHA est enlevé
+
+  // Retourne les éléments nécessaires, y compris ceux restaurés
   return {
     showDetails,
     formState,
-    isSubmitting, // <-- Réintroduit
+    isSubmitting,
     contactType,
-    formError, // <-- Réintroduit
-    setIsSubmitting, // <-- Réintroduit
+    formError,
+    setIsSubmitting, // Important de retourner le setter
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    validateForm, // <-- Réintroduit (version simplifiée)
-    resetForm // <-- Réintroduit
+    validateForm, // Important de retourner la validation
+    resetForm, // Important de retourner le reset
+    setFormError // Retourne le setter d'erreur si besoin externe
   };
 }
