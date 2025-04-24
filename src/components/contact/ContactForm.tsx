@@ -1,35 +1,35 @@
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
-import ReCAPTCHA from "react-google-recaptcha";
-import { Mail, AlertCircle } from 'lucide-react';
+// Supprimé: import ReCAPTCHA from "react-google-recaptcha";
+import { Mail /*, AlertCircle */ } from 'lucide-react'; // AlertCircle supprimé si formError est retiré
 // import { useToast } from "@/hooks/use-toast"; // Supprimé
-import { useContactForm } from '@/hooks/use-contact-form';
+import { useContactForm } from '@/hooks/use-contact-form'; // Nettoyer ce hook ensuite
 import { cn } from '@/lib/utils';
 // Supprimé: import { sendContactForm } from '@/utils/emailUtils';
 import ContactFeedbackMessage from './ContactFeedbackMessage';
 import FormDetailsSection from './FormDetailsSection';
-import SubmitButton from './SubmitButton'; // N'oubliez pas de modifier CE composant !
+import SubmitButton from './SubmitButton'; // Assurez-vous qu'il rend <button type="submit">
 import ToggleDetailsButton from './ToggleDetailsButton';
 
-// Clé de site reCAPTCHA (toujours nécessaire pour afficher le widget)
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
+// Supprimé: const RECAPTCHA_SITE_KEY = ...
 
 const ContactForm = () => {
   const formContainerRef = useRef<HTMLDivElement>(null);
   const contactInputRef = useRef<HTMLInputElement>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  // Supprimé: const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  // Garde les états/handlers nécessaires pour les champs contrôlés et le reCAPTCHA
+  // Nettoyage des éléments liés au captcha et à la soumission JS
   const {
     showDetails,
     formState,
     contactType,
-    formError, // Gardé si vous voulez l'utiliser pour une validation locale
+    // formError, // Supprimé (ou à garder si validation locale)
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    handleRecaptchaChange,
-  } = useContactForm(); // Nettoyé des états/fonctions de soumission
+    // validateForm, // Supprimé si plus de validation JS avant soumission
+    // handleRecaptchaChange, // Supprimé
+  } = useContactForm(); // Pensez à nettoyer la DÉFINITION de ce hook
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -131,7 +131,7 @@ const ContactForm = () => {
           />
 
           {/* Section des détails */}
-          {/* Les inputs 'name' et 'projectDescription' sont DANS ce composant */}
+          {/* Assurez-vous que les inputs ici ont les bons 'name' */}
           <FormDetailsSection
             showDetails={showDetails}
             formState={formState}
@@ -139,28 +139,20 @@ const ContactForm = () => {
             handleProjectTypeSelect={handleProjectTypeSelect}
           />
 
-          {/* Champ caché pour projectType car géré par un composant custom */}
+          {/* Optionnel: Champs cachés si les données ne sont pas dans des inputs visibles avec un 'name' */}
           <input type="hidden" name="projectType" value={formState.projectType || ''} />
 
 
-          {/* Composant reCAPTCHA */}
+          {/* DIV contenant reCAPTCHA et formError supprimée */}
+          {/*
           <div className="mt-6">
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={RECAPTCHA_SITE_KEY}
-              onChange={handleRecaptchaChange}
-            />
-            {/* Affichage d'erreur locale */}
-            {formError && (
-              <div className="mt-2 flex items-center text-red-500 text-sm">
-                <AlertCircle className="w-4 h-4 mr-1" />
-                {formError}
-              </div>
-            )}
+            <ReCAPTCHA ... />
+            {formError && ( ... )}
           </div>
+          */}
 
-          {/* Bouton de soumission (n'utilise plus isSubmitting) */}
-          {/* !!! N'oubliez pas de modifier SubmitButton.tsx pour qu'il retourne <button type="submit">... !!! */}
+          {/* Bouton de soumission */}
+          {/* !!! Rappel: modifier SubmitButton.tsx pour qu'il retourne <button type="submit">... !!! */}
           <SubmitButton />
 
         </form>
