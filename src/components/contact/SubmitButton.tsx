@@ -4,11 +4,13 @@ import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+// Interface restaurée
 interface SubmitButtonProps {
-  isSubmitting: boolean; // Réintroduit
+  isSubmitting: boolean;
 }
 
-const SubmitButton: React.FC<SubmitButtonProps> = ({ isSubmitting }) => { // Réintroduit
+// Prop isSubmitting restaurée
+const SubmitButton: React.FC<SubmitButtonProps> = ({ isSubmitting }) => {
   return (
     <motion.div
       className="mt-6"
@@ -18,10 +20,11 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ isSubmitting }) => { // Ré
     >
       <Button
         type="submit"
-        disabled={isSubmitting} // Réintroduit
+        disabled={isSubmitting} // Logique disabled restaurée
         className="w-full py-3 px-4 h-auto text-base font-medium"
       >
-        {isSubmitting ? ( // Réintroduit
+        {/* Logique d'affichage conditionnel restaurée */}
+        {isSubmitting ? (
           <>
             <svg className="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
