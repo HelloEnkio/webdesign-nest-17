@@ -1,125 +1,82 @@
-
+// src/hooks/use-contact-form.ts - Version simplifiée pour Formspree
 import { useState, useEffect } from 'react';
 
+// Garde la définition de l'état du formulaire
 export type FormState = {
   name: string;
   projectType: string;
-  projectDescription: string;
+  projectDescription: string; // Gardé car utilisé dans FormDetailsSection
   contact: string;
+  // Supprimé: details n'était pas dans la définition originale,
+  // mais projectDescription existe. Assurez-vous que c'est bien 'projectDescription'
+  // que vous voulez envoyer (il a un name="projectDescription" dans le textarea)
 };
 
 export type ContactType = 'email' | 'phone' | 'uncertain' | null;
 
 export function useContactForm() {
   const [showDetails, setShowDetails] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [contactType, setContactType] = useState<ContactType>(null);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
-  
+  // Supprimé: const [isSubmitting, setIsSubmitting] = useState(false);
+  // Supprimé: const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  // Supprimé: const [formError, setFormError] = useState<string | null>(null);
+
   const [formState, setFormState] = useState<FormState>({
     name: '',
     projectType: '',
-    projectDescription: '',
+    projectDescription: '', // Initialise projectDescription
     contact: ''
   });
 
-  // Detect contact type
+  // Détection du type de contact (conservée)
   useEffect(() => {
     const value = formState.contact;
-    
-    // Regex for email and phone (more flexible)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const strongPhoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
-    const loosePhoneRegex = /\d{6,}/; // At least 6 consecutive digits
-    
+    const loosePhoneRegex = /\d{6,}/;
+
     if (emailRegex.test(value)) {
       setContactType('email');
-    } else if (strongPhoneRegex.test(value)) {
-      setContactType('phone');
-    } else if (loosePhoneRegex.test(value)) {
-      // If we find at least 6 digits, probably a phone number
+    } else if (strongPhoneRegex.test(value) || loosePhoneRegex.test(value)) {
       setContactType('phone');
     } else if (value.includes('@')) {
-      // If we find @ somewhere, probably an email
       setContactType('email');
     } else if (value.trim().length > 5) {
-      // If there's at least a few characters, accept as uncertain
       setContactType('uncertain');
     } else {
       setContactType(null);
     }
   }, [formState.contact]);
 
+  // Gestion des changements d'input (conservée)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
   };
-  
+
+  // Gestion de la sélection du type de projet (conservée)
   const handleProjectTypeSelect = (type: string) => {
     setFormState(prev => ({ ...prev, projectType: type }));
   };
-  
+
+  // Gestion de l'affichage des détails (conservée)
   const toggleShowDetails = () => {
     setShowDetails(prev => !prev);
   };
-  
-  const validateContact = (): boolean => {
-    // Only validate that there's some kind of contact info
-    return contactType !== null && formState.contact.trim().length > 3;
-  };
-  
-  const handleRecaptchaChange = (token: string | null) => {
-    setRecaptchaToken(token);
-    if (!token) {
-      setFormError("Veuillez valider le captcha");
-    } else {
-      setFormError(null);
-    }
-  };
-  
-  const validateForm = (): boolean => {
-    if (!validateContact()) {
-      setFormError("Veuillez fournir un moyen de contact valide");
-      return false;
-    }
-    
-    if (!recaptchaToken) {
-      setFormError("Veuillez valider le captcha");
-      return false;
-    }
-    
-    setFormError(null);
-    return true;
-  };
-  
-  const resetForm = () => {
-    setFormState({
-      name: '',
-      projectType: '',
-      projectDescription: '',
-      contact: ''
-    });
-    setShowDetails(false);
-    setIsSubmitting(false);
-    setRecaptchaToken(null);
-    setFormError(null);
-  };
 
+  // Supprimé: validateContact
+  // Supprimé: handleRecaptchaChange
+  // Supprimé: validateForm
+  // Supprimé: resetForm
+
+  // Retourne uniquement les éléments nécessaires au formulaire contrôlé
   return {
     showDetails,
     formState,
-    isSubmitting,
     contactType,
-    formError,
-    recaptchaToken, // Make sure to expose recaptchaToken
-    setIsSubmitting,
     handleInputChange,
     handleProjectTypeSelect,
     toggleShowDetails,
-    validateContact,
-    validateForm,
-    handleRecaptchaChange,
-    resetForm
+    // Les fonctions et états supprimés ne sont plus retournés
   };
 }
